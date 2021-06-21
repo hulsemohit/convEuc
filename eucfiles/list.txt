@@ -76,7 +76,6 @@ lessthancongruence2.prf
 lessthancongruence.prf
 lessthannotequal.prf
 lessthantransitive.prf
-line-circle.prf
 linereflectionisometry.prf
 midpointunique.prf
 NCdistinct.prf

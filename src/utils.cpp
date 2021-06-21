@@ -1,10 +1,12 @@
 #include <iostream>
+#include <algorithm>
 
 #include "utils.h"
 
-using std::string, std::vector;
 
 namespace utils {
+
+    using std::string, std::vector;
     
     vector<string> split_at(const string& s, const string& d) {
         vector<string> parts;
@@ -14,7 +16,6 @@ namespace utils {
         }
         return parts;
     }
-
 
     string trim(string s) {
         while(!s.empty() && isspace(*s.begin()))
@@ -29,6 +30,11 @@ namespace utils {
             s = "n" + s;
         for(char& c: s) if(c == '.') c = '_';
         return s;
+    }
+
+    void unique(string& s) {
+        std::sort(s.begin(), s.end());
+        s.erase(std::unique(s.begin(), s.end()), s.end());       
     }
 
     namespace log {

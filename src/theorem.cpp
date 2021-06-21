@@ -21,7 +21,7 @@ std::map<char, vector<int>> get_pos(string euc_statement, int offset = 0) {
             for(auto [v, p]: get_pos(s))
                 for(int k: p)
                     res[v].push_back(k + offset);
-            offset += s.size();
+            offset += s.size() + 1;
         }
 
         return res;
@@ -45,11 +45,14 @@ theorem::theorem(vector<string> euc_assms, string euc_conc): assumptions{euc_ass
     }
     
     std::map<char, vector<int>> conc{get_pos(euc_conc)};
-    for(auto c: conc)
-        vars += c.first;
+    for(auto c: conc) {
+        if(vars.find(string(1, c.first)) == string::npos) {
+            vars += c.first;
+            exists += c.first;
+        }
+    }
 
-    std::sort(vars.begin(), vars.end());
-    vars.erase(std::unique(vars.begin(), vars.end()), vars.end());
+    utils::unique(vars);
 
     var_cnt = vars.size();
 
@@ -99,6 +102,10 @@ string theorem::to_string() const {
 
 int theorem::get_var_cnt() const {
     return var_cnt;
+}
+
+string theorem::get_exists() const {
+    return exists;
 }
 
 std::map<string, theorem> theorem::theorems{};

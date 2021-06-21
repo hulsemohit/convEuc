@@ -8,7 +8,7 @@
 
 void generate_statement(const std::string&);
 
-int main() {
+int main(int, char* argv[]) {
     std::ifstream in("../eucfiles/list.txt");
 
     std::string s;
@@ -20,12 +20,12 @@ int main() {
     
     in.close();
 
-    return 0;
     in = std::ifstream("../eucfiles/list.txt");
-    Info("Verifying proofs, and generating output...");
     while(getline(in, s)) {
         Info("Verifying " + s);
+        prover::generate_proof(s);
     }
+    in.close();
 
     return 0;
 }
@@ -62,5 +62,4 @@ void generate_statement(const std::string& fname) {
 
     theorem::theorems.insert({name, theorem(assms, conc)});
     Info(name + " = " + theorem::theorems[name].to_string());
-    Info(name + " \\<equiv>  " + prover::translate(theorem::theorems[name].conclusion));
 }

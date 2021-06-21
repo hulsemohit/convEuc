@@ -2,9 +2,9 @@
 #include <map>
 
 class command {
-    private:
-        std::string name;
-        int arity;
+    public:
+        const std::string name;
+        const int arity;
 
     public:
         command(const std::string& _name, int _arity): name{_name}, arity{_arity} {};
@@ -57,4 +57,49 @@ const std::map<std::string, command> commands {
     {"ER", command{"rec_eq_area", 8}},
     {"TE", command{"d_eq_tri", 6}},
     {"FE", command{"d_eq_qua", 8}}
+};
+
+const std::map<std::string, std::string> euc_cmd_names{
+    {"unequal", "NE"},
+    {"collinear", "CO"},
+    {"noncollinear", "NC"},
+    {"circle", "CI"},
+    {"inside", "IC"},
+    {"outside", "OC"},
+    {"on", "ON"},
+    {"equilateral", "EQ"},
+    {"triangle", "TR"},
+    {"ray", "RA"},
+    {"lessthan", "LT"},
+    {"midpoint", "MI"},
+    {"equalanlges", "EE"},
+    {"supplement", "SU"},
+    {"rightangle", "RR"},
+    {"perpat", "PA"},
+    {"perpendicular", "PE"},
+    {"interior", "IA"},
+    {"oppositeside", "OS"},
+    {"sameside", "SS"},
+    {"isosceles", "IS"},
+    {"cut", "CU"},
+    {"trianglecongruence","TC"},
+    {"anglelessthan", "AO"},
+    {"togethergreater", "TG"},
+    {"togetherfour", "TT"},
+    {"tworightangles", "RT"},
+    {"meet", "ME"},
+    {"cross", "CR"},
+    {"tarski_parallel", "TP"},
+    {"parallel", "PR"},
+    {"anglesum", "AS"},
+    {"parallelogram", "PG"},
+    {"square", "SQ"},
+    {"rectangle", "RE"},
+    {"congruentrectangles", "RC"},
+    {"equalrectangles", "ER"},
+    {"baserectangle", "BR"},
+    {"figurerectangle", "FR"},
+    {"equaltriangles", "TE"},
+    {"equalfigures", "FE"},
+    {"equaltrianglefigure", "TF"}
 };

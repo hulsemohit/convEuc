@@ -17,6 +17,8 @@ class theorem {
         std::vector<std::vector<std::vector<int>>> assms_pos;
         std::vector<std::vector<int>> conc_pos;
 
+        std::string exists;
+
     public:
         theorem(std::vector<std::string> euc_assms = {}, std::string euc_conc = "");
 
@@ -27,5 +29,7 @@ class theorem {
         std::string to_string() const;
 
         int get_var_cnt() const;
+
+        std::string get_exists() const;
 };
 

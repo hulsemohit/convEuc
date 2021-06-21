@@ -13,6 +13,7 @@ bool fact_set::has_fact(const string& fact) const {
 }
 
 
+#warning "trace_demorgan_and doesn't use de Morgans\'s law yet."
 string fact_set::trace_demorgan_and(const string& fact) const {
     if(has_fact(fact))
         return fact;
@@ -22,12 +23,12 @@ string fact_set::trace_demorgan_and(const string& fact) const {
             for(string f: v)
                 if(fact == f)
                     return s;
-        } else if(s.substr(0, 4) == "NOOR") {
+        } /* else if(s.substr(0, 4) == "NOOR") {
             vector<string> v = utils::split_at(s.substr(4), "|");
             for(string f: v)
                 if(fact == f)
                     return s;
-        }
+        } */
 
     return "FALSE";
 }
@@ -39,3 +40,4 @@ bool fact_set::verify_facts(const vector<string>& fact) const {
             return false;
     return true;
 }
+
