@@ -1,0 +1,10 @@
+BEADB
+EEACAD
+EEBDBC
+EEADAD   cn:congruencereflexive
+EEDBDB   cn:congruencereflexive
+EEBCBD   lemma:congruencesymmetric
+EEACAD
+EEDCDD   lemma:interior5
+EQDC     axiom:nullsegment1
+EQCD     lemma:equalitysymmetric

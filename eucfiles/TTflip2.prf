@@ -1,0 +1,29 @@
+TTABCDEFGH
+ANBEEFJ+EEFJGH+TGABCDEJ  defn:togetherfour
+BEEFJ
+EEFJGH
+TGABCDEJ
+ANBEABK+EEBKCD+LTEJAK  defn:togethergreater
+BEABK
+EEBKCD
+LTEJAK
+NEFJ  lemma:betweennotequal
+NEGH  lemma:nullsegment3
+NEHG  lemma:inequalitysymmetric
+NEEF  lemma:betweennotequal
+NEFE  lemma:inequalitysymmetric
+ANBEHGL+EEGLFE postulate:extension
+BEHGL
+EEGLFE
+EELGEF  lemma:congruenceflip
+EEGHFJ lemma:congruencesymmetric
+BELGH   axiom:betweennesssymmetry
+EELHEJ  lemma:sumofparts
+EEHLLH  cn:equalityreverse
+EEHLEJ  lemma:congruencetransitive 
+EEEJHL  lemma:congruencesymmetric
+LTHLAK  lemma:lessthancongruence2
+ANBEABK+EEBKCD+LTHLAK  
+TGABCDHL   defn:togethergreater
+ANBEHGL+EEGLFE+TGABCDHL
+TTABCDHGFE  defn:togetherfour

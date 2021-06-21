@@ -1,0 +1,52 @@
+LTABCD
+EECDEF
+ANBECGD+EECGAB   defn:lessthan
+BECGD
+EECGAB
+NECD  lemma:betweennotequal
+NEEF  lemma:nullsegment3
+EQFE  assumption
+EQEF  lemma:equalitysymmetric
+NEFE  reductio
+ANBEFEP+EEEPFE  postulate:extension
+BEFEP
+BEPEF axiom:betweennesssymmetry
+NEPE  lemma:betweennotequal
+NECG   lemma:betweennotequal
+NEAB   lemma:nullsegment3
+ANBEPEH+EEEHAB  postulate:extension
+EQDC  assumption
+BECGD
+BECGC  cn:equalitysub
+NOBECGC  axiom:betweennessidentity
+NEDC  reductio
+NEPE  lemma:betweennotequal
+NEEP  lemma:inequalitysymmetric
+ANBEDCQ+EECQEP  postulate:extension
+BEDCQ
+EECQEP
+BEQCD  axiom:betweennesssymmetry
+EEQCCQ  cn:equalityreverse
+EEQCEP  lemma:congruencetransitive
+EEEPPE  cn:equalityreverse
+EEQCPE  lemma:congruencetransitive
+EEQDPF  lemma:sumofparts
+EECGAB
+EEEHAB
+EEABEH  lemma:congruencesymmetric
+EECGEH  lemma:congruencetransitive
+EEQDPF
+EECDEF
+EEQCPE
+EECGEH
+BEQCG   axiom:innertransitivity
+BEPEH 
+EEDGFH  axiom:5-line
+EEGDHF  lemma:doublereverse
+EECGEH
+EECDEF
+BEEHF   lemma:betweennesspreserved
+LTABEF defn:lessthan
+
+ 
+

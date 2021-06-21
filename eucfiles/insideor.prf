@@ -1,0 +1,33 @@
+CIJCPQ
+ICAJ
+ANCIJCPQ+BEDCE+EECEPQ+EECDPQ+BEDAE defn:inside
+EECEPQ
+EECDPQ		
+BEDAE
+cases OREQAC|LTCAPQ:EQAC|NEAC
+ case 1: EQAC
+  OREQAC|LTCAPQ
+ qedcase
+ case 2: NEAC
+  NOLTCAPQ  assumption
+   BEDAC assumption
+    BECAD axiom:betweennesssymmetry
+    EECACA  cn:congruencereflexive
+    LTCACD  defn:lessthan
+    LTCAPQ  lemma:lessthancongruence
+   NOBEDAC  reductio
+   BEDCA assumption
+    BECAE  lemma:3.6a
+    EECACA cn:congruencereflexive
+    LTCACE  defn:lessthan
+    LTCAPQ  lemma:lessthancongruence
+   NOBEDCA  reductio
+   BEDAE
+   BEDCE
+   EQAC   axiom:connectivity
+  LTCAPQ reductio
+  OREQAC|LTCAPQ
+ qedcase
+OREQAC|LTCAPQ cases
+   
+ 

@@ -1,0 +1,42 @@
+TGBAAEBE
+BEAEC
+ANBEBAH+EEAHAE+LTBEBH  defn:togethergreater
+BEBAH
+NEBA  lemma:betweennotequal
+EEAHAE
+LTBEBH
+EQBE assumption
+ LTBBBH cn:equalitysub
+ ANBEBKH+EEBKBB  defn:lessthan
+ BEBKH
+ EEBKBB
+ EQBK   axiom:nullsegment1
+ BEBBH   cn:equalitysub
+ NEBB  lemma:betweennotequal
+ EQBB  cn:equalityreflexive
+NEBE  reductio
+NEAC  lemma:betweennotequal
+ANBEBAF+EEAFAC  postulate:extension
+BEBAF
+EEAFAC
+NEEC   lemma:betweennotequal
+ANBEBEG+EEEGEC  postulate:extension
+EEEGEC
+EEACAF  lemma:congruencesymmetric
+EEAEAH  lemma:congruencesymmetric
+EEAEAE  cn:congruencereflexive
+LTAEAC  defn:lessthan
+LTAEAF  lemma:lessthancongruence
+LTAHAF  lemma:lessthancongruence2
+RAAHF defn:ray
+BEAHF  lemma:lessthanbetween
+EEECHF   lemma:differenceofparts
+EEEGHF  lemma:congruencetransitive
+LTBEBH
+BEBEG
+BEBAH
+BEAHF
+BEBHF  lemma:3.7a
+LTBGBF   lemma:lessthanadditive
+TGBAACBG defn:togethergreater
+TTBAACBEEC  defn:togetherfour

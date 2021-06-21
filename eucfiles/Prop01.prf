@@ -1,0 +1,65 @@
+NEAB    
+CIJAAB   defn:circle
+CIKBAB   defn:circle
+NEBA     lemma:inequalitysymmetric
+ANBEBAD+EEADAB  postulate:extension
+BEBAD
+EEADAB
+EEBAAB   cn:equalityreverse
+ANCIKBAB+OCDK     defn:outside
+OCDK
+ANBEABE+EEBEAB  postulate:extension
+BEABE
+EEBEAB
+EEBAAB   cn:equalityreverse
+ANCIKBAB+ICBK     defn:inside
+ICBK
+ANCIJAAB+ONDJ     defn:on
+ONDJ
+EEABAB   cn:congruencereflexive
+ANCIJAAB+ONBJ     defn:on
+ONBJ
+ANONCK+ONCJ   postulate:circle-circle
+ONCJ
+ONCK
+EEACAB    defn:on
+EEABAC    lemma:congruencesymmetric
+EEBCAB    defn:on 
+EEBCAC    lemma:congruencetransitive
+EEABBC    lemma:congruencesymmetric
+EEACCA    cn:equalityreverse
+EEBCCA    lemma:congruencetransitive
+ELABC     defn:equilateral 
+NEAB
+EEABBC
+NEBC      lemma:nullsegment3
+EEBCCA    
+NECA      lemma:nullsegment3
+BEACB     assumption
+ NOEEACAB   lemma:partnotequalwhole
+ EEACAB 
+ EECAAC    cn:equalityreverse
+ EECAAB    lemma:congruencetransitive
+ EEACCA    cn:equalityreverse
+ EEACAB    lemma:congruencetransitive
+NOBEACB   reductio
+BEABC     assumption
+ NOEEABAC   lemma:partnotequalwhole
+ EEABCA    lemma:congruencetransitive
+ EECAAC     cn:equalityreverse
+ EEABAC     lemma:congruencetransitive
+NOBEABC    reductio
+BEBAC      assumption
+ NOEEBABC   lemma:partnotequalwhole
+ EEABBC
+ EEBAAB     cn:equalityreverse
+ EEBABC     lemma:congruencetransitive
+NOBEBAC    reductio
+COABC      assumption
+NEAC       lemma:inequalitysymmetric
+ANNEAB+NEAC+NEBC+NOBEBAC+NOBEABC+NOBEACB
+OREQAB|EQAC|EQBC|BEBAC|BEABC|BEACB  defn:collinear
+NCABC      reductio
+TRABC       defn:triangle
+ANELABC+TRABC 
+

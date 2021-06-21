@@ -1,0 +1,12 @@
+BEABC
+NEAB  lemma:betweennotequal
+NEBA  lemma:inequalitysymmetric
+ANBEBAD+EEADBA  postulate:extension
+BEBAD
+BEDAB axiom:betweennesssymmetry
+BEDAC lemma:3.7b
+BEABC
+NEBC  lemma:betweennotequal
+EEABAC  assumption
+EQBC    lemma:extensionunique
+NOEEABAC  reductio

@@ -1,0 +1,58 @@
+NEAB
+NCABC
+EQBC    assumption
+ COABC   defn:collinear
+NEBC    reductio
+NECB    lemma:inequalitysymmetric
+ANBECBE+EEBECB  postulate:extension
+BECBE
+NECE     lemma:betweennotequal
+NEEC     lemma:inequalitysymmetric
+ANBEECF+EECFEC  postulate:extension
+EECFEC
+EEECCE  cn:equalityreverse
+EECECE   cn:congruencereflexive
+EECFCE   lemma:congruencetransitive
+BEEBC   axiom:betweennesssymmetry
+BEECF
+BEEBF    lemma:3.6b
+CIKCCE   defn:circle
+ANCIKCCE+ICBK defn:inside
+ICBK     
+ANCOABP+COABQ+ONPK+ONQK+BEPBQ  postulate:line-circle
+COABQ
+ONPK
+ONQK
+BEPBQ
+EECPCE   defn:on
+EECQCE   defn:on
+EECECQ   lemma:congruencesymmetric
+EECPCQ   lemma:congruencetransitive
+EEPCQC   lemma:congruenceflip
+NEPQ     lemma:betweennotequal
+ANBEPMQ+EEMPMQ   proposition:10
+BEPMQ
+EEMPMQ
+EEPMQM   lemma:congruenceflip
+COPMQ    defn:collinear
+COPBQ    defn:collinear
+COPQB    lemma:collinearorder
+COPQM    lemma:collinearorder
+NEPQ    
+COQBM    lemma:collinear4
+COQBA    lemma:collinearorder
+NEBQ     lemma:betweennotequal
+NEQB     lemma:inequalitysymmetric
+COBMA    lemma:collinear4
+COABM    lemma:collinearorder
+EQMC     assumption
+ COABM
+ COABC   cn:equalitysub
+NEMC     reductio
+RRPMC    defn:rightangle
+EQMM      cn:equalityreflexive
+COCMM     defn:collinear
+COABP
+COABQ
+COABM      
+PACMABM    defn:perpat

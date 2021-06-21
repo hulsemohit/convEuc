@@ -1,0 +1,62 @@
+EEABab
+EEACac
+BEABC
+BEabc
+cases EEBCbc:EQBA|NEBA
+ case 1: EQBA    
+  EEAAab  cn:equalitysub
+  EEabAA  lemma:congruencesymmetric
+  EQab    axiom:nullsegment1
+  EEACAC   cn:congruencereflexive
+  EEBCAC   cn:equalitysub
+  EEBCac   lemma:congruencetransitive
+  EEbcbc   cn:congruencereflexive
+  EEbcac   cn:equalitysub
+  EEacbc   lemma:congruencesymmetric
+  EEBCbc   lemma:congruencetransitive
+ qedcase
+ case 2: NEBA  
+  EQCA    assumption
+  BEABA   cn:equalitysub  
+  NOBEABA   axiom:betweennessidentity
+  NECA    reductio
+  NEAC    lemma:inequalitysymmetric
+  ANBECAE+EEAEAC   postulate:extension
+  EEACac
+  BECAE
+  NEAC    lemma:inequalitysymmetric
+  NEac    lemma:nullsegment3
+  EQca    assumption
+  EQac    lemma:equalitysymmetric
+  NEca    reductio
+  NEac    lemma:inequalitysymmetric
+  ANBEcae+EEaeac   postulate:extension
+  BEcae
+  EEAEAC
+  EEaeac
+  EEEAAE   cn:equalityreverse
+  EEEAAC   lemma:congruencetransitive
+  EEACac
+  EEEAac   lemma:congruencetransitive
+  EEeaae   cn:equalityreverse
+  EEeaac   lemma:congruencetransitive
+  EEacea   lemma:congruencesymmetric
+  EEEAac   lemma:congruencetransitive
+  EEEAea   lemma:congruencetransitive
+  BEEAC    axiom:betweennesssymmetry
+  BEeac    axiom:betweennesssymmetry
+  EEECec   lemma:sumofparts
+  EEECec
+  EEEAea
+  EEABab
+  BEEAC
+  BEABC
+  BEEAB   axiom:innertransitivity
+  BEeab   axiom:innertransitivity
+  EECBcb  axiom:5-line
+  EEbcBC  lemma:doublereverse
+  EEBCbc  lemma:congruencesymmetric
+ qedcase
+EEBCbc  cases
+ 
+

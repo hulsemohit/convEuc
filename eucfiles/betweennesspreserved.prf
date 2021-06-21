@@ -1,0 +1,19 @@
+EEABab
+EEACac
+EEBCbc
+BEABC
+NEAB  lemma:betweennotequal
+EEABab  
+NEab lemma:nullsegment3
+NEBC  lemma:betweennotequal
+ANBEabd+EEbdBC  postulate:extension
+BEabd
+EEbdBC
+EEABab
+EEBCbd  lemma:congruencesymmetric
+EEBCbc
+EEACac
+EECCcd  axiom:5-line
+EEcdCC  lemma:congruencesymmetric
+EQcd    axiom:nullsegment1
+BEabc   cn:equalitysub
