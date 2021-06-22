@@ -17,7 +17,6 @@ int main(int, char* argv[]) {
         Info("Generating statement for " +  s);
         generate_statement(s);
     }
-    
     in.close();
 
     in = std::ifstream("../eucfiles/list.txt");
@@ -30,7 +29,7 @@ int main(int, char* argv[]) {
     return 0;
 }
 
-
+// Generates the statements of a theorem.
 void generate_statement(const std::string& fname) {
     using std::string, std::vector;
     std::ifstream in("../eucfiles/" + fname);

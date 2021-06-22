@@ -5,8 +5,14 @@
 
 #define Abort(s) utils::log::abort(std::string(__func__) + "::"\
         + std::to_string(__LINE__) + " - " +  s)
+
+#ifdef SILENT
+#define Info(s) 42
+#else
 #define Info(s) utils::log::info(std::string(__func__) + "::"\
         + std::to_string(__LINE__) + " - " +  s)
+#endif
+
 #define Warn(s) utils::log::warn(std::string(__func__) + "::"\
         + std::to_string(__LINE__) + " - " +  s)
 

@@ -3,6 +3,7 @@
 
 using std::string;
 
+// Creates a Euc word from the given variables and the command.
 string command::convert(const string& vars) const {
     if(vars.length() != arity)
         Abort("Attempted to apply command " +  name + " of arity "

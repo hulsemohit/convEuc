@@ -9,13 +9,14 @@
 
 namespace prover {
 
-    using std::string, std::vector, std::ifstream, std::ostream, std::ostringstream;
+    using std::string, std::vector, std::ifstream, std::ofstream, std::ostringstream;
 
     int indent_level{};
 
-    string proof_step(ifstream& in, fact_set& facts, string& vars) {
+    // Processes one line of the proof.
+    void proof_step(ifstream& in, ofstream& out, fact_set& facts, string& vars) {
         string s; getline(in, s); int l(s.size()); s = utils::trim(s);
-        if(s.empty() || s[0] == '%') return "";
+        if(s.empty() || s[0] == '%') return;
         
         string stmt, reason;
         if(int i(s.find(" ")); i == string::npos)
@@ -34,7 +35,6 @@ namespace prover {
 
         string type{verify::reason_type(reason)};
 
-        ostringstream out;
         if(type == "assumption") {
             out << string(indent_level, '\t');
             out << "have ";
@@ -47,11 +47,12 @@ namespace prover {
             out << string(indent_level, '\t');
             out << "proof (rule ccontr)\n";
             indent_level++;
-            out << by_contr(in, facts, vars, stmt);
+            by_contr(in, out, facts, vars, stmt);
             facts.add_fact(nstmt);
             getline(in, s); s = utils::trim(s);
             facts.add_fact(s.substr(0, s.find(" ")));
-            return out.str();
+            out << std::flush;
+            return;
 
         } else if(type == "reductio") {
             out << string(indent_level, '\t');
@@ -74,7 +75,8 @@ namespace prover {
             out << string(indent_level, '\t');
             out << "hence \"" << parse::translate(stmt) << "\" by blast\n";
             in.seekg(-(l + !in.eof()), std::ios_base::cur);
-            return out.str();
+            out << std::flush;
+            return;
 
         } else if(stmt == "cases") {
             stmt = type;
@@ -103,17 +105,23 @@ namespace prover {
                 indent_level++;
                 fact_set new_facts{facts};
                 new_facts.add_fact(c);
-                out << by_cases(in, new_facts, vars);
+                by_cases(in, out, new_facts, vars);
             }
             facts.add_fact(stmt);
-            return out.str();
+            out << std::flush;
+            return;
         } else if(stmt == "case") {
-            return string(indent_level, '\t') + "case " + type + "\n";
+            out << string(indent_level, '\t') + "case " + type + "\n";
+            out << std::flush;
+            return;
         } else if(stmt == "qedcase") {
             indent_level--;
-            return string(indent_level, '\t') + "next\n";
+            out << string(indent_level, '\t') + "next\n";
+            out << std::flush;
+            return;
         } else if(reason == "cases") {
-            return "";
+            out << std::flush;
+            return;
         }
 
         out << string(indent_level, '\t');
@@ -140,28 +148,29 @@ namespace prover {
 
         facts.add_fact(stmt);
 
-        return out.str();
+        out << std::flush;
     }
 
-    string by_cases(ifstream& in, fact_set facts, string vars) {
+    // Creates a new environment for a single case.
+    void by_cases(ifstream& in, ofstream& out, fact_set facts, string vars) {
         const int cur_level{indent_level};
-        ostringstream out;
         while(cur_level <= indent_level)
-            out << proof_step(in, facts, vars);
-        return out.str();
+            proof_step(in, out, facts, vars);
     }
 
-    string by_contr(ifstream& in, fact_set facts, string vars, string assm) {
+    // Creates a new environment for contradiction.
+    void by_contr(ifstream& in, ofstream& out,
+            fact_set facts, string vars, string assm) {
         const int cur_level{indent_level};
-        ostringstream out;
         out << string(indent_level, '\t');
         out << "assume \"" << parse::translate(assm) << "\"\n"; 
+        out << std::flush;
         facts.add_fact(assm);
         while(indent_level >= cur_level)
-            out << proof_step(in, facts, vars);
-        return out.str();
+            proof_step(in, out, facts, vars);
     }
 
+    // Generates the Isabelle/HOL translation of the proof in fname.
     void generate_proof(const std::string& fname) {
         const string name{utils::fix_name(fname.substr(0, fname.size() - 4))};
         std::ofstream out("../thyfiles/" + name + ".thy");
@@ -203,12 +212,11 @@ namespace prover {
         in.seekg(-int(s.size() + 1), std::ios_base::cur);
 
         while(!facts.has_fact(theorem::theorems[name].conclusion) && !in.eof())
-            out << proof_step(in, facts, vars) << std::flush;
+            proof_step(in, out, facts, vars);
 
         out << "\tthus ?thesis by blast\n";
         out << "qed\n\nend";
         indent_level--;
-        
         
         out.close();
         in.close();

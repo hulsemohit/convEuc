@@ -1,4 +1,5 @@
 #include <fstream>
+#include <algorithm>
 
 #include "verify.h"
 #include "parse.h"
@@ -10,8 +11,11 @@
 namespace verify {
     using std::string, std::vector;
 
+    // Performs a semi-brute-force test of all combination of variables
+    // that can prove stmt using facts and th.
     string test_combination(const string& stmt, const theorem& th,
             const string& vars, const string& sub, const fact_set& facts) {
+
         if(sub.size() == th.get_var_cnt()) {
             theorem th_ = th.instantiate(sub);
             if(!facts.verify_facts(th_.assumptions))
@@ -29,12 +33,24 @@ namespace verify {
         } else {
             string s;
             for(char c: vars) {
-                theorem th_ = th.instantiate(sub + c +
-                        string(th.get_var_cnt() - int(sub.size()) - 1, '?'));
+                string sub_ = sub + c + string(th.get_var_cnt() -
+                        int(sub.size()) - 1, '?');
+                theorem th_ = th.instantiate(sub_);
 
                 if(!facts.verify_facts(th_.assumptions))
                     continue;
 
+                fact_set tmp; tmp.add_fact(th_.conclusion);
+                if(tmp.trace_logical(stmt, true) == "FALSE")
+                    continue;
+
+                if(std::all_of(th_.assumptions.begin(), th_.assumptions.end(),
+                            [](string str){
+                            return str.find("?") == string::npos;
+                            })) {
+                        return sub_;
+                }
+                           
                 int missing_count{};
                 for(char x: parse::get_vars(stmt))
                     if((sub + c).find(x) == string::npos)
@@ -51,6 +67,66 @@ namespace verify {
         }
     }
 
+    // This method is slower on most proofs (but faster ocassionally).
+    // For this reason, this method isn't used.
+    string test_combination_slow(const string& stmt, const theorem& th,
+            const string& vars, string sub, const fact_set& facts) {
+        if(sub.empty()) {
+            sub = parse::get_vars(stmt);
+            sub = string(th.get_var_cnt() - int(sub.size()), '?') + sub;
+            do {
+                string s = test_combination_slow(stmt, th, vars, sub, facts);
+                if(!s.empty())
+                    return s;
+            } while(next_permutation(sub.begin(), sub.end()));
+
+            return "";
+        }
+
+        theorem th_ = th.instantiate(sub);
+        if(!facts.verify_facts(th_.assumptions))
+            return "";
+        fact_set tmp; tmp.add_fact(th_.conclusion);
+        if(tmp.trace_logical(stmt, true) == "FALSE")
+            return "";
+
+        if(std::all_of(th_.assumptions.begin(), th_.assumptions.end(),
+                        [](string str){
+                    return str.find("?") == string::npos;
+                    })) {
+                return sub;
+        }
+
+        int i = sub.find("?");
+        if(i == string::npos)
+            return "";
+
+        string good_vars{};
+        for(string s: th_.assumptions)
+            for(string k: facts.all_matches(s))
+                good_vars += parse::get_vars(k);
+        utils::unique(good_vars);
+
+        for(char c: good_vars) {
+            sub[i] = c;
+            string s = test_combination_slow(stmt, th, vars, sub, facts);
+            if(!s.empty())
+                return s;
+        }
+
+        for(char c: vars) if(good_vars.find(c) == string::npos) {
+            sub[i] = c;
+            string s = test_combination_slow(stmt, th, vars, sub, facts);
+            if(!s.empty())
+                return s;
+        }
+
+        return "";
+    }
+
+    // Generates an Isabelle reason for
+    // stmt using theorem th (which has name name)
+    // and facts.
     string generate_reason(const string& name, const theorem& th,
             const string& stmt, const fact_set& facts) {
         bool b{true};
@@ -86,6 +162,7 @@ namespace verify {
         }
     }
 
+    // Proof by fact (already proven or equivalent to a proven statement).
     string by_fact(const std::string& stmt, const fact_set& facts) {
         if(facts.has_fact(stmt))
             return "using `" + parse::translate(stmt) + "` .";
@@ -102,15 +179,45 @@ namespace verify {
         return "sorry";
     }
 
+    // Proof by substituting equal variables in a proven statement.
+    string by_equalitysub(const string& stmt, const fact_set& facts) {
+        vector<string> possibilities{
+            facts.all_matches(
+                    theorem({}, stmt).instantiate(
+                        string(parse::get_vars(stmt).size(), '?')
+                        ).conclusion
+                    )
+        };
+
+        for(string s: possibilities) {
+            string reason = "using `" + parse::translate(s) + "` ";
+            for(int i{}; i < stmt.size(); ++i)
+                if(stmt[i] != s[i]) {
+                    if(string k = facts.trace_logical(string("EQ") + s[i] + stmt[i]);
+                            k != "FALSE") {
+                        reason += "`" + parse::translate(k) + "` ";
+                    } else if(k = facts.trace_logical(string("EQ") + stmt[i] + s[i]);
+                            k != "FALSE") {
+                        reason += "`" + parse::translate(k) + "` ";
+                    } else {
+                        reason = "FALSE";
+                        break;
+                    }
+                }
+            if(reason != "FALSE")
+                return reason + "by blast";
+        }
+
+        Warn("Failed to show " + stmt + " using equalitysub, using sorry.");
+        return "sorry";
+    }
+
+    // Proof using an axiom.
     string by_axiom(const string& stmt, const string& ax,
             const string& vars, const fact_set& facts) {
 
-        if(ax == "equalitysub") {
-#warning "equalitysub has not been implemented."
-            Warn("TODO equalitysub, using sorry.");
-            return "sorry";
-        }
-
+        if(ax == "equalitysub")
+            return by_equalitysub(stmt, facts);
 
         if(axioms.find(ax) == axioms.end()) {
             Warn("Unknown axiom `" + ax + "`, using sorry.");
@@ -127,6 +234,7 @@ namespace verify {
         return "sorry";
     }
 
+    // Proof using a theorem.
     string by_theorem(const string& stmt, const string& th,
             const string& vars, const fact_set& facts) {
         if(theorem::theorems.find(th) == theorem::theorems.end()) {
@@ -144,24 +252,12 @@ namespace verify {
         return "sorry";
     }
 
+    // Proof using a definition.
     string by_definition(const string& stmt, string def,
             const std::string& vars, const fact_set& facts) {
-        if(euc_cmd_names.find(def) == euc_cmd_names.end()) {
-            Warn("Unknown definition `" + def + "`, using sorry.");
-            return "sorry";
-        }
-
-        def = euc_cmd_names.at(def);
-
-        if(commands.find(def) == commands.end()) {
-            Warn("No command `" + def + "` corresponding to definition, using sorry.");
-            return "sorry";
-        }
        
-        def = commands.at(def).name;
-
         if(definitions.find(def + "_f") == definitions.end()) {
-            // Warn("Could not find definition `" + def + "`, using sorry.");
+            Warn("Could not find definition `" + def + "`, using sorry.");
             return "sorry";
         }
 
@@ -178,10 +274,13 @@ namespace verify {
         return "sorry";
     }
 
+
+    // Separates the type of reason from the reason (eg. cn, axiom, lemma etc...)
     string reason_type(const string& reason) {
         return utils::split_at(reason, ":")[0];
     }
 
+    // Verifies a stmt using one of the above methods.
     string verify(const string& vars, const fact_set& facts,
             const string& stmt, const string& reason) {
 

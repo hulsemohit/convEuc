@@ -5,6 +5,7 @@
 
 #include "theorem.h"
 
+// A list of all axioms.
 const std::map<std::string, theorem> axioms{
     // common notions
     {"equalitytransitive", theorem({"EQAC", "EQBC"}, "EQAB")},

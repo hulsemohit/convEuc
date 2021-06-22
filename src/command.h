@@ -12,6 +12,7 @@ class command {
         std::string convert(const std::string& vars) const;
 };
 
+// All Euc commands
 const std::map<std::string, command> commands {
     {"BE", command{"bet", 3}},
     {"EQ", command{"eq_pnt", 2}},
@@ -59,6 +60,7 @@ const std::map<std::string, command> commands {
     {"FE", command{"d_eq_qua", 8}}
 };
 
+// A map from the name of command's definition to itself.
 const std::map<std::string, std::string> euc_cmd_names{
     {"unequal", "NE"},
     {"collinear", "CO"},
