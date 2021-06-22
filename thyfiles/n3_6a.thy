@@ -14,3 +14,5 @@ proof -
 	have "bet B C D" using betweennesssymmetryE[OF `axioms` `bet D C B`] .
 	thus ?thesis by blast
 qed
+
+end

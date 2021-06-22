@@ -13,7 +13,7 @@ proof -
 		have "bet A C B" sorry
 		have "bet B C B" using n3_6a[OF `axioms` `bet A B C` `bet A C B`] .
 		have "\<not> (bet B C B)" using betweennessidentityE[OF `axioms`] .
-		show "False" sorry
+		show "False" using `\<not> (bet B C B)` `bet B C B` by blast
 	qed
 	hence "B \<noteq> C" by blast
 	have "\<not> (A = B)"
@@ -22,7 +22,7 @@ proof -
 		have "bet B A C" sorry
 		have "bet A B A" using innertransitivityE[OF `axioms` `bet A B C` `bet B A C`] .
 		have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] .
-		show "False" sorry
+		show "False" using `\<not> (bet A B A)` `bet A B A` by blast
 	qed
 	hence "A \<noteq> B" by blast
 	have "\<not> (A = C)"
@@ -31,9 +31,11 @@ proof -
 		have "bet A B C" using `bet A B C` .
 		have "bet A B A" sorry
 		have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] .
-		show "False" sorry
+		show "False" using `\<not> (bet A B A)` `bet A B A` by blast
 	qed
 	hence "A \<noteq> C" by blast
-	have "B \<noteq> C \<and> A \<noteq> B \<and> A \<noteq> C"  using `B \<noteq> C` `A \<noteq> B` `A \<noteq> C` by simp
+	have "B \<noteq> C \<and> A \<noteq> B \<and> A \<noteq> C" using `B \<noteq> C` `A \<noteq> B` `A \<noteq> C` by blast
 	thus ?thesis by blast
 qed
+
+end

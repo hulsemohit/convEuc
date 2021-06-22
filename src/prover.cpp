@@ -15,7 +15,7 @@ namespace prover {
 
     string proof_step(ifstream& in, fact_set& facts, string& vars) {
         string s; getline(in, s); int l(s.size()); s = utils::trim(s);
-        if(s.empty()) return "";
+        if(s.empty() || s[0] == '%') return "";
         
         string stmt, reason;
         if(int i(s.find(" ")); i == string::npos)
@@ -55,20 +55,65 @@ namespace prover {
 
         } else if(type == "reductio") {
             out << string(indent_level, '\t');
-#warning "Implement actual contradiction finding."
-            out << "show \"False\" sorry\n";
+
+            out << "show \"False\" ";
+            string contr = facts.find_contradiction();
+            if(contr == "FALSE") {
+                Warn("Failed to find proof by contradiction, using sorry.");
+                out << "sorry\n";
+            } else {
+                out << "using ";
+                for(string s: utils::split_at(contr, " "))
+                    out << "`" << parse::translate(s) << "` ";
+                out << "by blast\n";
+            }
+
             indent_level--;
             out << string(indent_level, '\t');
             out << "qed\n";
             out << string(indent_level, '\t');
             out << "hence \"" << parse::translate(stmt) << "\" by blast\n";
-            in.seekg(-(l + 1), std::ios_base::cur);
+            in.seekg(-(l + !in.eof()), std::ios_base::cur);
             return out.str();
 
         } else if(stmt == "cases") {
-            // by_cases(in, facts, vars);
-#warning "Cases aren\'t implemented yet."
-            Abort("Cases not implemented yet.");
+            stmt = type;
+            string all_cases = utils::split_at(reason, ":")[1];
+            vector<string> cases = utils::split_at(all_cases, "|");
+            out << string(indent_level, '\t');
+            out << "consider ";
+            for(string c: cases) {
+                out << "\"" << parse::translate(c) << "\"";
+                if(c != cases.back())
+                    out << "|";
+            }
+
+            if(string s = facts.trace_logical("OR" + all_cases); s != "FALSE") {
+                out << " using ";
+                for(string k: utils::split_at(s, " "))
+                    out << "`" << parse::translate(k) << "` ";
+            }
+            out << " by blast\n";
+
+            out << string(indent_level, '\t');
+            out << "hence " << parse::translate(stmt) << '\n';
+            out << string(indent_level, '\t');
+            out << "proof (cases)\n";
+            for(string c: cases) {
+                indent_level++;
+                fact_set new_facts{facts};
+                new_facts.add_fact(c);
+                out << by_cases(in, new_facts, vars);
+            }
+            facts.add_fact(stmt);
+            return out.str();
+        } else if(stmt == "case") {
+            return string(indent_level, '\t') + "case " + type + "\n";
+        } else if(stmt == "qedcase") {
+            indent_level--;
+            return string(indent_level, '\t') + "next\n";
+        } else if(reason == "cases") {
+            return "";
         }
 
         out << string(indent_level, '\t');
@@ -95,6 +140,14 @@ namespace prover {
 
         facts.add_fact(stmt);
 
+        return out.str();
+    }
+
+    string by_cases(ifstream& in, fact_set facts, string vars) {
+        const int cur_level{indent_level};
+        ostringstream out;
+        while(cur_level <= indent_level)
+            out << proof_step(in, facts, vars);
         return out.str();
     }
 
@@ -134,7 +187,7 @@ namespace prover {
 
         if(!e.empty()) {
             out << "\\<exists>";
-            for(char c: e) out << " " << e;
+            for(char c: e) out << " " << c;
             out << ". ";
         }
 

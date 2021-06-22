@@ -7,8 +7,8 @@
 
 const std::map<std::string, theorem> axioms{
     // common notions
-    {"equalitytransitive", theorem({"EQAC", "EQBC", "EQAB"}, "EQAB")},
-    {"congruencetransitive", theorem({"EQAC", "EQBC"}, "EQAB")},
+    {"equalitytransitive", theorem({"EQAC", "EQBC"}, "EQAB")},
+    {"congruencetransitive", theorem({"EEPQBC", "EEPQDE"}, "EEBCDE")},
     {"equalityreflexive", theorem({}, "EQAA")},
     {"congruencereflexive", theorem({}, "EEABAB")},
     {"equalityreverse", theorem({}, "EEABBA")},
@@ -31,7 +31,7 @@ const std::map<std::string, theorem> axioms{
     {"line-circle", theorem({"CIKCPQ", "ICBK", "NEAB"}, 
             "ANCOABX+COABY+ONXK+ONYK+BEXBY")},
     {"circle-circle", theorem({"CIJCRS", "ICPJ", "OCQJ", "CIKDFG", "ONPK", "ONQK"},
-            "AXONXJ+ONXK")},
+            "ANONXJ+ONXK")},
     {"Euclid5", theorem({"BErts", "BEptq", "BEraq", "EEptqt", "EEtrts"},
             "ANBEpaX+BEsqX")},
 

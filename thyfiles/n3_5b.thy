@@ -12,3 +12,5 @@ proof -
 	have "bet A C D" using n3_7a[OF `axioms` `bet A B C` `bet B C D`] .
 	thus ?thesis by blast
 qed
+
+end

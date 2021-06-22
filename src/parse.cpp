@@ -54,4 +54,41 @@ namespace parse {
         return args;
     }
 
+    // canonical form: cannot have "NONO" "NOAN" "NOOR" "NOEQ" "NOCO""NONE" "NONC
+    // these are converted into "" "ORNO...|NO..." "ANNO..+" "NE" "NC" "EQ" "CO"
+    string canonical(const string& s) {
+        if(s.size() <= 3)
+            return s;
+        if(s.substr(0, 4) == "NONO")
+            return canonical(s.substr(4));
+        if(s.substr(0, 4) == "NOEQ")
+            return "NE" + s.substr(4);
+        if(s.substr(0, 4) == "NOCO")
+            return "NC" + s.substr(4);
+        if(s.substr(0, 4) == "NONE")
+            return "EQ" + s.substr(4);
+        if(s.substr(0, 4) == "NONC")
+            return "CO" + s.substr(4);
+        if(s.substr(0, 4) == "NOOR" || s.substr(0, 4) == "NOAN") {
+            bool b = s.substr(2, 2) == "AN";
+            string f{b ? "OR" : "AN"};
+            vector<string> clauses{utils::split_at(s.substr(4), b ? "+" : "|")};
+            for(string cl: clauses)
+                f += canonical("NO" + cl)  + (b ? "|" : "+");
+            f.pop_back();
+            return f;
+        }
+        if(s.substr(0, 2) == "AN" || s.substr(0, 2) == "OR") {
+            bool b = s.substr(0, 2) == "AN";
+            string f{b ? "AN" : "OR"};
+            vector<string> clauses{utils::split_at(s.substr(2), b ? "+" : "|")};
+            for(string cl: clauses)
+                f += canonical(cl) + (b ? "+" : "|");
+            f.pop_back();
+            return f;
+        }
+
+        return s;
+    }
+
 } // namespace parse

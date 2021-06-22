@@ -14,7 +14,7 @@ proof -
 	proof (rule ccontr)
 		assume "col C B A"
 		have "col A B C" using collinearorder[OF `axioms` `col C B A`] by blast
-		show "False" sorry
+		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "\<not> col C B A" by blast
 	have "ang_eq C B A A B C" using ABCequalsCBA[OF `axioms` `\<not> col C B A`] .
@@ -23,3 +23,5 @@ proof -
 	have "ang_eq C B A F E D" using equalanglestransitive[OF `axioms` `ang_eq C B A D E F` `ang_eq D E F F E D`] .
 	thus ?thesis by blast
 qed
+
+end

@@ -20,28 +20,29 @@ namespace verify {
             if(th_.conclusion == stmt)
                 return sub;
 
-            if(th_.conclusion.substr(0, 2) == "AN") {
-                vector<string> clauses{utils::split_at(th_.conclusion.substr(2), "+")};
-                for(string cl: clauses)
-                    if(cl == stmt)
-                        return sub;
-            }
+            fact_set f; f.add_fact(th_.conclusion);
+            if(f.trace_logical(stmt) != "FALSE")
+                return sub;
 
             return "";
+
         } else {
             string s;
             for(char c: vars) {
-                if(th.conclusion.size() == stmt.size()) {
-                    theorem th_ = th.instantiate(sub + c +
-                            string(th.get_var_cnt() - int(sub.size()) - 1, '?'));
-                    bool b = true;
-                    for(int i{}; i < stmt.size(); ++i)
-                        if(th_.conclusion[i] != '?' && th_.conclusion[i] != stmt[i]) {
-                            b = false;
-                            break;
-                        }
-                    if(!b) continue;
-                }
+                theorem th_ = th.instantiate(sub + c +
+                        string(th.get_var_cnt() - int(sub.size()) - 1, '?'));
+
+                if(!facts.verify_facts(th_.assumptions))
+                    continue;
+
+                int missing_count{};
+                for(char x: parse::get_vars(stmt))
+                    if((sub + c).find(x) == string::npos)
+                        missing_count++;
+
+                if(missing_count > th.get_var_cnt() - int(sub.size()) - 1)
+                    continue;
+
                 s = test_combination(stmt, th, vars, sub + c, facts);
                 if(s != "")
                     break;
@@ -50,52 +51,55 @@ namespace verify {
         }
     }
 
-    string generate_reason(const string& name, const theorem& th, const string& stmt) {
-        string res = "using " + name + "[OF `axioms`";
+    string generate_reason(const string& name, const theorem& th,
+            const string& stmt, const fact_set& facts) {
+        bool b{true};
         for(string h: th.assumptions)
-            res += " `" + parse::translate(h) + "`";
-        res += "] ";
-        if(th.conclusion == stmt)
-            res += ".";
-        else
+            if(!facts.has_fact(h))
+                b = false;
+
+        if(b) {
+            string res = "using " + name + "[OF `axioms`";
+            for(string h: th.assumptions)
+                res += " `" + parse::translate(h) + "`";
+            res += "] ";
+            if(th.conclusion == stmt)
+                res += ".";
+            else
+                res += "by blast";
+            return res;
+        } else {
+            string res = "using " + name + " `axioms` ";
+            for(string h: th.assumptions) {
+                if(string s = facts.trace_logical(h); s != "FALSE") {
+                    for(string k: utils::split_at(s, " "))
+                        res += "`" + parse::translate(k) + "` ";
+                } else {
+                    Warn("Attempted to use theorem " + name + " to prove "
+                            + stmt + " with incomplete preconditions, using sorry.");
+                    return "sorry";
+                }
+            }
+
             res += "by blast";
-        return res;
+            return res;
+        }
     }
 
     string by_fact(const std::string& stmt, const fact_set& facts) {
         if(facts.has_fact(stmt))
             return "using `" + parse::translate(stmt) + "` .";
 
-        else if(string s = facts.trace_demorgan_and(stmt); s != "FALSE")
-            return "using `" + parse::translate(s) + "` by simp";
-
-        else if(stmt.substr(0, 2) == "AN") {
-            string reason = " using ";
-            vector<string> clauses{utils::split_at(stmt.substr(2), "+")};
-            for(string cl: clauses)
-                if(string t = facts.trace_demorgan_and(cl); t != "FALSE")
-                    reason += "`" + parse::translate(t) + "` ";
-                else {
-                    Warn("Could not check fact `" + cl + "` in "
-                            + stmt + " using sorry.");
-                    return "sorry";
-                }
-            reason += "by simp";
-            return reason;
-
-        } else if(stmt.substr(0, 2) == "OR") {
-            string reason = " using ";
-            vector<string> clauses{utils::split_at(stmt.substr(2), "|")};
-            for(string cl: clauses)
-                if(string t = facts.trace_demorgan_and(cl); t != "FALSE")
-                    return "using `" + parse::translate(t) + "` by simp";
-            Warn("Could not check fact `" + stmt + "`, using sorry.");
-            return "sorry";
-
-        } else {
-            Warn("Could not check fact `" + stmt + "`, using sorry.");
-            return "sorry";
+        else if(string s = facts.trace_logical(stmt); s != "FALSE") {
+            string ret{"using "};
+            for(string k: utils::split_at(s, " "))
+                ret += "`" + parse::translate(k) + "` ";
+            ret += "by blast";
+            return ret;
         }
+
+        Warn("Could not check fact `" + stmt + "`, using sorry.");
+        return "sorry";
     }
 
     string by_axiom(const string& stmt, const string& ax,
@@ -115,8 +119,8 @@ namespace verify {
 
         theorem axiom{axioms.find(ax)->second};
         
-        if(string s{test_combination(stmt, axiom, vars, "", facts)}; s != "") 
-            return generate_reason(ax + "E", axiom.instantiate(s), stmt);
+        if(string s{test_combination(stmt, axiom, vars, "", facts)}; s != "")
+            return generate_reason(ax + "E", axiom.instantiate(s), stmt, facts);
 
         Warn("Failed to use axiom `" + ax + "` to show `"
                 + stmt + "`, using sorry.");
@@ -133,7 +137,7 @@ namespace verify {
         theorem thy{theorem::theorems.find(th)->second};
         
         if(string s{test_combination(stmt, thy, vars, "", facts)}; s != "")
-            return generate_reason(th, thy.instantiate(s), stmt);
+            return generate_reason(th, thy.instantiate(s), stmt, facts);
 
         Warn("Failed to use theorem `" + th + "` to show `"
                 + stmt + "`, using sorry.");
@@ -157,17 +161,17 @@ namespace verify {
         def = commands.at(def).name;
 
         if(definitions.find(def + "_f") == definitions.end()) {
-            Warn("Could not find definition `" + def + "`, using sorry.");
+            // Warn("Could not find definition `" + def + "`, using sorry.");
             return "sorry";
         }
 
         theorem de_f{definitions.find(def + "_f")->second};
         if(string s{test_combination(stmt, de_f, vars, "", facts)}; s != "")
-            return generate_reason(def + "_f", de_f.instantiate(s), stmt);
+            return generate_reason(def + "_f", de_f.instantiate(s), stmt, facts);
 
         theorem de_b{definitions.find(def + "_b")->second};
         if(string s{test_combination(stmt, de_b, vars, "", facts)}; s != "")
-            return generate_reason(def + "_b", de_b.instantiate(s), stmt);
+            return generate_reason(def + "_b", de_b.instantiate(s), stmt, facts);
         
         Warn("Failed to use definition `" + def + "` to show `"
                 + stmt + "`, using sorry.");

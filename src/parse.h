@@ -6,4 +6,6 @@ namespace parse {
 
     std::string get_vars(const std::string& stmt);
 
+    std::string canonical(const std:: string& stmt);
+
 } // namespace parse

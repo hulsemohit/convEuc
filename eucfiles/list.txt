@@ -47,7 +47,6 @@ crossimpliesopposite.prf
 diagonalsbisect.prf
 diagonalsmeet.prf
 differenceofparts.prf
-differentpoints.prf
 doublereverse.prf
 droppedperpendicularunique.prf
 EFreflexive.prf

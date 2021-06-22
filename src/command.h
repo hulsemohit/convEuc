@@ -72,7 +72,7 @@ const std::map<std::string, std::string> euc_cmd_names{
     {"ray", "RA"},
     {"lessthan", "LT"},
     {"midpoint", "MI"},
-    {"equalanlges", "EE"},
+    {"equalangles", "EE"},
     {"supplement", "SU"},
     {"rightangle", "RR"},
     {"perpat", "PA"},
