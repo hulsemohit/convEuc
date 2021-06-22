@@ -12,8 +12,8 @@ proof -
 	proof (rule ccontr)
 		assume "oppo_side A C D B"
 		have "oppo_side B C D B" using planeseparation[OF `axioms` `same_side B A C D` `oppo_side A C D B`] .
-		obtain M where "bet B M B" sorry
-		have "\<not> (bet B M B)" using betweennessidentityE[OF `axioms`] .
+		obtain M where "bet B M B" using oppositeside_f[OF `axioms` `oppo_side B C D B`] by blast
+		have "\<not> (bet B M B)" using betweennessidentityE[OF `axioms`] by blast
 		show "False" using `\<not> (bet B M B)` `bet B M B` by blast
 	qed
 	hence "\<not> (oppo_side A C D B)" by blast

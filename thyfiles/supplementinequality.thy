@@ -9,12 +9,12 @@ theorem supplementinequality:
 		"ang_lt a b c A B C"
 	shows: "ang_lt D B F d b f"
 proof -
-	obtain P Q R where "bet P R Q \<and> ray_on B A P \<and> ray_on B C Q \<and> ang_eq a b c A B R" sorry
+	obtain P Q R where "bet P R Q \<and> ray_on B A P \<and> ray_on B C Q \<and> ang_eq a b c A B R" using anglelessthan_f[OF `axioms` `ang_lt a b c A B C`] by blast
 	have "bet P R Q" using `bet P R Q \<and> ray_on B A P \<and> ray_on B C Q \<and> ang_eq a b c A B R` by blast
 	have "ray_on B C Q" using `bet P R Q \<and> ray_on B A P \<and> ray_on B C Q \<and> ang_eq a b c A B R` by blast
 	have "ang_eq a b c A B R" using `bet P R Q \<and> ray_on B A P \<and> ray_on B C Q \<and> ang_eq a b c A B R` by blast
 	have "\<not> col A B R" using equalanglesNC[OF `axioms` `ang_eq a b c A B R`] .
-	have "ray_on B C D \<and> bet A B F" sorry
+	have "ray_on B C D \<and> bet A B F" using supplement_f[OF `axioms` `linear_pair A B C D F`] .
 	have "bet Q R P" using betweennesssymmetryE[OF `axioms` `bet P R Q`] .
 	have "bet A B F" using `ray_on B C D \<and> bet A B F` by blast
 	have "bet F B A" using betweennesssymmetryE[OF `axioms` `bet A B F`] .
@@ -27,7 +27,7 @@ proof -
 		have "bet F B P" using innertransitivityE[OF `axioms` `bet F B A` `bet B P A`] .
 	next
 		case 2
-		have "bet F B P" sorry
+		have "bet F B P" using `bet F B A` `A = P` by blast
 	next
 		case 3
 		have "bet F B P" using n3_7b[OF `axioms` `bet F B A` `bet B A P`] .
@@ -36,7 +36,7 @@ proof -
 	proof (rule ccontr)
 		assume "col F P Q"
 		have "col B A P" using rayimpliescollinear[OF `axioms` `ray_on B A P`] .
-		have "col A B F" using col_b `axioms` `ray_on B C D \<and> bet A B F` by blast
+		have "col A B F" using collinear_b `axioms` `ray_on B C D \<and> bet A B F` by blast
 		have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A B F`] by blast
 		have "col A B P" using collinearorder[OF `axioms` `col B A P`] by blast
 		have "col B F P" using collinear4[OF `axioms` `col A B F` `col A B P` `A \<noteq> B`] .
@@ -48,7 +48,7 @@ proof -
 		have "B \<noteq> P" using betweennotequal[OF `axioms` `bet F B P`] by blast
 		have "P \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> P`] .
 		have "col B Q A" using collinear4[OF `axioms` `col P B Q` `col P B A` `P \<noteq> B`] .
-		have "col P R Q" using col_b `axioms` `bet P R Q \<and> ray_on B A P \<and> ray_on B C Q \<and> ang_eq a b c A B R` by blast
+		have "col P R Q" using collinear_b `axioms` `bet P R Q \<and> ray_on B A P \<and> ray_on B C Q \<and> ang_eq a b c A B R` by blast
 		have "col P Q R" using collinearorder[OF `axioms` `col P R Q`] by blast
 		have "col P Q B" using collinearorder[OF `axioms` `col P B Q`] by blast
 		have "P \<noteq> Q" using betweennotequal[OF `axioms` `bet P R Q`] by blast
@@ -63,19 +63,19 @@ proof -
 		show "False" using `\<not> col A B R` `col A B R` by blast
 	qed
 	hence "\<not> col F P Q" by blast
-	obtain M where "bet F M R \<and> bet Q M B" using Pasch-innerE[OF `axioms` `bet F B P` `bet Q R P` `\<not> col F P Q`]  by  blast
+	obtain M where "bet F M R \<and> bet Q M B" using Pasch-innerE[OF `axioms` `bet F B P` `bet Q R P` `\<not> col F P Q`] by blast
 	have "bet F M R" using `bet F M R \<and> bet Q M B` by blast
 	have "bet Q M B" using `bet F M R \<and> bet Q M B` by blast
 	have "R = R" using equalityreflexiveE[OF `axioms`] .
 	have "\<not> (B = R)"
 	proof (rule ccontr)
 		assume "B = R"
-		have "col A B R" using col_b `axioms` `B = R` by blast
+		have "col A B R" using collinear_b `axioms` `B = R` by blast
 		show "False" using `col A B R` `\<not> col A B R` by blast
 	qed
 	hence "B \<noteq> R" by blast
 	have "ray_on B R R" using ray4 `axioms` `R = R` `B \<noteq> R` by blast
-	have "linear_pair A B R R F" sorry
+	have "linear_pair A B R R F" using supplement_b[OF `axioms` `ray_on B R R` `bet A B F`] .
 	have "ang_eq A B R a b c" using equalanglessymmetric[OF `axioms` `ang_eq a b c A B R`] .
 	have "ang_eq R B F d b f" using supplements[OF `axioms` `ang_eq A B R a b c` `linear_pair A B R R F` `linear_pair a b c d f`] .
 	have "B \<noteq> F" using betweennotequal[OF `axioms` `bet A B F`] by blast
@@ -87,11 +87,11 @@ proof -
 	proof (rule ccontr)
 		assume "col F B Q"
 		have "col Q B F" using collinearorder[OF `axioms` `col F B Q`] by blast
-		have "col Q M B" using col_b `axioms` `bet F M R \<and> bet Q M B` by blast
+		have "col Q M B" using collinear_b `axioms` `bet F M R \<and> bet Q M B` by blast
 		have "col Q B M" using collinearorder[OF `axioms` `col Q M B`] by blast
 		have "Q \<noteq> B" using betweennotequal[OF `axioms` `bet Q M B`] by blast
 		have "col B F M" using collinear4[OF `axioms` `col Q B F` `col Q B M` `Q \<noteq> B`] .
-		have "col F M R" using col_b `axioms` `bet F M R \<and> bet Q M B` by blast
+		have "col F M R" using collinear_b `axioms` `bet F M R \<and> bet Q M B` by blast
 		have "col M F B" using collinearorder[OF `axioms` `col B F M`] by blast
 		have "col M F R" using collinearorder[OF `axioms` `col F M R`] by blast
 		have "F \<noteq> M" using betweennotequal[OF `axioms` `bet F M R`] by blast
@@ -111,7 +111,7 @@ proof -
 	have "bet R M F" using betweennesssymmetryE[OF `axioms` `bet F M R`] .
 	have "ray_on B R R" using `ray_on B R R` .
 	have "ray_on B F F" using `ray_on B F F` .
-	have "ang_lt F B Q F B R" sorry
+	have "ang_lt F B Q F B R" using anglelessthan_b[OF `axioms` `bet F M R` `ray_on B F F` `ray_on B R R` `ang_eq F B Q F B M`] .
 	have "ang_eq f b d F B R" using equalanglesflip[OF `axioms` `ang_eq d b f R B F`] .
 	have "ang_eq F B R f b d" using equalanglessymmetric[OF `axioms` `ang_eq f b d F B R`] .
 	have "ang_lt F B Q f b d" using angleorderrespectscongruence[OF `axioms` `ang_lt F B Q F B R` `ang_eq f b d F B R`] .

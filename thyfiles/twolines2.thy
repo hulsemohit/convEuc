@@ -38,15 +38,15 @@ proof -
 			have "col B A P" using collinearorder[OF `axioms` `col A B P`] by blast
 			have "col A Q P" using collinear4[OF `axioms` `col B A Q` `col B A P` `B \<noteq> A`] .
 			have "col Q P A" using collinearorder[OF `axioms` `col A Q P`] by blast
-			have "col C P B" sorry
-			have "col C P A" sorry
+			have "col C P B" using `col Q P B` `Q = C` by blast
+			have "col C P A" using `col Q P A` `Q = C` by blast
 			have "col P C A" using collinearorder[OF `axioms` `col C P A`] by blast
 			have "col P C B" using collinearorder[OF `axioms` `col C P B`] by blast
 			have "col P C D" using collinearorder[OF `axioms` `col C P D`] by blast
 			have "\<not> (P = C)"
 			proof (rule ccontr)
 				assume "P = C"
-				have "P = Q" sorry
+				have "P = Q" using `P = C` `Q = C` by blast
 				show "False" using `P = Q` `P \<noteq> Q` by blast
 			qed
 			hence "P \<noteq> C" by blast

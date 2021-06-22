@@ -10,7 +10,7 @@ proof -
 	have "\<not> (A = B)"
 	proof (rule ccontr)
 		assume "A = B"
-		have "col A B C" using col_b `axioms` `A = B` by blast
+		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "A \<noteq> B" by blast
@@ -18,7 +18,7 @@ proof -
 	have "\<not> (A = C)"
 	proof (rule ccontr)
 		assume "A = C"
-		have "col A B C" using col_b `axioms` `A = C` by blast
+		have "col A B C" using collinear_b `axioms` `A = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "A \<noteq> C" by blast
@@ -26,7 +26,7 @@ proof -
 	have "\<not> (B = C)"
 	proof (rule ccontr)
 		assume "B = C"
-		have "col A B C" using col_b `axioms` `B = C` by blast
+		have "col A B C" using collinear_b `axioms` `B = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "B \<noteq> C" by blast

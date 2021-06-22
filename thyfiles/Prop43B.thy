@@ -13,14 +13,14 @@ theorem Prop43B:
 		"parallelogram G K F C"
 	shows: "parallelogram E K G B"
 proof -
-	have "parallel A D B C" sorry
-	have "parallel A B C D" sorry
-	have "parallel E A H K" sorry
-	have "parallel E K A H" sorry
-	have "parallel G K F C" sorry
+	have "parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] by blast
+	have "parallel A B C D" using parallelogram_f[OF `axioms` `parallelogram A B C D`] by blast
+	have "parallel E A H K" using parallelogram_f[OF `axioms` `parallelogram E A H K`] by blast
+	have "parallel E K A H" using parallelogram_f[OF `axioms` `parallelogram E A H K`] by blast
+	have "parallel G K F C" using parallelogram_f[OF `axioms` `parallelogram G K F C`] by blast
 	have "parallel F C G K" using parallelsymmetric[OF `axioms` `parallel G K F C`] .
 	have "parallel C F G K" using parallelflip[OF `axioms` `parallel F C G K`] by blast
-	have "parallel G C K F" sorry
+	have "parallel G C K F" using parallelogram_f[OF `axioms` `parallelogram G K F C`] by blast
 	have "parallel B C A D" using parallelsymmetric[OF `axioms` `parallel A D B C`] .
 	have "parallel C D A B" using parallelsymmetric[OF `axioms` `parallel A B C D`] .
 	have "parallel A H E K" using parallelsymmetric[OF `axioms` `parallel E K A H`] .
@@ -28,18 +28,18 @@ proof -
 	have "tarski_parallel E A H K" using paralleldef2B[OF `axioms` `parallel E A H K`] .
 	have "tarski_parallel G C K F" using paralleldef2B[OF `axioms` `parallel G C K F`] .
 	have "tarski_parallel B C A D" using paralleldef2B[OF `axioms` `parallel B C A D`] .
-	have "same_side A D B C" sorry
+	have "same_side A D B C" using tarski_parallel_f[OF `axioms` `tarski_parallel B C A D`] by blast
 	have "same_side A D C B" using samesideflip[OF `axioms` `same_side A D B C`] .
 	have "same_side D A C B" using samesidesymmetric[OF `axioms` `same_side A D B C`] by blast
-	have "same_side C D A B" sorry
-	have "same_side H K E A" sorry
-	have "same_side K F G C" sorry
+	have "same_side C D A B" using tarski_parallel_f[OF `axioms` `tarski_parallel A B C D`] by blast
+	have "same_side H K E A" using tarski_parallel_f[OF `axioms` `tarski_parallel E A H K`] by blast
+	have "same_side K F G C" using tarski_parallel_f[OF `axioms` `tarski_parallel G C K F`] by blast
 	have "A \<noteq> E" using betweennotequal[OF `axioms` `bet A E B`] by blast
 	have "A \<noteq> H" using betweennotequal[OF `axioms` `bet A H D`] by blast
 	have "B \<noteq> G" using betweennotequal[OF `axioms` `bet B G C`] by blast
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A E B`] by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-	obtain e where "bet B A e \<and> seg_eq A e B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`]  by  blast
+	obtain e where "bet B A e \<and> seg_eq A e B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`] by blast
 	have "bet B A e" using `bet B A e \<and> seg_eq A e B A` by blast
 	have "bet e A B" using betweennesssymmetryE[OF `axioms` `bet B A e`] .
 	have "same_side D C A B" using samesidesymmetric[OF `axioms` `same_side C D A B`] by blast
@@ -61,7 +61,7 @@ proof -
 	have "ang_eq A E K A B C" using supplements2[OF `axioms` `ang_suppl H A E A E K` `ang_eq H A E D A B` `ang_suppl D A B A B C`] by blast
 	have "same_side C D A B" using `same_side C D A B` .
 	have "same_side C D B A" using samesideflip[OF `axioms` `same_side C D A B`] .
-	have "col A E B" using col_b `axioms` `bet A E B` by blast
+	have "col A E B" using collinear_b `axioms` `bet A E B` by blast
 	have "col B A E" using collinearorder[OF `axioms` `col A E B`] by blast
 	have "E \<noteq> B" using betweennotequal[OF `axioms` `bet A E B`] by blast
 	have "B \<noteq> E" using inequalitysymmetric[OF `axioms` `E \<noteq> B`] .
@@ -78,7 +78,7 @@ proof -
 	have "ray_on B G C" using ray4 `axioms` `bet B G C` `B \<noteq> G` by blast
 	have "ray_on B C G" using ray5[OF `axioms` `ray_on B G C`] .
 	have "B = B" using equalityreflexiveE[OF `axioms`] .
-	have "col B B E" using col_b `axioms` `B = B` by blast
+	have "col B B E" using collinear_b `axioms` `B = B` by blast
 	have "same_side K G B E" using sameside2[OF `axioms` `same_side K C B E` `col B B E` `ray_on B C G`] .
 	have "same_side K G E B" using samesideflip[OF `axioms` `same_side K G B E`] .
 	have "ray_on B E A" using ray4 `axioms` `bet B E A` `B \<noteq> E` by blast
@@ -88,7 +88,7 @@ proof -
 	have "parallel E K G B" using parallelflip[OF `axioms` `parallel E K B G`] by blast
 	have "same_side D A C B" using `same_side D A C B` .
 	have "B \<noteq> C" using betweennotequal[OF `axioms` `bet B G C`] by blast
-	obtain c where "bet B C c \<and> seg_eq C c B C" using extensionE[OF `axioms` `B \<noteq> C` `B \<noteq> C`]  by  blast
+	obtain c where "bet B C c \<and> seg_eq C c B C" using extensionE[OF `axioms` `B \<noteq> C` `B \<noteq> C`] by blast
 	have "bet B C c" using `bet B C c \<and> seg_eq C c B C` by blast
 	have "bet c C B" using betweennesssymmetryE[OF `axioms` `bet B C c`] .
 	have "parallel C D B A" using parallelflip[OF `axioms` `parallel C D A B`] by blast
@@ -120,7 +120,7 @@ proof -
 	have "ray_on B G C" using ray4 `axioms` `bet B G C` `B \<noteq> G` by blast
 	have "ray_on B C G" using ray5[OF `axioms` `ray_on B G C`] .
 	have "ang_eq C G K G B A" using equalangleshelper[OF `axioms` `ang_eq C G K C B A` `ray_on B C G` `ray_on B A A`] .
-	have "col B G C" using col_b `axioms` `bet B G C` by blast
+	have "col B G C" using collinear_b `axioms` `bet B G C` by blast
 	have "col C B G" using collinearorder[OF `axioms` `col B G C`] by blast
 	have "same_side A D B C" using `same_side A D B C` .
 	have "bet C F D" using betweennesssymmetryE[OF `axioms` `bet D F C`] .
@@ -128,11 +128,11 @@ proof -
 	have "ray_on C F D" using ray4 `axioms` `bet C F D` `C \<noteq> F` by blast
 	have "ray_on C D F" using ray5[OF `axioms` `ray_on C F D`] .
 	have "C = C" using equalityreflexiveE[OF `axioms`] .
-	have "col B C C" using col_b `axioms` `C = C` by blast
+	have "col B C C" using collinear_b `axioms` `C = C` by blast
 	have "same_side A F B C" using sameside2[OF `axioms` `same_side A D B C` `col B C C` `ray_on C D F`] .
 	have "parallel G C K F" using `parallel G C K F` .
 	have "tarski_parallel G C K F" using paralleldef2B[OF `axioms` `parallel G C K F`] .
-	have "same_side K F G C" sorry
+	have "same_side K F G C" using tarski_parallel_f[OF `axioms` `tarski_parallel G C K F`] by blast
 	have "col C G B" using collinearorder[OF `axioms` `col B G C`] by blast
 	have "C \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> C`] .
 	have "same_side K F C G" using samesideflip[OF `axioms` `same_side K F G C`] .
@@ -151,7 +151,7 @@ proof -
 	have "parallel G K E B" using collinearparallel[OF `axioms` `parallel G K A B` `col A B E` `E \<noteq> B`] .
 	have "parallel E B G K" using parallelsymmetric[OF `axioms` `parallel G K E B`] .
 	have "parallel E B K G" using parallelflip[OF `axioms` `parallel E B G K`] by blast
-	have "parallelogram E K G B" sorry
+	have "parallelogram E K G B" using parallelogram_b[OF `axioms` `parallel E K G B` `parallel E B K G`] .
 	thus ?thesis by blast
 qed
 

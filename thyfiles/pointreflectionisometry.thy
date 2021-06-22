@@ -8,8 +8,8 @@ theorem pointreflectionisometry:
 		"midpoint P B Q"
 	shows: "seg_eq A P C Q"
 proof -
-	have "bet A B C \<and> seg_eq A B B C" sorry
-	have "bet P B Q \<and> seg_eq P B B Q" sorry
+	have "bet A B C \<and> seg_eq A B B C" using midpoint_f[OF `axioms` `midpoint A B C`] .
+	have "bet P B Q \<and> seg_eq P B B Q" using midpoint_f[OF `axioms` `midpoint P B Q`] .
 	have "bet A B C" using `bet A B C \<and> seg_eq A B B C` by blast
 	have "seg_eq A B B C" using `bet A B C \<and> seg_eq A B B C` by blast
 	have "bet P B Q" using `bet P B Q \<and> seg_eq P B B Q` by blast
@@ -18,7 +18,7 @@ proof -
 	hence seg_eq A P C Q
 	proof (cases)
 		case 1
-		have "A = B \<or> A = P \<or> B = P \<or> bet B A P \<or> bet A B P \<or> bet A P B" using col_f[OF `axioms` `col A B P`] .
+		have "A = B \<or> A = P \<or> B = P \<or> bet B A P \<or> bet A B P \<or> bet A P B" using collinear_f[OF `axioms` `col A B P`] .
 		consider "A = B"|"A = P"|"B = P"|"bet B A P"|"bet A B P"|"bet A P B" using `A = B \<or> A = P \<or> B = P \<or> bet B A P \<or> bet A B P \<or> bet A P B`  by blast
 		hence seg_eq A P C Q
 		proof (cases)
@@ -26,7 +26,7 @@ proof -
 			have "seg_eq A P C Q"
 			proof (rule ccontr)
 				assume "\<not> (seg_eq A P C Q)"
-				have "bet A B C" sorry
+				have "bet A B C" using midpoint_f[OF `axioms` `midpoint A B C`] by blast
 				have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A B C`] by blast
 				show "False" using `A \<noteq> B` `A = B` by blast
 			qed
@@ -34,22 +34,22 @@ proof -
 		next
 			case 2
 			have "bet P B Q" using `bet P B Q` .
-			have "bet A B Q" sorry
+			have "bet A B Q" using `bet P B Q` `A = P` by blast
 			have "seg_eq B C A B" using congruencesymmetric[OF `axioms` `seg_eq A B B C`] .
-			have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] .
-			have "seg_eq A B P B" sorry
+			have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] by blast
+			have "seg_eq A B P B" using `seg_eq A B A B` `A = P` by blast
 			have "seg_eq B C P B" using congruencetransitive[OF `axioms` `seg_eq B C A B` `seg_eq A B P B`] .
 			have "seg_eq P B B Q" using `seg_eq P B B Q` .
 			have "seg_eq B C B Q" using congruencetransitive[OF `axioms` `seg_eq B C P B` `seg_eq P B B Q`] .
 			have "bet A B Q" using `bet A B Q` .
 			have "bet A B C" using `bet A B C` .
 			have "C = Q" using extensionunique[OF `axioms` `bet A B C` `bet A B Q` `seg_eq B C B Q`] .
-			have "seg_eq C Q C Q" using congruencereflexiveE[OF `axioms`] .
-			have "seg_eq C Q C C" sorry
+			have "seg_eq C Q C Q" using congruencereflexiveE[OF `axioms`] by blast
+			have "seg_eq C Q C C" using `seg_eq C Q C Q` `C = Q` by blast
 			have "seg_eq C C C Q" using congruencesymmetric[OF `axioms` `seg_eq C Q C C`] .
-			have "seg_eq A P A P" using congruencereflexiveE[OF `axioms`] .
-			have "seg_eq A P A A" sorry
-			have "seg_eq A A C C" using nullsegment2E[OF `axioms`] .
+			have "seg_eq A P A P" using congruencereflexiveE[OF `axioms`] by blast
+			have "seg_eq A P A A" using `seg_eq A P A P` `A = P` by blast
+			have "seg_eq A A C C" using nullsegment2E[OF `axioms`] by blast
 			have "seg_eq A P C C" using congruencetransitive[OF `axioms` `seg_eq A P A A` `seg_eq A A C C`] .
 			have "seg_eq A P C Q" using congruencetransitive[OF `axioms` `seg_eq A P C C` `seg_eq C C C Q`] .
 		next
@@ -71,14 +71,14 @@ proof -
 			have "seg_eq Q B B P" using doublereverse[OF `axioms` `seg_eq P B B Q`] by blast
 			have "seg_eq B Q B P" using congruenceflip[OF `axioms` `seg_eq Q B B P`] by blast
 			have "seg_eq B A C B" using doublereverse[OF `axioms` `seg_eq A B B C`] by blast
-			have "seg_lt C B B P" sorry
+			have "seg_lt C B B P" using lessthan_b[OF `axioms` `bet B A P` `seg_eq B A C B`] .
 			have "seg_eq B P B Q" using congruencesymmetric[OF `axioms` `seg_eq B Q B P`] .
 			have "seg_lt C B B Q" using lessthancongruence[OF `axioms` `seg_lt C B B P` `seg_eq B P B Q`] .
-			have "seg_eq C B B C" using equalityreverseE[OF `axioms`] .
+			have "seg_eq C B B C" using equalityreverseE[OF `axioms`] by blast
 			have "seg_lt B C B Q" using lessthancongruence2[OF `axioms` `seg_lt C B B Q` `seg_eq C B B C`] .
-			have "seg_eq B Q B Q" using congruencereflexiveE[OF `axioms`] .
+			have "seg_eq B Q B Q" using congruencereflexiveE[OF `axioms`] by blast
 			have "B \<noteq> Q" using betweennotequal[OF `axioms` `bet P B Q`] by blast
-			obtain H where "bet B H Q \<and> seg_eq B H B C" using Prop03[OF `axioms` `seg_lt B C B Q` `seg_eq B Q B Q`]  by  blast
+			obtain H where "bet B H Q \<and> seg_eq B H B C" using Prop03[OF `axioms` `seg_lt B C B Q` `seg_eq B Q B Q`] by blast
 			have "bet B H Q" using `bet B H Q \<and> seg_eq B H B C` by blast
 			have "seg_eq B H B C" using `bet B H Q \<and> seg_eq B H B C` by blast
 			have "ray_on B Q H" using ray4 `axioms` `bet B H Q \<and> seg_eq B H B C` `B \<noteq> Q` by blast
@@ -87,11 +87,11 @@ proof -
 			have "bet P B C" using n3_7a[OF `axioms` `bet P A B` `bet A B C`] .
 			have "bet P B Q" using `bet P B Q` .
 			have "bet P B C \<and> bet P B Q" using `bet P B C` `bet P B Q \<and> seg_eq P B B Q` by blast
-			have "ray_on B C Q" sorry
+			have "ray_on B C Q" using ray_b[OF `axioms` `bet P B Q` `bet P B C`] .
 			have "ray_on B Q C" using ray5[OF `axioms` `ray_on B C Q`] .
 			have "seg_eq B C B H" using congruencesymmetric[OF `axioms` `seg_eq B H B C`] .
 			have "C = H" using layoffunique[OF `axioms` `ray_on B Q C` `ray_on B Q H` `seg_eq B C B H`] .
-			have "bet B C Q" sorry
+			have "bet B C Q" using `bet B H Q` `C = H` by blast
 			have "bet B A P" using betweennesssymmetryE[OF `axioms` `bet P A B`] .
 			have "seg_eq B A B C" using congruencesymmetric[OF `axioms` `seg_eq B C B A`] .
 			have "seg_eq B P B Q" using `seg_eq B P B Q` .
@@ -129,17 +129,17 @@ proof -
 				hence "\<not> (bet B C P)" by blast
 				have "P = C" using outerconnectivity[OF `axioms` `bet A B P` `bet A B C` `\<not> (bet B P C)` `\<not> (bet B C P)`] .
 				have "seg_eq A B B C" using `seg_eq A B B C` .
-				have "seg_eq A B B P" sorry
+				have "seg_eq A B B P" using `seg_eq A B B C` `P = C` by blast
 				have "seg_eq B P B Q" using congruenceflip[OF `axioms` `seg_eq P B B Q`] by blast
 				have "seg_eq A B B Q" using congruencetransitive[OF `axioms` `seg_eq A B B P` `seg_eq B P B Q`] .
 				have "bet C B A" using betweennesssymmetryE[OF `axioms` `bet A B C`] .
-				have "bet P B A" sorry
+				have "bet P B A" using `bet C B A` `P = C` by blast
 				have "seg_eq B Q A B" using congruencesymmetric[OF `axioms` `seg_eq A B B Q`] .
 				have "seg_eq B Q B A" using congruenceflip[OF `axioms` `seg_eq B Q A B`] by blast
 				have "Q = A" using extensionunique[OF `axioms` `bet P B Q` `bet P B A` `seg_eq B Q B A`] .
-				have "seg_eq A C C A" using equalityreverseE[OF `axioms`] .
-				have "seg_eq A P C A" sorry
-				have "seg_eq A P C Q" sorry
+				have "seg_eq A C C A" using equalityreverseE[OF `axioms`] by blast
+				have "seg_eq A P C A" using `seg_eq A C C A` `P = C` by blast
+				have "seg_eq A P C Q" using `seg_eq A C C A` `P = C` `Q = A` by blast
 				show "False" using `seg_eq A P C Q` `\<not> (seg_eq A P C Q)` by blast
 			qed
 			hence "seg_eq A P C Q" by blast
@@ -153,25 +153,25 @@ proof -
 			have "seg_eq B C B A" using congruenceflip[OF `axioms` `seg_eq C B B A`] by blast
 			have "bet B P A" using betweennesssymmetryE[OF `axioms` `bet A P B`] .
 			have "seg_eq B P Q B" using doublereverse[OF `axioms` `seg_eq B Q P B`] by blast
-			have "seg_lt Q B B A" sorry
+			have "seg_lt Q B B A" using lessthan_b[OF `axioms` `bet B P A` `seg_eq B P Q B`] .
 			have "seg_eq B A B C" using congruencesymmetric[OF `axioms` `seg_eq B C B A`] .
 			have "seg_lt Q B B C" using lessthancongruence[OF `axioms` `seg_lt Q B B A` `seg_eq B A B C`] .
-			have "seg_eq Q B B Q" using equalityreverseE[OF `axioms`] .
+			have "seg_eq Q B B Q" using equalityreverseE[OF `axioms`] by blast
 			have "seg_lt B Q B C" using lessthancongruence2[OF `axioms` `seg_lt Q B B C` `seg_eq Q B B Q`] .
-			have "seg_eq B C B C" using congruencereflexiveE[OF `axioms`] .
+			have "seg_eq B C B C" using congruencereflexiveE[OF `axioms`] by blast
 			have "B \<noteq> C" using betweennotequal[OF `axioms` `bet A B C`] by blast
-			obtain H where "bet B H C \<and> seg_eq B H B Q" using Prop03[OF `axioms` `seg_lt B Q B C` `seg_eq B C B C`]  by  blast
+			obtain H where "bet B H C \<and> seg_eq B H B Q" using Prop03[OF `axioms` `seg_lt B Q B C` `seg_eq B C B C`] by blast
 			have "bet B H C" using `bet B H C \<and> seg_eq B H B Q` by blast
 			have "seg_eq B H B Q" using `bet B H C \<and> seg_eq B H B Q` by blast
 			have "bet A B C" using `bet A B C` .
 			have "bet P B C" using n3_6a[OF `axioms` `bet A P B` `bet A B C`] .
 			have "bet P B Q" using `bet P B Q` .
 			have "bet P B C \<and> bet P B Q" using `bet P B C` `bet P B Q \<and> seg_eq P B B Q` by blast
-			have "ray_on B C Q" sorry
+			have "ray_on B C Q" using ray_b[OF `axioms` `bet P B Q` `bet P B C`] .
 			have "ray_on B C H" using ray4 `axioms` `bet B H C \<and> seg_eq B H B Q` `B \<noteq> C` by blast
 			have "seg_eq B Q B H" using congruencesymmetric[OF `axioms` `seg_eq B H B Q`] .
 			have "Q = H" using layoffunique[OF `axioms` `ray_on B C Q` `ray_on B C H` `seg_eq B Q B H`] .
-			have "bet B Q C" sorry
+			have "bet B Q C" using `bet B H C` `Q = H` by blast
 			have "bet B P A" using betweennesssymmetryE[OF `axioms` `bet A P B`] .
 			have "seg_eq B P B Q" using congruencesymmetric[OF `axioms` `seg_eq B Q B P`] .
 			have "seg_eq B A B C" using `seg_eq B A B C` .

@@ -7,7 +7,7 @@ theorem equalanglessymmetric:
 		"ang_eq A B C a b c"
 	shows: "ang_eq a b c A B C"
 proof -
-	obtain U V u v where "ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C" sorry
+	obtain U V u v where "ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C a b c`] by blast
 	have "ray_on B A U" using `ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 	have "ray_on B C V" using `ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 	have "ray_on b a u" using `ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
@@ -59,7 +59,7 @@ proof -
 	have "ray_on B C V" using `ray_on B C V` .
 	have "seg_eq b v B V" using `seg_eq b v B V` .
 	have "seg_eq u v U V" using congruencesymmetric[OF `axioms` `seg_eq U V u v`] .
-	have "ang_eq a b c A B C" sorry
+	have "ang_eq a b c A B C" using equalangles_b[OF `axioms` `ray_on b a u` `ray_on b c v` `ray_on B A U` `ray_on B C V` `seg_eq b u B U` `seg_eq b v B V` `seg_eq u v U V` `\<not> col a b c`] .
 	thus ?thesis by blast
 qed
 

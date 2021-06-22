@@ -15,7 +15,7 @@ theorem Prop36A:
 		"bet C M E"
 	shows: "qua_eq_area A B C D E F G H"
 proof -
-	have "parallel A B C D \<and> parallel A D B C" sorry
+	have "parallel A B C D \<and> parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] .
 	have "parallel A B C D" using `parallel A B C D \<and> parallel A D B C` by blast
 	have "seg_eq E H F G" using Prop34[OF `axioms` `parallelogram E F G H`] by blast
 	have "seg_eq F G E H" using congruencesymmetric[OF `axioms` `seg_eq E H F G`] .
@@ -34,7 +34,7 @@ proof -
 	have "parallel B E C H" using `parallel B E C H \<and> seg_eq B E C H` by blast
 	have "parallel E B C H" using parallelflip[OF `axioms` `parallel B E C H`] by blast
 	have "parallel E H B C" using parallelsymmetric[OF `axioms` `parallel B C E H`] .
-	have "parallelogram E B C H" sorry
+	have "parallelogram E B C H" using parallelogram_b[OF `axioms` `parallel E B C H` `parallel E H B C`] .
 	have "qua_eq_area A B C D E B C H" using Prop35[OF `axioms` `parallelogram A B C D` `parallelogram E B C H` `col A D E` `col A D H`] .
 	have "parallelogram C H E B" using PGsymmetric[OF `axioms` `parallelogram E B C H`] .
 	have "\<not> col A B C" using parallelNC[OF `axioms` `parallel A B C D`] by blast

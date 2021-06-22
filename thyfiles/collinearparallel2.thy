@@ -21,7 +21,7 @@ proof -
 	hence parallel A B E F
 	proof (cases)
 		case 1
-		have "D \<noteq> F" sorry
+		have "D \<noteq> F" using `E \<noteq> F` `E = D` by blast
 		have "F \<noteq> D" using inequalitysymmetric[OF `axioms` `D \<noteq> F`] .
 		have "parallel A B C D" using `parallel A B C D` .
 		have "parallel A B F D" using collinearparallel[OF `axioms` `parallel A B C D` `col C D F` `F \<noteq> D`] .
@@ -33,7 +33,7 @@ proof -
 		proof (cases)
 			case 1
 			have "col C D E" using collinearorder[OF `axioms` `col D C E`] by blast
-			have "col F D E" sorry
+			have "col F D E" using `col C D E` `C = F` by blast
 		next
 			case 2
 			have "col F D E" using collinear4[OF `axioms` `col C F D` `col C F E` `C \<noteq> F`] .

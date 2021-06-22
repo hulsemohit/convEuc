@@ -10,13 +10,13 @@ theorem lessthanadditive:
 		"seg_eq B E D F"
 	shows: "seg_lt A E C F"
 proof -
-	obtain b where "bet C b D \<and> seg_eq C b A B" sorry
+	obtain b where "bet C b D \<and> seg_eq C b A B" using lessthan_f[OF `axioms` `seg_lt A B C D`] by blast
 	have "bet C b D" using `bet C b D \<and> seg_eq C b A B` by blast
 	have "seg_eq C b A B" using `bet C b D \<and> seg_eq C b A B` by blast
 	have "seg_eq A B C b" using congruencesymmetric[OF `axioms` `seg_eq C b A B`] .
 	have "C \<noteq> b" using betweennotequal[OF `axioms` `bet C b D`] by blast
 	have "B \<noteq> E" using betweennotequal[OF `axioms` `bet A B E`] by blast
-	obtain e where "bet C b e \<and> seg_eq b e B E" using extensionE[OF `axioms` `C \<noteq> b` `B \<noteq> E`]  by  blast
+	obtain e where "bet C b e \<and> seg_eq b e B E" using extensionE[OF `axioms` `C \<noteq> b` `B \<noteq> E`] by blast
 	have "seg_eq b e B E" using `bet C b e \<and> seg_eq b e B E` by blast
 	have "seg_eq B E b e" using congruencesymmetric[OF `axioms` `seg_eq b e B E`] .
 	have "bet C D F" using `bet C D F` .
@@ -25,31 +25,31 @@ proof -
 	have "\<not> (bet b F e)"
 	proof (rule ccontr)
 		assume "bet b F e"
-		have "seg_eq F D F D" using congruencereflexiveE[OF `axioms`] .
+		have "seg_eq F D F D" using congruencereflexiveE[OF `axioms`] by blast
 		have "bet C b D" using `bet C b D` .
 		have "bet C D F" using `bet C D F` .
 		have "bet b D F" using n3_6a[OF `axioms` `bet C b D` `bet C D F`] .
 		have "bet F D b" using betweennesssymmetryE[OF `axioms` `bet b D F`] .
-		have "seg_lt F D F b" sorry
-		have "seg_eq F b b F" using equalityreverseE[OF `axioms`] .
+		have "seg_lt F D F b" using lessthan_b[OF `axioms` `bet F D b` `seg_eq F D F D`] .
+		have "seg_eq F b b F" using equalityreverseE[OF `axioms`] by blast
 		have "seg_lt F D b F" using lessthancongruence[OF `axioms` `seg_lt F D F b` `seg_eq F b b F`] .
-		have "seg_eq F D D F" using equalityreverseE[OF `axioms`] .
+		have "seg_eq F D D F" using equalityreverseE[OF `axioms`] by blast
 		have "seg_lt D F b F" using lessthancongruence2[OF `axioms` `seg_lt F D b F` `seg_eq F D D F`] .
 		have "seg_eq b e B E" using `seg_eq b e B E` .
 		have "seg_eq B E D F" using `seg_eq B E D F` .
 		have "seg_eq b e D F" using congruencetransitive[OF `axioms` `seg_eq b e B E` `seg_eq B E D F`] .
 		have "seg_eq D F b e" using congruencesymmetric[OF `axioms` `seg_eq b e D F`] .
 		have "seg_lt b e b F" using lessthancongruence2[OF `axioms` `seg_lt D F b F` `seg_eq D F b e`] .
-		obtain q where "bet b q F \<and> seg_eq b q b e" sorry
+		obtain q where "bet b q F \<and> seg_eq b q b e" using lessthan_f[OF `axioms` `seg_lt b e b F`] by blast
 		have "bet b q F" using `bet b q F \<and> seg_eq b q b e` by blast
 		have "seg_eq b q b e" using `bet b q F \<and> seg_eq b q b e` by blast
 		have "b \<noteq> F" using betweennotequal[OF `axioms` `bet C b F`] by blast
 		have "ray_on b F q" using ray4 `axioms` `bet b q F \<and> seg_eq b q b e` `b \<noteq> F` by blast
 		have "ray_on b F e" using ray4 `axioms` `bet b F e` `b \<noteq> F` by blast
 		have "q = e" using layoffunique[OF `axioms` `ray_on b F q` `ray_on b F e` `seg_eq b q b e`] .
-		have "bet b e F" sorry
+		have "bet b e F" using `bet b q F` `q = e` by blast
 		have "bet F e F" using n3_6a[OF `axioms` `bet b F e` `bet b e F`] .
-		have "\<not> (bet F e F)" using betweennessidentityE[OF `axioms`] .
+		have "\<not> (bet F e F)" using betweennessidentityE[OF `axioms`] by blast
 		show "False" using `\<not> (bet F e F)` `bet F e F` by blast
 	qed
 	hence "\<not> (bet b F e)" by blast
@@ -57,14 +57,14 @@ proof -
 	proof (rule ccontr)
 		assume "F = e"
 		have "seg_eq b e B E" using `seg_eq b e B E` .
-		have "seg_eq b F B E" sorry
+		have "seg_eq b F B E" using `seg_eq b e B E` `F = e` by blast
 		have "bet C b D" using `bet C b D` .
 		have "bet C D F" using `bet C D F` .
 		have "bet b D F" using n3_6a[OF `axioms` `bet C b D` `bet C D F`] .
 		have "bet F D b" using betweennesssymmetryE[OF `axioms` `bet b D F`] .
-		have "seg_eq F D F D" using congruencereflexiveE[OF `axioms`] .
-		have "seg_lt F D F b" sorry
-		have "seg_eq F b b F" using equalityreverseE[OF `axioms`] .
+		have "seg_eq F D F D" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_lt F D F b" using lessthan_b[OF `axioms` `bet F D b` `seg_eq F D F D`] .
+		have "seg_eq F b b F" using equalityreverseE[OF `axioms`] by blast
 		have "seg_lt F D b F" using lessthancongruence[OF `axioms` `seg_lt F D F b` `seg_eq F b b F`] .
 		have "seg_eq D F B E" using congruencesymmetric[OF `axioms` `seg_eq B E D F`] .
 		have "seg_eq F D B E" using congruenceflip[OF `axioms` `seg_eq D F B E`] by blast
@@ -94,7 +94,7 @@ proof -
 	have "seg_eq B E b e" using `seg_eq B E b e` .
 	have "seg_eq A E C e" using sumofparts[OF `axioms` `seg_eq A B C b` `seg_eq B E b e` `bet A B E` `bet C b e`] .
 	have "seg_eq C e A E" using congruencesymmetric[OF `axioms` `seg_eq A E C e`] .
-	have "seg_lt A E C F" sorry
+	have "seg_lt A E C F" using lessthan_b[OF `axioms` `bet C e F` `seg_eq C e A E`] .
 	thus ?thesis by blast
 qed
 

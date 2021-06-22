@@ -10,8 +10,8 @@ theorem angleaddition:
 		"area_sum_eq a b c d e f p q r"
 	shows: "ang_eq P Q R p q r"
 proof -
-	obtain S where "ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R" sorry
-	obtain s where "ang_eq a b c p q s \<and> ang_eq d e f s q r \<and> bet p s r" sorry
+	obtain S where "ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R" using anglesum_f[OF `axioms` `area_sum_eq A B C D E F P Q R`] by blast
+	obtain s where "ang_eq a b c p q s \<and> ang_eq d e f s q r \<and> bet p s r" using anglesum_f[OF `axioms` `area_sum_eq a b c d e f p q r`] by blast
 	have "ang_eq A B C P Q S" using `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
 	have "ang_eq D E F S Q R" using `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
 	have "bet P S R" using `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
@@ -27,11 +27,11 @@ proof -
 	have "q \<noteq> p" using NCdistinct[OF `axioms` `\<not> col p q s`] by blast
 	have "q \<noteq> r" using NCdistinct[OF `axioms` `\<not> col s q r`] by blast
 	have "q \<noteq> s" using NCdistinct[OF `axioms` `\<not> col p q s`] by blast
-	obtain G where "ray_on q p G \<and> seg_eq q G Q P" using layoff[OF `axioms` `q \<noteq> p` `Q \<noteq> P`]  by  blast
+	obtain G where "ray_on q p G \<and> seg_eq q G Q P" using layoff[OF `axioms` `q \<noteq> p` `Q \<noteq> P`] by blast
 	have "ray_on q p G" using `ray_on q p G \<and> seg_eq q G Q P` by blast
-	obtain H where "ray_on q s H \<and> seg_eq q H Q S" using layoff[OF `axioms` `q \<noteq> s` `Q \<noteq> S`]  by  blast
+	obtain H where "ray_on q s H \<and> seg_eq q H Q S" using layoff[OF `axioms` `q \<noteq> s` `Q \<noteq> S`] by blast
 	have "ray_on q s H" using `ray_on q s H \<and> seg_eq q H Q S` by blast
-	obtain K where "ray_on q r K \<and> seg_eq q K Q R" using layoff[OF `axioms` `q \<noteq> r` `Q \<noteq> R`]  by  blast
+	obtain K where "ray_on q r K \<and> seg_eq q K Q R" using layoff[OF `axioms` `q \<noteq> r` `Q \<noteq> R`] by blast
 	have "ray_on q r K" using `ray_on q r K \<and> seg_eq q K Q R` by blast
 	have "seg_eq q K Q R" using `ray_on q r K \<and> seg_eq q K Q R` by blast
 	have "ang_eq P Q S A B C" using equalanglessymmetric[OF `axioms` `ang_eq A B C P Q S`] .
@@ -57,8 +57,8 @@ proof -
 	have "Q = Q" using equalityreflexiveE[OF `axioms`] .
 	have "S \<noteq> Q" using NCdistinct[OF `axioms` `\<not> col P Q S`] by blast
 	have "ray_on S Q Q" using ray4 `axioms` `Q = Q` `S \<noteq> Q` by blast
-	have "linear_pair P S Q Q R" sorry
-	have "ang_suppl G H q q H K" sorry
+	have "linear_pair P S Q Q R" using supplement_b[OF `axioms` `ray_on S Q Q` `bet P S R`] .
+	have "ang_suppl G H q q H K" using tworightangles_b[OF `axioms` `linear_pair P S Q Q R` `ang_eq G H q P S Q` `ang_eq q H K Q S R`] .
 	have "bet p s r" using `ang_eq a b c p q s \<and> ang_eq d e f s q r \<and> bet p s r` by blast
 	have "col q s H" using rayimpliescollinear[OF `axioms` `ray_on q s H`] .
 	have "col q H s" using collinearorder[OF `axioms` `col q s H`] by blast
@@ -66,14 +66,14 @@ proof -
 	have "col q p G" using rayimpliescollinear[OF `axioms` `ray_on q p G`] .
 	have "col G q p" using collinearorder[OF `axioms` `col q p G`] by blast
 	have "q = q" using equalityreflexiveE[OF `axioms`] .
-	have "col G q q" using col_b `axioms` `q = q` by blast
+	have "col G q q" using collinear_b `axioms` `q = q` by blast
 	have "q \<noteq> p" using ray2[OF `axioms` `ray_on q p G`] .
 	have "p \<noteq> q" using inequalitysymmetric[OF `axioms` `q \<noteq> p`] .
 	have "\<not> col p q H" using NChelper[OF `axioms` `\<not> col G q H` `col G q p` `col G q q` `p \<noteq> q`] .
 	have "\<not> col q H p" using NCorder[OF `axioms` `\<not> col p q H`] by blast
-	have "oppo_side p q H r" sorry
+	have "oppo_side p q H r" using oppositeside_b[OF `axioms` `bet p s r` `col q H s` `\<not> col q H p`] .
 	have "oppo_side r q H p" using oppositesidesymmetric[OF `axioms` `oppo_side p q H r`] .
-	have "col q H q" using col_b `axioms` `q = q` by blast
+	have "col q H q" using collinear_b `axioms` `q = q` by blast
 	have "ray_on q K r" using ray5[OF `axioms` `ray_on q r K`] .
 	have "oppo_side K q H p" using n9_5[OF `axioms` `oppo_side r q H p` `ray_on q K r` `col q H q`] .
 	have "oppo_side p q H K" using oppositesidesymmetric[OF `axioms` `oppo_side K q H p`] .
@@ -92,16 +92,16 @@ proof -
 	have "ray_on Q P P" using ray4 `axioms` `P = P` `Q \<noteq> P` by blast
 	have "ray_on Q R R" using ray4 `axioms` `R = R` `Q \<noteq> R` by blast
 	have "\<not> col P S Q" using NCorder[OF `axioms` `\<not> col P Q S`] by blast
-	have "col P S R" using col_b `axioms` `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
+	have "col P S R" using collinear_b `axioms` `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
 	have "P = P" using equalityreflexiveE[OF `axioms`] .
-	have "col P S P" using col_b `axioms` `P = P` by blast
+	have "col P S P" using collinear_b `axioms` `P = P` by blast
 	have "P \<noteq> R" using betweennotequal[OF `axioms` `bet P S R`] by blast
 	have "\<not> col P R Q" using NChelper[OF `axioms` `\<not> col P S Q` `col P S P` `col P S R` `P \<noteq> R`] .
 	have "\<not> col P Q R" using NCorder[OF `axioms` `\<not> col P R Q`] by blast
 	have "seg_eq Q P q G" using congruencesymmetric[OF `axioms` `seg_eq q G Q P`] .
 	have "seg_eq Q R q K" using congruencesymmetric[OF `axioms` `seg_eq q K Q R`] .
 	have "seg_eq P R G K" using congruencesymmetric[OF `axioms` `seg_eq G K P R`] .
-	have "ang_eq P Q R p q r" sorry
+	have "ang_eq P Q R p q r" using equalangles_b[OF `axioms` `ray_on Q P P` `ray_on Q R R` `ray_on q p G` `ray_on q r K` `seg_eq Q P q G` `seg_eq Q R q K` `seg_eq P R G K` `\<not> col P Q R`] .
 	thus ?thesis by blast
 qed
 

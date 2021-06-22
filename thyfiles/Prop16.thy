@@ -8,50 +8,50 @@ theorem Prop16:
 		"bet B C D"
 	shows: "ang_lt B A C A C D \<and> ang_lt C B A A C D"
 proof -
-	have "\<not> col A B C" sorry
+	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "\<not> (A = C)"
 	proof (rule ccontr)
 		assume "A = C"
-		have "col A B C" using col_b `axioms` `A = C` by blast
+		have "col A B C" using collinear_b `axioms` `A = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "A \<noteq> C" by blast
 	have "\<not> (B = C)"
 	proof (rule ccontr)
 		assume "B = C"
-		have "col A B C" using col_b `axioms` `B = C` by blast
+		have "col A B C" using collinear_b `axioms` `B = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "B \<noteq> C" by blast
 	have "C \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> C`] .
-	obtain E where "bet A E C \<and> seg_eq E A E C" using Prop10[OF `axioms` `A \<noteq> C`]  by  blast
+	obtain E where "bet A E C \<and> seg_eq E A E C" using Prop10[OF `axioms` `A \<noteq> C`] by blast
 	have "bet A E C" using `bet A E C \<and> seg_eq E A E C` by blast
 	have "\<not> (B = E)"
 	proof (rule ccontr)
 		assume "B = E"
-		have "bet A B C" sorry
-		have "col A B C" using col_b `axioms` `bet A B C` by blast
+		have "bet A B C" using `bet A E C` `B = E` by blast
+		have "col A B C" using collinear_b `axioms` `bet A B C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "B \<noteq> E" by blast
 	have "E \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> E`] .
-	obtain F where "bet B E F \<and> seg_eq E F E B" using extensionE[OF `axioms` `B \<noteq> E` `E \<noteq> B`]  by  blast
+	obtain F where "bet B E F \<and> seg_eq E F E B" using extensionE[OF `axioms` `B \<noteq> E` `E \<noteq> B`] by blast
 	have "seg_eq E F E B" using `bet B E F \<and> seg_eq E F E B` by blast
 	have "\<not> (A = C)"
 	proof (rule ccontr)
 		assume "A = C"
-		have "col A B C" using col_b `axioms` `A = C` by blast
+		have "col A B C" using collinear_b `axioms` `A = C` by blast
 		have "\<not> col A B C" using `\<not> col A B C` .
 		show "False" using `\<not> col A B C` `col A B C` by blast
 	qed
 	hence "A \<noteq> C" by blast
 	have "C \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> C`] .
 	have "E \<noteq> C" using betweennotequal[OF `axioms` `bet A E C`] by blast
-	obtain G where "bet A C G \<and> seg_eq C G E C" using extensionE[OF `axioms` `A \<noteq> C` `E \<noteq> C`]  by  blast
+	obtain G where "bet A C G \<and> seg_eq C G E C" using extensionE[OF `axioms` `A \<noteq> C` `E \<noteq> C`] by blast
 	have "\<not> (col B E A)"
 	proof (rule ccontr)
 		assume "col B E A"
-		have "col A E C" using col_b `axioms` `bet A E C \<and> seg_eq E A E C` by blast
+		have "col A E C" using collinear_b `axioms` `bet A E C \<and> seg_eq E A E C` by blast
 		have "col E A B" using collinearorder[OF `axioms` `col B E A`] by blast
 		have "col E A C" using collinearorder[OF `axioms` `col A E C`] by blast
 		have "A \<noteq> E" using betweennotequal[OF `axioms` `bet A E C`] by blast
@@ -117,13 +117,13 @@ proof -
 	have "\<not> (col E C F)"
 	proof (rule ccontr)
 		assume "col E C F"
-		have "col B E F" using col_b `axioms` `bet B E F \<and> seg_eq E F E B` by blast
+		have "col B E F" using collinear_b `axioms` `bet B E F \<and> seg_eq E F E B` by blast
 		have "col F E B" using collinearorder[OF `axioms` `col B E F`] by blast
 		have "col F E C" using collinearorder[OF `axioms` `col E C F`] by blast
 		have "E \<noteq> F" using betweennotequal[OF `axioms` `bet B E F`] by blast
 		have "F \<noteq> E" using inequalitysymmetric[OF `axioms` `E \<noteq> F`] .
 		have "col E B C" using collinear4[OF `axioms` `col F E B` `col F E C` `F \<noteq> E`] .
-		have "col A E C" using col_b `axioms` `bet A E C \<and> seg_eq E A E C` by blast
+		have "col A E C" using collinear_b `axioms` `bet A E C \<and> seg_eq E A E C` by blast
 		have "col E C B" using collinearorder[OF `axioms` `col E B C`] by blast
 		have "col E C A" using collinearorder[OF `axioms` `col A E C`] by blast
 		have "E \<noteq> C" using betweennotequal[OF `axioms` `bet A E C`] by blast
@@ -135,7 +135,7 @@ proof -
 	have "\<not> (C = F)"
 	proof (rule ccontr)
 		assume "C = F"
-		have "col E C F" using col_b `axioms` `C = F` by blast
+		have "col E C F" using collinear_b `axioms` `C = F` by blast
 		show "False" using `col E C F` `\<not> col E C F` by blast
 	qed
 	hence "C \<noteq> F" by blast
@@ -151,19 +151,19 @@ proof -
 	proof (rule ccontr)
 		assume "col D B F"
 		have "col F B D" using collinearorder[OF `axioms` `col D B F`] by blast
-		have "col B E F" using col_b `axioms` `bet B E F \<and> seg_eq E F E B` by blast
+		have "col B E F" using collinear_b `axioms` `bet B E F \<and> seg_eq E F E B` by blast
 		have "col F B E" using collinearorder[OF `axioms` `col B E F`] by blast
 		have "B \<noteq> F" using betweennotequal[OF `axioms` `bet B E F`] by blast
 		have "F \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> F`] .
 		have "col B D E" using collinear4[OF `axioms` `col F B D` `col F B E` `F \<noteq> B`] .
 		have "col D B E" using collinearorder[OF `axioms` `col B D E`] by blast
-		have "col B C D" using col_b `axioms` `bet B C D` by blast
+		have "col B C D" using collinear_b `axioms` `bet B C D` by blast
 		have "col D B C" using collinearorder[OF `axioms` `col B C D`] by blast
 		have "B \<noteq> D" using betweennotequal[OF `axioms` `bet B C D`] by blast
 		have "D \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> D`] .
 		have "col B E C" using collinear4[OF `axioms` `col D B E` `col D B C` `D \<noteq> B`] .
 		have "col E C B" using collinearorder[OF `axioms` `col B E C`] by blast
-		have "col A E C" using col_b `axioms` `bet A E C \<and> seg_eq E A E C` by blast
+		have "col A E C" using collinear_b `axioms` `bet A E C \<and> seg_eq E A E C` by blast
 		have "col E C A" using collinearorder[OF `axioms` `col A E C`] by blast
 		have "E \<noteq> C" using betweennotequal[OF `axioms` `bet A E C`] by blast
 		have "col C B A" using collinear4[OF `axioms` `col E C B` `col E C A` `E \<noteq> C`] .
@@ -172,7 +172,7 @@ proof -
 		show "False" using `\<not> col A B C` `col A B C` by blast
 	qed
 	hence "\<not> col D B F" by blast
-	obtain H where "bet D H E \<and> bet F H C" using Pasch-innerE[OF `axioms` `bet D C B` `bet F E B` `\<not> col D B F`]  by  blast
+	obtain H where "bet D H E \<and> bet F H C" using Pasch-innerE[OF `axioms` `bet D C B` `bet F E B` `\<not> col D B F`] by blast
 	have "bet D H E" using `bet D H E \<and> bet F H C` by blast
 	have "bet F H C" using `bet D H E \<and> bet F H C` by blast
 	have "bet C H F" using betweennesssymmetryE[OF `axioms` `bet F H C`] .
@@ -188,26 +188,26 @@ proof -
 	have "C \<noteq> D" using inequalitysymmetric[OF `axioms` `D \<noteq> C`] .
 	have "ray_on C D D" using ray4 `axioms` `D = D` `C \<noteq> D` by blast
 	have "ang_eq B A C A C H" using equalanglestransitive[OF `axioms` `ang_eq B A C B A C` `ang_eq B A C A C H`] .
-	have "ang_lt B A C A C D" sorry
+	have "ang_lt B A C A C D" using anglelessthan_b[OF `axioms` `bet E H D` `ray_on C A E` `ray_on C D D` `ang_eq B A C A C H`] .
 	have "B \<noteq> C" using betweennotequal[OF `axioms` `bet B C D`] by blast
-	obtain e where "bet B e C \<and> seg_eq e B e C" using Prop10[OF `axioms` `B \<noteq> C`]  by  blast
+	obtain e where "bet B e C \<and> seg_eq e B e C" using Prop10[OF `axioms` `B \<noteq> C`] by blast
 	have "bet B e C" using `bet B e C \<and> seg_eq e B e C` by blast
-	have "col B e C" using col_b `axioms` `bet B e C \<and> seg_eq e B e C` by blast
+	have "col B e C" using collinear_b `axioms` `bet B e C \<and> seg_eq e B e C` by blast
 	have "\<not> (A = e)"
 	proof (rule ccontr)
 		assume "A = e"
-		have "bet B A C" sorry
-		have "col B A C" using col_b `axioms` `bet B A C` by blast
+		have "bet B A C" using `bet B e C` `A = e` by blast
+		have "col B A C" using collinear_b `axioms` `bet B A C` by blast
 		show "False" using `col B A C` `\<not> col B A C` by blast
 	qed
 	hence "A \<noteq> e" by blast
 	have "e \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> e`] .
-	obtain f where "bet A e f \<and> seg_eq e f e A" using extensionE[OF `axioms` `A \<noteq> e` `e \<noteq> A`]  by  blast
+	obtain f where "bet A e f \<and> seg_eq e f e A" using extensionE[OF `axioms` `A \<noteq> e` `e \<noteq> A`] by blast
 	have "seg_eq e f e A" using `bet A e f \<and> seg_eq e f e A` by blast
 	have "\<not> (B = C)"
 	proof (rule ccontr)
 		assume "B = C"
-		have "col B A C" using col_b `axioms` `B = C` by blast
+		have "col B A C" using collinear_b `axioms` `B = C` by blast
 		have "\<not> col B A C" using `\<not> col B A C` .
 		show "False" using `\<not> col B A C` `col B A C` by blast
 	qed
@@ -215,7 +215,7 @@ proof -
 	have "\<not> (col A e B)"
 	proof (rule ccontr)
 		assume "col A e B"
-		have "col B e C" using col_b `axioms` `bet B e C \<and> seg_eq e B e C` by blast
+		have "col B e C" using collinear_b `axioms` `bet B e C \<and> seg_eq e B e C` by blast
 		have "col e B A" using collinearorder[OF `axioms` `col A e B`] by blast
 		have "col e B C" using collinearorder[OF `axioms` `col B e C`] by blast
 		have "B \<noteq> e" using betweennotequal[OF `axioms` `bet B e C`] by blast
@@ -279,7 +279,7 @@ proof -
 	have "\<not> (C = f)"
 	proof (rule ccontr)
 		assume "C = f"
-		have "col e C f" using col_b `axioms` `C = f` by blast
+		have "col e C f" using collinear_b `axioms` `C = f` by blast
 		show "False" using `col e C f` `\<not> col e C f` by blast
 	qed
 	hence "C \<noteq> f" by blast
@@ -287,7 +287,7 @@ proof -
 	have "\<not> (col e C f)"
 	proof (rule ccontr)
 		assume "col e C f"
-		have "col A e f" using col_b `axioms` `bet A e f \<and> seg_eq e f e A` by blast
+		have "col A e f" using collinear_b `axioms` `bet A e f \<and> seg_eq e f e A` by blast
 		have "col f e A" using collinearorder[OF `axioms` `col A e f`] by blast
 		have "col f e C" using collinearorder[OF `axioms` `col e C f`] by blast
 		have "e \<noteq> f" using betweennotequal[OF `axioms` `bet A e f`] by blast
@@ -314,19 +314,19 @@ proof -
 	proof (rule ccontr)
 		assume "col G A f"
 		have "col f A G" using collinearorder[OF `axioms` `col G A f`] by blast
-		have "col A e f" using col_b `axioms` `bet A e f \<and> seg_eq e f e A` by blast
+		have "col A e f" using collinear_b `axioms` `bet A e f \<and> seg_eq e f e A` by blast
 		have "col f A e" using collinearorder[OF `axioms` `col A e f`] by blast
 		have "A \<noteq> f" using betweennotequal[OF `axioms` `bet A e f`] by blast
 		have "f \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> f`] .
 		have "col A G e" using collinear4[OF `axioms` `col f A G` `col f A e` `f \<noteq> A`] .
 		have "col G A e" using collinearorder[OF `axioms` `col A G e`] by blast
-		have "col A C G" using col_b `axioms` `bet A C G \<and> seg_eq C G E C` by blast
+		have "col A C G" using collinear_b `axioms` `bet A C G \<and> seg_eq C G E C` by blast
 		have "col G A C" using collinearorder[OF `axioms` `col A C G`] by blast
 		have "A \<noteq> G" using betweennotequal[OF `axioms` `bet A C G`] by blast
 		have "G \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> G`] .
 		have "col A e C" using collinear4[OF `axioms` `col G A e` `col G A C` `G \<noteq> A`] .
 		have "col e C A" using collinearorder[OF `axioms` `col A e C`] by blast
-		have "col B e C" using col_b `axioms` `bet B e C \<and> seg_eq e B e C` by blast
+		have "col B e C" using collinear_b `axioms` `bet B e C \<and> seg_eq e B e C` by blast
 		have "col e C B" using collinearorder[OF `axioms` `col B e C`] by blast
 		have "e \<noteq> C" using betweennotequal[OF `axioms` `bet B e C`] by blast
 		have "col C A B" using collinear4[OF `axioms` `col e C A` `col e C B` `e \<noteq> C`] .
@@ -335,7 +335,7 @@ proof -
 		show "False" using `\<not> col A B C` `col A B C` by blast
 	qed
 	hence "\<not> col G A f" by blast
-	obtain h where "bet G h e \<and> bet f h C" using Pasch-innerE[OF `axioms` `bet G C A` `bet f e A` `\<not> col G A f`]  by  blast
+	obtain h where "bet G h e \<and> bet f h C" using Pasch-innerE[OF `axioms` `bet G C A` `bet f e A` `\<not> col G A f`] by blast
 	have "bet G h e" using `bet G h e \<and> bet f h C` by blast
 	have "bet f h C" using `bet G h e \<and> bet f h C` by blast
 	have "bet C h f" using betweennesssymmetryE[OF `axioms` `bet f h C`] .
@@ -353,11 +353,11 @@ proof -
 	have "G = G" using equalityreflexiveE[OF `axioms`] .
 	have "ray_on C G G" using ray4 `axioms` `G = G` `C \<noteq> G` by blast
 	have "ang_eq A B C B C h" using equalanglestransitive[OF `axioms` `ang_eq A B C A B C` `ang_eq A B C B C h`] .
-	have "ang_lt A B C B C G" sorry
+	have "ang_lt A B C B C G" using anglelessthan_b[OF `axioms` `bet e h G` `ray_on C B e` `ray_on C G G` `ang_eq A B C B C h`] .
 	have "\<not> (col G C B)"
 	proof (rule ccontr)
 		assume "col G C B"
-		have "col A C G" using col_b `axioms` `bet A C G \<and> seg_eq C G E C` by blast
+		have "col A C G" using collinear_b `axioms` `bet A C G \<and> seg_eq C G E C` by blast
 		have "col G C A" using collinearorder[OF `axioms` `col A C G`] by blast
 		have "C \<noteq> G" using betweennotequal[OF `axioms` `bet A C G`] by blast
 		have "G \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> G`] .
@@ -371,7 +371,7 @@ proof -
 	proof (rule ccontr)
 		assume "col A C D"
 		have "col D C A" using collinearorder[OF `axioms` `col A C D`] by blast
-		have "col B C D" using col_b `axioms` `bet B C D` by blast
+		have "col B C D" using collinear_b `axioms` `bet B C D` by blast
 		have "col D C B" using collinearorder[OF `axioms` `col B C D`] by blast
 		have "C \<noteq> D" using betweennotequal[OF `axioms` `bet B C D`] by blast
 		have "D \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> D`] .

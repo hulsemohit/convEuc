@@ -8,7 +8,7 @@ theorem angleorderrespectscongruence:
 		"ang_eq P Q R D E F"
 	shows: "ang_lt A B C P Q R"
 proof -
-	obtain G H J where "bet G H J \<and> ray_on E D G \<and> ray_on E F J \<and> ang_eq A B C D E H" sorry
+	obtain G H J where "bet G H J \<and> ray_on E D G \<and> ray_on E F J \<and> ang_eq A B C D E H" using anglelessthan_f[OF `axioms` `ang_lt A B C D E F`] by blast
 	have "bet G H J" using `bet G H J \<and> ray_on E D G \<and> ray_on E F J \<and> ang_eq A B C D E H` by blast
 	have "ray_on E D G" using `bet G H J \<and> ray_on E D G \<and> ray_on E F J \<and> ang_eq A B C D E H` by blast
 	have "ray_on E F J" using `bet G H J \<and> ray_on E D G \<and> ray_on E F J \<and> ang_eq A B C D E H` by blast
@@ -19,13 +19,13 @@ proof -
 	have "Q \<noteq> P" using inequalitysymmetric[OF `axioms` `P \<noteq> Q`] .
 	have "A \<noteq> B \<and> B \<noteq> C \<and> A \<noteq> C \<and> D \<noteq> E \<and> E \<noteq> H \<and> D \<noteq> H" using angledistinct[OF `axioms` `ang_eq A B C D E H`] .
 	have "E \<noteq> G" using raystrict[OF `axioms` `ray_on E D G`] .
-	obtain U where "ray_on Q P U \<and> seg_eq Q U E G" using layoff[OF `axioms` `Q \<noteq> P` `E \<noteq> G`]  by  blast
+	obtain U where "ray_on Q P U \<and> seg_eq Q U E G" using layoff[OF `axioms` `Q \<noteq> P` `E \<noteq> G`] by blast
 	have "seg_eq Q U E G" using `ray_on Q P U \<and> seg_eq Q U E G` by blast
 	have "E \<noteq> J" using raystrict[OF `axioms` `ray_on E F J`] .
-	obtain V where "ray_on Q R V \<and> seg_eq Q V E J" using layoff[OF `axioms` `Q \<noteq> R` `E \<noteq> J`]  by  blast
+	obtain V where "ray_on Q R V \<and> seg_eq Q V E J" using layoff[OF `axioms` `Q \<noteq> R` `E \<noteq> J`] by blast
 	have "seg_eq Q V E J" using `ray_on Q R V \<and> seg_eq Q V E J` by blast
-	have "seg_eq G H G H" using congruencereflexiveE[OF `axioms`] .
-	have "seg_lt G H G J" sorry
+	have "seg_eq G H G H" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_lt G H G J" using lessthan_b[OF `axioms` `bet G H J` `seg_eq G H G H`] .
 	have "ray_on Q P U" using `ray_on Q P U \<and> seg_eq Q U E G` by blast
 	have "ray_on Q R V" using `ray_on Q R V \<and> seg_eq Q V E J` by blast
 	have "ang_eq D E F P Q R" using equalanglessymmetric[OF `axioms` `ang_eq P Q R D E F`] .
@@ -44,7 +44,7 @@ proof -
 	have "seg_eq U V G J" using congruencesymmetric[OF `axioms` `seg_eq G J U V`] .
 	have "seg_lt G H G J" using `seg_lt G H G J` .
 	have "G \<noteq> J" using betweennotequal[OF `axioms` `bet G H J`] by blast
-	obtain W where "bet U W V \<and> seg_eq U W G H" using Prop03[OF `axioms` `seg_lt G H G J` `seg_eq U V G J`]  by  blast
+	obtain W where "bet U W V \<and> seg_eq U W G H" using Prop03[OF `axioms` `seg_lt G H G J` `seg_eq U V G J`] by blast
 	have "bet U W V" using `bet U W V \<and> seg_eq U W G H` by blast
 	have "seg_eq U W G H" using `bet U W V \<and> seg_eq U W G H` by blast
 	have "ray_on E D G" using `ray_on E D G` .
@@ -64,7 +64,7 @@ proof -
 	have "\<not> (G = E)"
 	proof (rule ccontr)
 		assume "G = E"
-		have "col G H E" using col_b `axioms` `G = E` by blast
+		have "col G H E" using collinear_b `axioms` `G = E` by blast
 		show "False" using `col G H E` `\<not> col G H E` by blast
 	qed
 	hence "G \<noteq> E" by blast
@@ -101,7 +101,7 @@ proof -
 	have "\<not> (Q = W)"
 	proof (rule ccontr)
 		assume "Q = W"
-		have "col Q U W" using col_b `axioms` `Q = W` by blast
+		have "col Q U W" using collinear_b `axioms` `Q = W` by blast
 		have "col W U Q" using collinearorder[OF `axioms` `col Q U W`] by blast
 		show "False" using `col W U Q` `\<not> col W U Q` by blast
 	qed
@@ -112,7 +112,7 @@ proof -
 	have "ray_on Q P U" using `ray_on Q P U` .
 	have "ray_on Q R V" using `ray_on Q R V` .
 	have "bet U W V" using `bet U W V` .
-	have "ang_lt A B C P Q R" sorry
+	have "ang_lt A B C P Q R" using anglelessthan_b[OF `axioms` `bet U W V` `ray_on Q P U` `ray_on Q R V` `ang_eq A B C P Q W`] .
 	thus ?thesis by blast
 qed
 

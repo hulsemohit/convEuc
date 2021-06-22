@@ -13,24 +13,24 @@ theorem fiveline:
 		"A \<noteq> C"
 	shows: "seg_eq B D b d"
 proof -
-	have "A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B" using col_f[OF `axioms` `col A B C`] .
+	have "A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B" using collinear_f[OF `axioms` `col A B C`] .
 	have "A = B \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B" using `A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B` `A \<noteq> C` by blast
 	consider "A = B"|"B = C"|"bet B A C"|"bet A B C"|"bet A C B" using `A = B \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B`  by blast
 	hence seg_eq B D b d
 	proof (cases)
 		case 1
-		have "seg_eq B B a b" sorry
+		have "seg_eq B B a b" using `seg_eq A B a b` `A = B` by blast
 		have "seg_eq a b B B" using congruencesymmetric[OF `axioms` `seg_eq B B a b`] .
 		have "a = b" using nullsegment1E[OF `axioms` `seg_eq a b B B`] .
-		have "seg_eq B D a d" sorry
-		have "seg_eq B D b d" sorry
+		have "seg_eq B D a d" using `seg_eq A D a d` `A = B` by blast
+		have "seg_eq B D b d" using `seg_eq A D a d` `A = B` `a = b` by blast
 	next
 		case 2
-		have "seg_eq B B b c" sorry
+		have "seg_eq B B b c" using `seg_eq B C b c` `B = C` by blast
 		have "seg_eq b c B B" using congruencesymmetric[OF `axioms` `seg_eq B B b c`] .
 		have "b = c" using nullsegment1E[OF `axioms` `seg_eq b c B B`] .
-		have "seg_eq B D c d" sorry
-		have "seg_eq B D b d" sorry
+		have "seg_eq B D c d" using `seg_eq C D c d` `B = C` by blast
+		have "seg_eq B D b d" using `seg_eq B D c d` `b = c` by blast
 	next
 		case 3
 		have "bet C A B" using betweennesssymmetryE[OF `axioms` `bet B A C`] .

@@ -11,7 +11,7 @@ theorem together:
 		"seg_eq P Q C c"
 	shows: "seg_lt P Q D G \<and> A \<noteq> a \<and> B \<noteq> b \<and> C \<noteq> c"
 proof -
-	obtain R where "bet A a R \<and> seg_eq a R B b \<and> seg_lt C c A R" sorry
+	obtain R where "bet A a R \<and> seg_eq a R B b \<and> seg_lt C c A R" using togethergreater_f[OF `axioms` `seg_sum_gt A a B b C c`] by blast
 	have "bet A a R" using `bet A a R \<and> seg_eq a R B b \<and> seg_lt C c A R` by blast
 	have "seg_eq a R B b" using `bet A a R \<and> seg_eq a R B b \<and> seg_lt C c A R` by blast
 	have "seg_lt C c A R" using `bet A a R \<and> seg_eq a R B b \<and> seg_lt C c A R` by blast
@@ -25,7 +25,7 @@ proof -
 	have "A \<noteq> a" using betweennotequal[OF `axioms` `bet A a R`] by blast
 	have "a \<noteq> R" using betweennotequal[OF `axioms` `bet A a R`] by blast
 	have "B \<noteq> b" using nullsegment3[OF `axioms` `a \<noteq> R` `seg_eq a R B b`] .
-	obtain S where "bet A S R \<and> seg_eq A S C c" sorry
+	obtain S where "bet A S R \<and> seg_eq A S C c" using lessthan_f[OF `axioms` `seg_lt C c A R`] by blast
 	have "bet A S R" using `bet A S R \<and> seg_eq A S C c` by blast
 	have "seg_eq A S C c" using `bet A S R \<and> seg_eq A S C c` by blast
 	have "A \<noteq> S" using betweennotequal[OF `axioms` `bet A S R`] by blast

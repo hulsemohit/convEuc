@@ -8,14 +8,14 @@ theorem Prop19:
 		"ang_lt B C A A B C"
 	shows: "seg_lt A B A C"
 proof -
-	have "\<not> col A B C" sorry
+	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "\<not> col B C A" using NCorder[OF `axioms` `\<not> col A B C`] by blast
 	have "\<not> col A C B" using NCorder[OF `axioms` `\<not> col A B C`] by blast
 	have "\<not> (seg_eq A C A B)"
 	proof (rule ccontr)
 		assume "seg_eq A C A B"
 		have "seg_eq A B A C" using congruencesymmetric[OF `axioms` `seg_eq A C A B`] .
-		have "tri_isos A B C" sorry
+		have "tri_isos A B C" using isosceles_b[OF `axioms` `triangle A B C` `seg_eq A B A C`] .
 		have "ang_eq A B C A C B" using Prop05[OF `axioms` `tri_isos A B C`] .
 		have "ang_eq A C B A B C" using equalanglessymmetric[OF `axioms` `ang_eq A B C A C B`] .
 		have "\<not> col B C A" using `\<not> col B C A` .
@@ -29,7 +29,7 @@ proof -
 	have "\<not> (seg_lt A C A B)"
 	proof (rule ccontr)
 		assume "seg_lt A C A B"
-		have "triangle A C B" sorry
+		have "triangle A C B" using triangle_b[OF `axioms` `\<not> col A C B`] .
 		have "ang_lt C B A A C B" using Prop18[OF `axioms` `triangle A C B` `seg_lt A C A B`] .
 		have "ang_eq A B C C B A" using ABCequalsCBA[OF `axioms` `\<not> col A B C`] .
 		have "ang_lt A B C A C B" using angleorderrespectscongruence2[OF `axioms` `ang_lt C B A A C B` `ang_eq A B C C B A`] .

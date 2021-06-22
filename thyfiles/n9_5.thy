@@ -35,18 +35,18 @@ proof -
 			have "oppo_side Q A B C" using n9_5a[OF `axioms` `oppo_side P A B C` `bet R P Q` `\<not> col R Q C` `col A B R`] .
 		next
 			case 2
-			have "oppo_side Q A B C" sorry
+			have "oppo_side Q A B C" using `oppo_side P A B C` `Q = P` by blast
 		next
 			case 3
 			have "oppo_side Q A B C" using n9_5b[OF `axioms` `oppo_side P A B C` `bet R Q P` `\<not> col C P R` `col A B R`] .
 		next
 	next
 		case 2
-		obtain L where "bet P L C \<and> col A B L \<and> \<not> col A B P" sorry
+		obtain L where "bet P L C \<and> col A B L \<and> \<not> col A B P" using oppositeside_f[OF `axioms` `oppo_side P A B C`] by blast
 		have "bet P L C" using `bet P L C \<and> col A B L \<and> \<not> col A B P` by blast
 		have "col A B L" using `bet P L C \<and> col A B L \<and> \<not> col A B P` by blast
 		have "\<not> col A B P" using `bet P L C \<and> col A B L \<and> \<not> col A B P` by blast
-		have "col P C L" using col_b `axioms` `bet P L C \<and> col A B L \<and> \<not> col A B P` by blast
+		have "col P C L" using collinear_b `axioms` `bet P L C \<and> col A B L \<and> \<not> col A B P` by blast
 		have "col C P L" using collinearorder[OF `axioms` `col P C L`] by blast
 		have "P \<noteq> C" using betweennotequal[OF `axioms` `bet P L C`] by blast
 		have "C \<noteq> P" using inequalitysymmetric[OF `axioms` `P \<noteq> C`] .
@@ -54,7 +54,7 @@ proof -
 		have "\<not> (A = B)"
 		proof (rule ccontr)
 			assume "A = B"
-			have "col A B P" using col_b `axioms` `A = B` by blast
+			have "col A B P" using collinear_b `axioms` `A = B` by blast
 			show "False" using `col A B P` `bet P L C \<and> col A B L \<and> \<not> col A B P` by blast
 		qed
 		hence "A \<noteq> B" by blast
@@ -77,7 +77,7 @@ proof -
 			qed
 			hence "R = B" by blast
 			have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-			have "R \<noteq> A" sorry
+			have "R \<noteq> A" using `B \<noteq> A` `R = B` by blast
 			have "col B A R" using collinearorder[OF `axioms` `col A B R`] by blast
 			have "col B A L" using collinearorder[OF `axioms` `col A B L`] by blast
 			have "col A L R" using collinear4[OF `axioms` `col B A L` `col B A R` `B \<noteq> A`] .
@@ -91,7 +91,7 @@ proof -
 			show "False" using `\<not> col A B P` `col A B P` by blast
 		qed
 		hence "L = R" by blast
-		have "bet P R C" sorry
+		have "bet P R C" using `bet P L C` `L = R` by blast
 		have "bet C R P" using betweennesssymmetryE[OF `axioms` `bet P R C`] .
 		consider "bet R P Q"|"Q = P"|"bet R Q P" using `bet R P Q \<or> Q = P \<or> bet R Q P`  by blast
 		hence bet C R Q
@@ -100,7 +100,7 @@ proof -
 			have "bet C R Q" using n3_7b[OF `axioms` `bet C R P` `bet R P Q`] .
 		next
 			case 2
-			have "bet C R Q" sorry
+			have "bet C R Q" using `bet C R P` `Q = P` by blast
 		next
 			case 3
 			have "bet C R Q" using innertransitivityE[OF `axioms` `bet C R P` `bet R Q P`] .
@@ -127,7 +127,7 @@ proof -
 			qed
 			hence "R = B" by blast
 			have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-			have "R \<noteq> A" sorry
+			have "R \<noteq> A" using `B \<noteq> A` `R = B` by blast
 			have "col B A R" using collinearorder[OF `axioms` `col A B R`] by blast
 			have "col B A Q" using collinearorder[OF `axioms` `col A B Q`] by blast
 			have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
@@ -143,7 +143,7 @@ proof -
 		qed
 		hence "\<not> col A B Q" by blast
 		have "bet Q R C \<and> col A B R \<and> \<not> col A B Q" using `bet Q R C` `col A B R` `\<not> col A B Q` by blast
-		have "oppo_side Q A B C" sorry
+		have "oppo_side Q A B C" using oppositeside_b[OF `axioms` `bet Q R C` `col A B R` `\<not> col A B Q`] .
 	next
 	thus ?thesis by blast
 qed

@@ -10,7 +10,7 @@ theorem n26helper:
 		"seg_eq A B D E"
 	shows: "\<not> (seg_lt E F B C)"
 proof -
-	have "\<not> col A B C" sorry
+	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
 	have "A \<noteq> B" using angledistinct[OF `axioms` `ang_eq A B C A B C`] by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
@@ -21,7 +21,7 @@ proof -
 	have "\<not> (seg_lt E F B C)"
 	proof (rule ccontr)
 		assume "seg_lt E F B C"
-		obtain H where "bet B H C \<and> seg_eq B H E F" sorry
+		obtain H where "bet B H C \<and> seg_eq B H E F" using lessthan_f[OF `axioms` `seg_lt E F B C`] by blast
 		have "bet B H C" using `bet B H C \<and> seg_eq B H E F` by blast
 		have "seg_eq B H E F" using `bet B H C \<and> seg_eq B H E F` by blast
 		have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
@@ -38,7 +38,7 @@ proof -
 		proof (rule ccontr)
 			assume "col A C H"
 			have "col H C A" using collinearorder[OF `axioms` `col A C H`] by blast
-			have "col B H C" using col_b `axioms` `bet B H C \<and> seg_eq B H E F` by blast
+			have "col B H C" using collinear_b `axioms` `bet B H C \<and> seg_eq B H E F` by blast
 			have "col H C B" using collinearorder[OF `axioms` `col B H C`] by blast
 			have "H \<noteq> C" using betweennotequal[OF `axioms` `bet B H C`] by blast
 			have "col C A B" using collinear4[OF `axioms` `col H C A` `col H C B` `H \<noteq> C`] .
@@ -46,7 +46,7 @@ proof -
 			show "False" using `col A B C` `\<not> col A B C` by blast
 		qed
 		hence "\<not> col A C H" by blast
-		have "triangle A C H" sorry
+		have "triangle A C H" using triangle_b[OF `axioms` `\<not> col A C H`] .
 		have "bet C H B" using betweennesssymmetryE[OF `axioms` `bet B H C`] .
 		have "ang_lt H C A A H B" using Prop16[OF `axioms` `triangle A C H` `bet C H B`] by blast
 		have "ray_on C B H" using ray4 `axioms` `bet C H B` `C \<noteq> B` by blast
@@ -68,7 +68,7 @@ proof -
 		proof (rule ccontr)
 			assume "col A H B"
 			have "col H B A" using collinearorder[OF `axioms` `col A H B`] by blast
-			have "col B H C" using col_b `axioms` `bet B H C \<and> seg_eq B H E F` by blast
+			have "col B H C" using collinear_b `axioms` `bet B H C \<and> seg_eq B H E F` by blast
 			have "col H B C" using collinearorder[OF `axioms` `col B H C`] by blast
 			have "B \<noteq> H" using betweennotequal[OF `axioms` `bet B H C`] by blast
 			have "H \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> H`] .

@@ -16,23 +16,23 @@ proof -
 	have "B \<noteq> C" using angledistinct[OF `axioms` `ang_eq A B C D E F`] by blast
 	have "P \<noteq> Q" using angledistinct[OF `axioms` `ang_eq D E F P Q R`] by blast
 	have "Q \<noteq> P" using inequalitysymmetric[OF `axioms` `P \<noteq> Q`] .
-	obtain U where "ray_on E D U \<and> seg_eq E U B A" using layoff[OF `axioms` `E \<noteq> D` `B \<noteq> A`]  by  blast
-	obtain V where "ray_on E F V \<and> seg_eq E V B C" using layoff[OF `axioms` `E \<noteq> F` `B \<noteq> C`]  by  blast
+	obtain U where "ray_on E D U \<and> seg_eq E U B A" using layoff[OF `axioms` `E \<noteq> D` `B \<noteq> A`] by blast
+	obtain V where "ray_on E F V \<and> seg_eq E V B C" using layoff[OF `axioms` `E \<noteq> F` `B \<noteq> C`] by blast
 	have "ray_on E D U" using `ray_on E D U \<and> seg_eq E U B A` by blast
 	have "ray_on E F V" using `ray_on E F V \<and> seg_eq E V B C` by blast
 	have "E \<noteq> U" using raystrict[OF `axioms` `ray_on E D U`] .
 	have "E \<noteq> V" using raystrict[OF `axioms` `ray_on E F V`] .
 	have "ang_eq P Q R D E F" using equalanglessymmetric[OF `axioms` `ang_eq D E F P Q R`] .
 	have "Q \<noteq> R" using angledistinct[OF `axioms` `ang_eq D E F P Q R`] by blast
-	obtain u where "ray_on Q P u \<and> seg_eq Q u E U" using layoff[OF `axioms` `Q \<noteq> P` `E \<noteq> U`]  by  blast
-	obtain v where "ray_on Q R v \<and> seg_eq Q v E V" using layoff[OF `axioms` `Q \<noteq> R` `E \<noteq> V`]  by  blast
+	obtain u where "ray_on Q P u \<and> seg_eq Q u E U" using layoff[OF `axioms` `Q \<noteq> P` `E \<noteq> U`] by blast
+	obtain v where "ray_on Q R v \<and> seg_eq Q v E V" using layoff[OF `axioms` `Q \<noteq> R` `E \<noteq> V`] by blast
 	have "seg_eq E U B A" using `ray_on E D U \<and> seg_eq E U B A` by blast
 	have "seg_eq E V B C" using `ray_on E F V \<and> seg_eq E V B C` by blast
 	have "ray_on Q P u" using `ray_on Q P u \<and> seg_eq Q u E U` by blast
 	have "ray_on Q R v" using `ray_on Q R v \<and> seg_eq Q v E V` by blast
 	have "seg_eq Q u E U" using `ray_on Q P u \<and> seg_eq Q u E U` by blast
 	have "seg_eq Q v E V" using `ray_on Q R v \<and> seg_eq Q v E V` by blast
-	have "\<not> col A B C" sorry
+	have "\<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C D E F`] by blast
 	have "ang_eq A B C D E F" using `ang_eq A B C D E F` .
 	have "ray_on E D U" using `ray_on E D U` .
 	have "ray_on E F V" using `ray_on E F V` .
@@ -56,7 +56,7 @@ proof -
 	have "C = C" using equalityreflexiveE[OF `axioms`] .
 	have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast
 	have "ray_on B C C" using ray4 `axioms` `C = C` `B \<noteq> C` by blast
-	have "ang_eq A B C P Q R" sorry
+	have "ang_eq A B C P Q R" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B C C` `ray_on Q P u` `ray_on Q R v` `seg_eq B A Q u` `seg_eq B C Q v` `seg_eq A C u v` `\<not> col A B C`] .
 	thus ?thesis by blast
 qed
 

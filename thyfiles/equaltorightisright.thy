@@ -9,7 +9,7 @@ theorem equaltorightisright:
 	shows: "ang_right a b c"
 proof -
 	have "ang_eq A B C a b c" using equalanglessymmetric[OF `axioms` `ang_eq a b c A B C`] .
-	obtain E F e f where "ray_on B A E \<and> ray_on B C F \<and> ray_on b a e \<and> ray_on b c f \<and> seg_eq B E b e \<and> seg_eq B F b f \<and> seg_eq E F e f \<and> \<not> col A B C" sorry
+	obtain E F e f where "ray_on B A E \<and> ray_on B C F \<and> ray_on b a e \<and> ray_on b c f \<and> seg_eq B E b e \<and> seg_eq B F b f \<and> seg_eq E F e f \<and> \<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C a b c`] by blast
 	have "ray_on B A E" using `ray_on B A E \<and> ray_on B C F \<and> ray_on b a e \<and> ray_on b c f \<and> seg_eq B E b e \<and> seg_eq B F b f \<and> seg_eq E F e f \<and> \<not> col A B C` by blast
 	have "ray_on B C F" using `ray_on B A E \<and> ray_on B C F \<and> ray_on b a e \<and> ray_on b c f \<and> seg_eq B E b e \<and> seg_eq B F b f \<and> seg_eq E F e f \<and> \<not> col A B C` by blast
 	have "ray_on b a e" using `ray_on B A E \<and> ray_on B C F \<and> ray_on b a e \<and> ray_on b c f \<and> seg_eq B E b e \<and> seg_eq B F b f \<and> seg_eq E F e f \<and> \<not> col A B C` by blast
@@ -23,14 +23,14 @@ proof -
 	have "ang_right E B F" using n8_2[OF `axioms` `ang_right F B E`] .
 	have "B \<noteq> E" using raystrict[OF `axioms` `ray_on B A E`] .
 	have "E \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> E`] .
-	obtain W where "bet E B W \<and> seg_eq E B W B \<and> seg_eq E F W F \<and> B \<noteq> F" sorry
+	obtain W where "bet E B W \<and> seg_eq E B W B \<and> seg_eq E F W F \<and> B \<noteq> F" using rightangle_f[OF `axioms` `ang_right E B F`] by blast
 	have "bet E B W" using `bet E B W \<and> seg_eq E B W B \<and> seg_eq E F W F \<and> B \<noteq> F` by blast
 	have "seg_eq E B W B" using `bet E B W \<and> seg_eq E B W B \<and> seg_eq E F W F \<and> B \<noteq> F` by blast
 	have "seg_eq E F W F" using `bet E B W \<and> seg_eq E B W B \<and> seg_eq E F W F \<and> B \<noteq> F` by blast
 	have "B \<noteq> F" using `bet E B W \<and> seg_eq E B W B \<and> seg_eq E F W F \<and> B \<noteq> F` by blast
 	have "b \<noteq> e" using nullsegment3[OF `axioms` `B \<noteq> E` `seg_eq B E b e`] .
 	have "e \<noteq> b" using inequalitysymmetric[OF `axioms` `b \<noteq> e`] .
-	obtain w where "bet e b w \<and> seg_eq b w e b" using extensionE[OF `axioms` `e \<noteq> b` `e \<noteq> b`]  by  blast
+	obtain w where "bet e b w \<and> seg_eq b w e b" using extensionE[OF `axioms` `e \<noteq> b` `e \<noteq> b`] by blast
 	have "bet e b w" using `bet e b w \<and> seg_eq b w e b` by blast
 	have "seg_eq b w e b" using `bet e b w \<and> seg_eq b w e b` by blast
 	have "seg_eq e b E B" using doublereverse[OF `axioms` `seg_eq B E b e`] by blast
@@ -50,7 +50,7 @@ proof -
 	have "seg_eq e f w f" using congruencetransitive[OF `axioms` `seg_eq e f W F` `seg_eq W F w f`] .
 	have "b \<noteq> f" using raystrict[OF `axioms` `ray_on b c f`] .
 	have "bet e b w \<and> seg_eq e b w b \<and> seg_eq e f w f \<and> b \<noteq> f" using `bet e b w \<and> seg_eq b w e b` `seg_eq e b w b` `seg_eq e f w f` `b \<noteq> f` by blast
-	have "ang_right e b f" sorry
+	have "ang_right e b f" using rightangle_b[OF `axioms` `bet e b w` `seg_eq e b w b` `seg_eq e f w f` `b \<noteq> f`] .
 	have "ray_on b f c" using ray5[OF `axioms` `ray_on b c f`] .
 	have "ang_right e b c" using n8_3[OF `axioms` `ang_right e b f` `ray_on b f c`] .
 	have "ang_right c b e" using n8_2[OF `axioms` `ang_right e b c`] .

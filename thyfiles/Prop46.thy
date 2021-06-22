@@ -9,27 +9,27 @@ theorem Prop46:
 	shows: "\<exists> D E. square A B E D \<and> oppo_side D A B R \<and> parallelogram A B E D"
 proof -
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-	obtain F where "bet B A F \<and> seg_eq A F A B" using extensionE[OF `axioms` `B \<noteq> A` `A \<noteq> B`]  by  blast
+	obtain F where "bet B A F \<and> seg_eq A F A B" using extensionE[OF `axioms` `B \<noteq> A` `A \<noteq> B`] by blast
 	have "bet B A F" using `bet B A F \<and> seg_eq A F A B` by blast
 	have "\<not> col B A R" using NCorder[OF `axioms` `\<not> col A B R`] by blast
-	have "col B A F" using col_b `axioms` `bet B A F \<and> seg_eq A F A B` by blast
+	have "col B A F" using collinear_b `axioms` `bet B A F \<and> seg_eq A F A B` by blast
 	have "B = B" using equalityreflexiveE[OF `axioms`] .
-	have "col B A B" using col_b `axioms` `B = B` by blast
+	have "col B A B" using collinear_b `axioms` `B = B` by blast
 	have "B \<noteq> F" using betweennotequal[OF `axioms` `bet B A F`] by blast
 	have "\<not> col B F R" using NChelper[OF `axioms` `\<not> col B A R` `col B A B` `col B A F` `B \<noteq> F`] .
 	obtain C where "ang_right B A C \<and> oppo_side C B F R" using Prop11B[OF `axioms` `bet B A F` `\<not> col B F R`]  by  blast
 	have "oppo_side C B F R" using `ang_right B A C \<and> oppo_side C B F R` by blast
-	have "\<not> col B F C" sorry
+	have "\<not> col B F C" using oppositeside_f[OF `axioms` `oppo_side C B F R`] by blast
 	have "col B F A" using collinearorder[OF `axioms` `col B A F`] by blast
-	have "col B F B" using col_b `axioms` `B = B` by blast
+	have "col B F B" using collinear_b `axioms` `B = B` by blast
 	have "\<not> col B A C" using NChelper[OF `axioms` `\<not> col B F C` `col B F B` `col B F A` `B \<noteq> A`] .
 	have "A \<noteq> C" using NCdistinct[OF `axioms` `\<not> col B A C`] by blast
-	obtain D where "ray_on A C D \<and> seg_eq A D A B" using layoff[OF `axioms` `A \<noteq> C` `A \<noteq> B`]  by  blast
+	obtain D where "ray_on A C D \<and> seg_eq A D A B" using layoff[OF `axioms` `A \<noteq> C` `A \<noteq> B`] by blast
 	have "ray_on A C D" using `ray_on A C D \<and> seg_eq A D A B` by blast
 	have "ray_on A D C" using ray5[OF `axioms` `ray_on A C D`] .
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
-	have "col A B A" using col_b `axioms` `A = A` by blast
-	obtain q where "bet C q R \<and> col B F q \<and> \<not> col B F C" sorry
+	have "col A B A" using collinear_b `axioms` `A = A` by blast
+	obtain q where "bet C q R \<and> col B F q \<and> \<not> col B F C" using oppositeside_f[OF `axioms` `oppo_side C B F R`] by blast
 	have "bet C q R" using `bet C q R \<and> col B F q \<and> \<not> col B F C` by blast
 	have "col B F q" using `bet C q R \<and> col B F q \<and> \<not> col B F C` by blast
 	have "\<not> col B F C" using `\<not> col B F C` .
@@ -43,11 +43,11 @@ proof -
 	have "F \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> F`] .
 	have "col B A q" using collinear4[OF `axioms` `col F B A` `col F B q` `F \<noteq> B`] .
 	have "col A B q" using collinearorder[OF `axioms` `col B A q`] by blast
-	have "oppo_side C A B R" sorry
+	have "oppo_side C A B R" using oppositeside_b[OF `axioms` `bet C q R` `col A B q` `\<not> col A B C`] .
 	have "oppo_side D A B R" using n9_5[OF `axioms` `oppo_side C A B R` `ray_on A D C` `col A B A`] .
 	have "\<not> col C A B" using NCorder[OF `axioms` `\<not> col A B C`] by blast
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
-	have "col C A A" using col_b `axioms` `A = A` by blast
+	have "col C A A" using collinear_b `axioms` `A = A` by blast
 	have "col A C D" using rayimpliescollinear[OF `axioms` `ray_on A C D`] .
 	have "col C A D" using collinearorder[OF `axioms` `col A C D`] by blast
 	have "A \<noteq> D" using ray2[OF `axioms` `ray_on A D C`] .
@@ -57,19 +57,19 @@ proof -
 	have "\<not> col A B D" using NCorder[OF `axioms` `\<not> col A D B`] by blast
 	have "bet F A B" using betweennesssymmetryE[OF `axioms` `bet B A F`] .
 	have "col A B F" using `col A B F` .
-	have "col A B B" using col_b `axioms` `B = B` by blast
+	have "col A B B" using collinear_b `axioms` `B = B` by blast
 	have "A \<noteq> B" using `A \<noteq> B` .
 	have "\<not> col F B D" using NChelper[OF `axioms` `\<not> col A B D` `col A B F` `col A B B` `F \<noteq> B`] .
-	obtain G M e where "bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A" using Prop31short[OF `axioms` `bet F A B` `\<not> col F B D`]  by  blast
+	obtain G M e where "bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A" using Prop31short[OF `axioms` `bet F A B` `\<not> col F B D`] by blast
 	have "bet G D e" using `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
 	have "parallel G e F B" using `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
 	have "bet G M B" using `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
 	have "bet D M A" using `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
 	have "parallel G e A B" using collinearparallel[OF `axioms` `parallel G e F B` `col F B A` `A \<noteq> B`] .
 	have "parallel A B G e" using parallelsymmetric[OF `axioms` `parallel G e A B`] .
-	have "col G D e" using col_b `axioms` `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
+	have "col G D e" using collinear_b `axioms` `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
 	have "col G e D" using collinearorder[OF `axioms` `col G D e`] by blast
-	obtain E where "parallelogram D E B A \<and> col G e E" using triangletoparallelogram[OF `axioms` `parallel A B G e` `col G e D`]  by  blast
+	obtain E where "parallelogram D E B A \<and> col G e E" using triangletoparallelogram[OF `axioms` `parallel A B G e` `col G e D`] by blast
 	have "col G e E" using `parallelogram D E B A \<and> col G e E` by blast
 	have "ang_right B A C" using `ang_right B A C \<and> oppo_side C B F R` by blast
 	have "ang_right C A B" using n8_2[OF `axioms` `ang_right B A C`] .
@@ -79,7 +79,7 @@ proof -
 	have "ang_right B A D" using n8_2[OF `axioms` `ang_right D A B`] .
 	have "ang_eq G D A D A B" using `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
 	have "ang_right G D A" using equaltorightisright[OF `axioms` `ang_right D A B` `ang_eq G D A D A B`] .
-	obtain p where "bet G D p \<and> seg_eq G D p D \<and> seg_eq G A p A \<and> D \<noteq> A" sorry
+	obtain p where "bet G D p \<and> seg_eq G D p D \<and> seg_eq G A p A \<and> D \<noteq> A" using rightangle_f[OF `axioms` `ang_right G D A`] by blast
 	have "bet G D p" using `bet G D p \<and> seg_eq G D p D \<and> seg_eq G A p A \<and> D \<noteq> A` by blast
 	have "seg_eq G D p D" using `bet G D p \<and> seg_eq G D p D \<and> seg_eq G A p A \<and> D \<noteq> A` by blast
 	have "seg_eq G A p A" using `bet G D p \<and> seg_eq G D p D \<and> seg_eq G A p A \<and> D \<noteq> A` by blast
@@ -87,23 +87,23 @@ proof -
 	have "bet p D G" using betweennesssymmetryE[OF `axioms` `bet G D p`] .
 	have "seg_eq p D G D" using congruencesymmetric[OF `axioms` `seg_eq G D p D`] .
 	have "seg_eq p A G A" using congruencesymmetric[OF `axioms` `seg_eq G A p A`] .
-	have "ang_right p D A" sorry
+	have "ang_right p D A" using rightangle_b[OF `axioms` `bet p D G` `seg_eq p D G D` `seg_eq p A G A` `D \<noteq> A`] .
 	have "parallelogram D E B A" using `parallelogram D E B A \<and> col G e E` by blast
-	have "parallel D A E B" sorry
+	have "parallel D A E B" using parallelogram_f[OF `axioms` `parallelogram D E B A`] by blast
 	have "tarski_parallel D A E B" using paralleldef2B[OF `axioms` `parallel D A E B`] .
-	have "same_side E B D A" sorry
+	have "same_side E B D A" using tarski_parallel_f[OF `axioms` `tarski_parallel D A E B`] by blast
 	have "D = D" using equalityreflexiveE[OF `axioms`] .
-	have "col D A D" using col_b `axioms` `D = D` by blast
+	have "col D A D" using collinear_b `axioms` `D = D` by blast
 	have "\<not> col D A B" using NCorder[OF `axioms` `\<not> col A B D`] by blast
 	have "bet B M G" using betweennesssymmetryE[OF `axioms` `bet G M B`] .
-	have "col D M A" using col_b `axioms` `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
+	have "col D M A" using collinear_b `axioms` `bet G D e \<and> ang_eq G D A D A B \<and> parallel G e F B \<and> bet G M B \<and> bet D M A` by blast
 	have "col D A M" using collinearorder[OF `axioms` `col D M A`] by blast
-	have "oppo_side B D A G" sorry
+	have "oppo_side B D A G" using oppositeside_b[OF `axioms` `bet B M G` `col D A M` `\<not> col D A B`] .
 	have "oppo_side E D A G" using planeseparation[OF `axioms` `same_side E B D A` `oppo_side B D A G`] .
-	have "\<not> col D A E" sorry
+	have "\<not> col D A E" using oppositeside_f[OF `axioms` `oppo_side E D A G`] by blast
 	have "oppo_side G D A E" using oppositesidesymmetric[OF `axioms` `oppo_side E D A G`] .
-	have "\<not> col D A G" sorry
-	obtain d where "bet E d G \<and> col D A d \<and> \<not> col D A E" sorry
+	have "\<not> col D A G" using oppositeside_f[OF `axioms` `oppo_side G D A E`] by blast
+	obtain d where "bet E d G \<and> col D A d \<and> \<not> col D A E" using oppositeside_f[OF `axioms` `oppo_side E D A G`] by blast
 	have "bet E d G" using `bet E d G \<and> col D A d \<and> \<not> col D A E` by blast
 	have "col D A d" using `bet E d G \<and> col D A d \<and> \<not> col D A E` by blast
 	have "\<not> col D A E" using `\<not> col D A E` .
@@ -125,7 +125,7 @@ proof -
 		have "bet G D e" using `bet G D e` .
 		have "bet E G D" using betweennesssymmetryE[OF `axioms` `bet D G E`] .
 		have "bet E D e" using n3_7a[OF `axioms` `bet E G D` `bet G D e`] .
-		have "same_side E G D A" sorry
+		have "same_side E G D A" using sameside_b[OF `axioms` `col D A D` `col D A D` `bet E D e` `bet G D e` `\<not> col D A E` `\<not> col D A G`] .
 		show "False" using `same_side E G D A` `\<not> (same_side E G D A)` by blast
 	qed
 	hence "\<not> (bet D G E)" by blast
@@ -134,7 +134,7 @@ proof -
 		assume "bet G E D"
 		have "bet G D e" using `bet G D e` .
 		have "bet E D e" using n3_6a[OF `axioms` `bet G E D` `bet G D e`] .
-		have "same_side E G D A" sorry
+		have "same_side E G D A" using sameside_b[OF `axioms` `col D A D` `col D A D` `bet E D e` `bet G D e` `\<not> col D A E` `\<not> col D A G`] .
 		show "False" using `same_side E G D A` `\<not> (same_side E G D A)` by blast
 	qed
 	hence "\<not> (bet G E D)" by blast
@@ -144,7 +144,7 @@ proof -
 	have "G \<noteq> e" using NCdistinct[OF `axioms` `\<not> col G e F`] by blast
 	have "e \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> e`] .
 	have "col G D E" using collinear4[OF `axioms` `col e G D` `col e G E` `e \<noteq> G`] .
-	have "G = D \<or> G = E \<or> D = E \<or> bet D G E \<or> bet G D E \<or> bet G E D" using col_f[OF `axioms` `col G D E`] .
+	have "G = D \<or> G = E \<or> D = E \<or> bet D G E \<or> bet G D E \<or> bet G E D" using collinear_f[OF `axioms` `col G D E`] .
 	consider "G = D"|"G = E"|"D = E"|"bet D G E"|"bet G D E"|"bet G E D" using `G = D \<or> G = E \<or> D = E \<or> bet D G E \<or> bet G D E \<or> bet G E D`  by blast
 	hence bet G D E
 	proof (cases)
@@ -195,7 +195,7 @@ proof -
 		qed
 		hence "bet G D E" by blast
 	next
-	have "col G D E" using col_b[OF `axioms` `G = D \<or> G = E \<or> D = E \<or> bet D G E \<or> bet G D E \<or> bet G E D`] .
+	have "col G D E" using collinear_b[OF `axioms` `G = D \<or> G = E \<or> D = E \<or> bet D G E \<or> bet G D E \<or> bet G E D`] .
 	have "E \<noteq> D" using inequalitysymmetric[OF `axioms` `D \<noteq> E`] .
 	have "ang_right E D A" using collinearright[OF `axioms` `ang_right G D A` `col G D E` `E \<noteq> D`] .
 	have "parallelogram D E B A" using `parallelogram D E B A` .
@@ -219,7 +219,7 @@ proof -
 	have "ang_right B E D" using equaltorightisright[OF `axioms` `ang_right D A B` `ang_eq B E D D A B`] .
 	have "ang_right A B E" using equaltorightisright[OF `axioms` `ang_right E D A` `ang_eq A B E E D A`] .
 	have "seg_eq A B E D \<and> seg_eq A B B E \<and> seg_eq A B D A \<and> ang_right D A B \<and> ang_right A B E \<and> ang_right B E D \<and> ang_right E D A" using `seg_eq A B E D` `seg_eq A B B E` `seg_eq A B D A` `ang_right D A B` `ang_right A B E` `ang_right B E D` `ang_right E D A` by blast
-	have "square A B E D" sorry
+	have "square A B E D" using square_b[OF `axioms` `seg_eq A B E D` `seg_eq A B B E` `seg_eq A B D A` `ang_right D A B` `ang_right A B E` `ang_right B E D` `ang_right E D A`] .
 	have "parallelogram B A D E" using PGsymmetric[OF `axioms` `parallelogram D E B A`] .
 	have "parallelogram A B E D" using PGflip[OF `axioms` `parallelogram B A D E`] .
 	have "square A B E D \<and> oppo_side D A B R \<and> parallelogram A B E D" using `square A B E D` `oppo_side D A B R` `parallelogram A B E D` by blast

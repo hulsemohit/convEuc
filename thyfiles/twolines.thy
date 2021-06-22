@@ -9,22 +9,22 @@ theorem twolines:
 		"\<not> col B C D"
 	shows: "E = F"
 proof -
-	have "bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D" sorry
+	have "bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D" using cut_f[OF `axioms` `cuts A B C D E`] .
 	have "bet A E B" using `bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
-	have "bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D" sorry
+	have "bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D" using cut_f[OF `axioms` `cuts A B C D F`] .
 	have "bet A F B" using `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
-	have "col A E B" using col_b `axioms` `bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
+	have "col A E B" using collinear_b `axioms` `bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	have "col A B E" using collinearorder[OF `axioms` `col A E B`] by blast
-	have "col A F B" using col_b `axioms` `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
+	have "col A F B" using collinear_b `axioms` `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	have "col A B F" using collinearorder[OF `axioms` `col A F B`] by blast
 	have "col A B E" using `col A B E` .
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A E B`] by blast
 	have "col B E F" using collinear4[OF `axioms` `col A B E` `col A B F` `A \<noteq> B`] .
 	have "col E F B" using collinearorder[OF `axioms` `col B E F`] by blast
 	have "bet C E D" using `bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
-	have "col C E D" using col_b `axioms` `bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
+	have "col C E D" using collinear_b `axioms` `bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	have "bet C F D" using `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
-	have "col C F D" using col_b `axioms` `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
+	have "col C F D" using collinear_b `axioms` `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	have "col C D F" using collinearorder[OF `axioms` `col C F D`] by blast
 	have "col C E D" using `col C E D` .
 	have "col C D E" using collinearorder[OF `axioms` `col C E D`] by blast
@@ -50,8 +50,8 @@ proof -
 		have "\<not> (F = B)"
 		proof (rule ccontr)
 			assume "F = B"
-			have "col F C D" using col_b `axioms` `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
-			have "col B C D" sorry
+			have "col F C D" using collinear_b `axioms` `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
+			have "col B C D" using `col F C D` `F = B` by blast
 			have "\<not> col B C D" using `\<not> col B C D` .
 			show "False" using `\<not> col B C D` `col B C D` by blast
 		qed

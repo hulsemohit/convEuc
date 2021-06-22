@@ -31,7 +31,7 @@ proof -
 			proof (rule ccontr)
 				assume "\<not> (bet A C B)"
 				have "bet A B A" using innertransitivityE[OF `axioms` `bet A B C` `bet B A C`] .
-				have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] .
+				have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] by blast
 				show "False" using `\<not> (bet A B A)` `bet A B A` by blast
 			qed
 			hence "bet A C B" by blast

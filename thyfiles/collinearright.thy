@@ -9,14 +9,14 @@ theorem collinearright:
 		"C \<noteq> B"
 	shows: "ang_right C B D"
 proof -
-	have "A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B" using col_f[OF `axioms` `col A B C`] .
+	have "A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B" using collinear_f[OF `axioms` `col A B C`] .
 	have "\<not> col A B D" using rightangleNC[OF `axioms` `ang_right A B D`] .
 	have "\<not> (A = B)"
 	proof (rule ccontr)
 		assume "A = B"
-		have "\<not> col A A D" sorry
+		have "\<not> col A A D" using `\<not> col A B D` `A = B` by blast
 		have "A = A" using equalityreflexiveE[OF `axioms`] .
-		have "col D A A" using col_b `axioms` `A = A` by blast
+		have "col D A A" using collinear_b `axioms` `A = A` by blast
 		have "col A A D" using collinearorder[OF `axioms` `col D A A`] by blast
 		show "False" using `col A A D` `\<not> col A A D` by blast
 	qed
@@ -29,13 +29,13 @@ proof -
 		have "ang_right D B C"
 		proof (rule ccontr)
 			assume "\<not> (ang_right D B C)"
-			have "col A B D" using col_b `axioms` `A = B` by blast
+			have "col A B D" using collinear_b `axioms` `A = B` by blast
 			show "False" using `col A B D` `\<not> col A B D` by blast
 		qed
 		hence "ang_right D B C" by blast
 	next
 		case 2
-		have "ang_right D B C" sorry
+		have "ang_right D B C" using `ang_right D B A` `A = C` by blast
 	next
 		case 3
 		have "ang_right D B C"
@@ -53,7 +53,7 @@ proof -
 		have "ang_right D B C" using n8_3[OF `axioms` `ang_right D B A` `ray_on B A C`] .
 	next
 		case 5
-		obtain E where "bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D" sorry
+		obtain E where "bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D" using rightangle_f[OF `axioms` `ang_right A B D`] by blast
 		have "seg_eq A B E B" using `bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D` by blast
 		have "seg_eq A D E D" using `bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D` by blast
 		have "bet A B E" using `bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D` by blast
@@ -62,11 +62,11 @@ proof -
 		have "seg_eq E B A B" using congruencesymmetric[OF `axioms` `seg_eq A B E B`] .
 		have "seg_eq E D A D" using congruencesymmetric[OF `axioms` `seg_eq A D E D`] .
 		have "bet E B A \<and> seg_eq E B A B \<and> seg_eq A D E D \<and> B \<noteq> D" using `bet E B A` `seg_eq E B A B` `bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D` `bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D` by blast
-		have "ang_right E B D" sorry
+		have "ang_right E B D" using rightangle_b[OF `axioms` `bet E B A` `seg_eq E B A B` `seg_eq E D A D` `B \<noteq> D`] .
 		have "ang_right D B E" using n8_2[OF `axioms` `ang_right E B D`] .
 		have "bet A B E" using betweennesssymmetryE[OF `axioms` `bet E B A`] .
 		have "bet A B C \<and> bet A B E" using `bet A B C` `bet A B E \<and> seg_eq A B E B \<and> seg_eq A D E D \<and> B \<noteq> D` by blast
-		have "ray_on B E C" sorry
+		have "ray_on B E C" using ray_b[OF `axioms` `bet A B C` `bet A B E`] .
 		have "ang_right D B C" using n8_3[OF `axioms` `ang_right D B E` `ray_on B E C`] .
 	next
 		case 6

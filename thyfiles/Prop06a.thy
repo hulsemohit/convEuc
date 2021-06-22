@@ -17,21 +17,21 @@ proof -
 	have "\<not> (seg_lt A C A B)"
 	proof (rule ccontr)
 		assume "seg_lt A C A B"
-		have "seg_eq B A A B" using equalityreverseE[OF `axioms`] .
-		obtain D where "bet B D A \<and> seg_eq B D A C" using Prop03[OF `axioms` `seg_lt A C A B` `seg_eq B A A B`]  by  blast
+		have "seg_eq B A A B" using equalityreverseE[OF `axioms`] by blast
+		obtain D where "bet B D A \<and> seg_eq B D A C" using Prop03[OF `axioms` `seg_lt A C A B` `seg_eq B A A B`] by blast
 		have "bet B D A" using `bet B D A \<and> seg_eq B D A C` by blast
 		have "seg_eq B D A C" using `bet B D A \<and> seg_eq B D A C` by blast
 		have "seg_eq D B A C" using congruenceflip[OF `axioms` `seg_eq B D A C`] by blast
 		have "ray_on B A D" using ray4 `axioms` `bet B D A \<and> seg_eq B D A C` `B \<noteq> A` by blast
 		have "C = C" using equalityreflexiveE[OF `axioms`] .
 		have "ray_on B C C" using ray4 `axioms` `C = C` `B \<noteq> C` by blast
-		have "\<not> col A B C" sorry
+		have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 		have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
 		have "ang_eq A B C D B C" using equalangleshelper[OF `axioms` `ang_eq A B C A B C` `ray_on B A D` `ray_on B C C`] .
 		have "ang_eq D B C A B C" using equalanglessymmetric[OF `axioms` `ang_eq A B C D B C`] .
 		have "ang_eq D B C A C B" using equalanglestransitive[OF `axioms` `ang_eq D B C A B C` `ang_eq A B C A C B`] .
 		have "seg_eq B D C A" using congruenceflip[OF `axioms` `seg_eq B D A C`] by blast
-		have "seg_eq B C C B" using equalityreverseE[OF `axioms`] .
+		have "seg_eq B C C B" using equalityreverseE[OF `axioms`] by blast
 		have "seg_eq D C A B \<and> ang_eq B D C C A B \<and> ang_eq B C D C B A" using Prop04[OF `axioms` `seg_eq B D C A` `seg_eq B C C B` `ang_eq D B C A C B`] .
 		have "ang_eq B C D C B A" using `seg_eq D C A B \<and> ang_eq B D C C A B \<and> ang_eq B C D C B A` by blast
 		have "\<not> (col C B A)"
@@ -63,7 +63,7 @@ proof -
 		have "\<not> (col B C D)"
 		proof (rule ccontr)
 			assume "col B C D"
-			have "col B D A" using col_b `axioms` `bet B D A \<and> seg_eq B D A C` by blast
+			have "col B D A" using collinear_b `axioms` `bet B D A \<and> seg_eq B D A C` by blast
 			have "col D B A" using collinearorder[OF `axioms` `col B D A`] by blast
 			have "col D B C" using collinearorder[OF `axioms` `col B C D`] by blast
 			have "B \<noteq> D" using betweennotequal[OF `axioms` `bet B D A`] by blast
@@ -74,7 +74,7 @@ proof -
 		qed
 		hence "\<not> col B C D" by blast
 		have "ang_eq B C D B C D" using equalanglesreflexive[OF `axioms` `\<not> col B C D`] .
-		have "ang_lt B C D B C A" sorry
+		have "ang_lt B C D B C A" using anglelessthan_b[OF `axioms` `bet B D A` `ray_on C B B` `ray_on C A A` `ang_eq B C D B C D`] .
 		have "ang_lt B C A B C A" using angleorderrespectscongruence2[OF `axioms` `ang_lt B C D B C A` `ang_eq B C A B C D`] .
 		have "\<not> (ang_lt B C A B C A)" using angletrichotomy[OF `axioms` `ang_lt B C A B C A`] .
 		show "False" using `\<not> (ang_lt B C A B C A)` `ang_lt B C A B C A` by blast

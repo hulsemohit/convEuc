@@ -15,15 +15,15 @@ theorem Prop30:
 		"C \<noteq> K"
 	shows: "parallel A B C D"
 proof -
-	obtain b where "bet A G b \<and> seg_eq G b A G" using extensionE[OF `axioms` `A \<noteq> G` `A \<noteq> G`]  by  blast
-	obtain f where "bet E H f \<and> seg_eq H f E H" using extensionE[OF `axioms` `E \<noteq> H` `E \<noteq> H`]  by  blast
-	obtain d where "bet C K d \<and> seg_eq K d C K" using extensionE[OF `axioms` `C \<noteq> K` `C \<noteq> K`]  by  blast
+	obtain b where "bet A G b \<and> seg_eq G b A G" using extensionE[OF `axioms` `A \<noteq> G` `A \<noteq> G`] by blast
+	obtain f where "bet E H f \<and> seg_eq H f E H" using extensionE[OF `axioms` `E \<noteq> H` `E \<noteq> H`] by blast
+	obtain d where "bet C K d \<and> seg_eq K d C K" using extensionE[OF `axioms` `C \<noteq> K` `C \<noteq> K`] by blast
 	have "bet A G b" using `bet A G b \<and> seg_eq G b A G` by blast
 	have "bet E H f" using `bet E H f \<and> seg_eq H f E H` by blast
 	have "bet C K d" using `bet C K d \<and> seg_eq K d C K` by blast
 	have "\<not> col C D E" using parallelNC[OF `axioms` `parallel C D E F`] by blast
 	have "C \<noteq> D" using NCdistinct[OF `axioms` `\<not> col C D E`] by blast
-	have "col A G b" using col_b `axioms` `bet A G b \<and> seg_eq G b A G` by blast
+	have "col A G b" using collinear_b `axioms` `bet A G b \<and> seg_eq G b A G` by blast
 	have "col G A b" using collinearorder[OF `axioms` `col A G b`] by blast
 	have "col G A B" using collinearorder[OF `axioms` `col A B G`] by blast
 	have "G \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> G`] .
@@ -36,7 +36,7 @@ proof -
 	have "parallel E F b A" using collinearparallel[OF `axioms` `parallel E F B A` `col B A b` `b \<noteq> A`] .
 	have "parallel E F A b" using parallelflip[OF `axioms` `parallel E F b A`] by blast
 	have "parallel A b E F" using parallelsymmetric[OF `axioms` `parallel E F A b`] .
-	have "col E H f" using col_b `axioms` `bet E H f \<and> seg_eq H f E H` by blast
+	have "col E H f" using collinear_b `axioms` `bet E H f \<and> seg_eq H f E H` by blast
 	have "col H E f" using collinearorder[OF `axioms` `col E H f`] by blast
 	have "col H E F" using collinearorder[OF `axioms` `col E F H`] by blast
 	have "H \<noteq> E" using inequalitysymmetric[OF `axioms` `E \<noteq> H`] .
@@ -47,7 +47,7 @@ proof -
 	have "parallel A b F E" using parallelflip[OF `axioms` `parallel A b E F`] by blast
 	have "parallel A b f E" using collinearparallel[OF `axioms` `parallel A b F E` `col F E f` `f \<noteq> E`] .
 	have "parallel A b E f" using parallelflip[OF `axioms` `parallel A b f E`] by blast
-	have "col C K d" using col_b `axioms` `bet C K d \<and> seg_eq K d C K` by blast
+	have "col C K d" using collinear_b `axioms` `bet C K d \<and> seg_eq K d C K` by blast
 	have "col K C d" using collinearorder[OF `axioms` `col C K d`] by blast
 	have "col K C D" using collinearorder[OF `axioms` `col C D K`] by blast
 	have "K \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> K`] .
@@ -64,7 +64,7 @@ proof -
 	have "parallel C d f E" using collinearparallel[OF `axioms` `parallel C d F E` `col F E f` `f \<noteq> E`] .
 	have "parallel C d E f" using parallelflip[OF `axioms` `parallel C d f E`] by blast
 	have "H = H" using equalityreflexiveE[OF `axioms`] .
-	have "col E H H" using col_b `axioms` `H = H` by blast
+	have "col E H H" using collinear_b `axioms` `H = H` by blast
 	have "bet G H K" using `bet G H K` .
 	have "col A b G" using collinearorder[OF `axioms` `col A G b`] by blast
 	have "col E f H" using collinearorder[OF `axioms` `col E H f`] by blast
@@ -84,35 +84,35 @@ proof -
 	have "parallel C d H E" using collinearparallel[OF `axioms` `parallel C d f E` `col f E H` `H \<noteq> E`] .
 	have "parallel H E C d" using parallelsymmetric[OF `axioms` `parallel C d H E`] .
 	have "parallel H E d C" using parallelflip[OF `axioms` `parallel H E C d`] by blast
-	have "col C K d" using col_b `axioms` `bet C K d \<and> seg_eq K d C K` by blast
+	have "col C K d" using collinear_b `axioms` `bet C K d \<and> seg_eq K d C K` by blast
 	have "col d C K" using collinearorder[OF `axioms` `col C K d`] by blast
 	have "C \<noteq> K" using betweennotequal[OF `axioms` `bet C K d`] by blast
 	have "K \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> K`] .
 	have "parallel H E K C" using collinearparallel[OF `axioms` `parallel H E d C` `col d C K` `K \<noteq> C`] .
 	have "parallel E H C K" using parallelflip[OF `axioms` `parallel H E K C`] by blast
 	have "tarski_parallel E H C K" using paralleldef2B[OF `axioms` `parallel E H C K`] .
-	have "same_side C K E H" sorry
+	have "same_side C K E H" using tarski_parallel_f[OF `axioms` `tarski_parallel E H C K`] by blast
 	have "\<not> col E H K" using parallelNC[OF `axioms` `parallel E H C K`] by blast
 	have "bet K H G" using betweennesssymmetryE[OF `axioms` `bet G H K`] .
-	have "oppo_side K E H G" sorry
+	have "oppo_side K E H G" using oppositeside_b[OF `axioms` `bet K H G` `col E H H` `\<not> col E H K`] .
 	have "oppo_side C E H G" using planeseparation[OF `axioms` `same_side C K E H` `oppo_side K E H G`] .
-	obtain Q where "bet C Q G \<and> col E H Q \<and> \<not> col E H C" sorry
+	obtain Q where "bet C Q G \<and> col E H Q \<and> \<not> col E H C" using oppositeside_f[OF `axioms` `oppo_side C E H G`] by blast
 	have "bet C Q G" using `bet C Q G \<and> col E H Q \<and> \<not> col E H C` by blast
 	have "col E H Q" using `bet C Q G \<and> col E H Q \<and> \<not> col E H C` by blast
 	have "parallel C d E f" using `parallel C d E f` .
 	have "parallel E f C d" using parallelsymmetric[OF `axioms` `parallel C d E f`] .
 	have "tarski_parallel E f C d" using paralleldef2B[OF `axioms` `parallel E f C d`] .
-	have "same_side C d E f" sorry
+	have "same_side C d E f" using tarski_parallel_f[OF `axioms` `tarski_parallel E f C d`] by blast
 	have "same_side d C E f" using samesidesymmetric[OF `axioms` `same_side C d E f`] by blast
-	have "col E H f" using col_b `axioms` `bet E H f \<and> seg_eq H f E H` by blast
+	have "col E H f" using collinear_b `axioms` `bet E H f \<and> seg_eq H f E H` by blast
 	have "col H E f" using collinearorder[OF `axioms` `col E H f`] by blast
 	have "col H E Q" using collinearorder[OF `axioms` `col E H Q`] by blast
 	have "col E f Q" using collinear4[OF `axioms` `col H E f` `col H E Q` `H \<noteq> E`] .
 	have "\<not> col C E f" using parallelNC[OF `axioms` `parallel C d E f`] by blast
 	have "\<not> col E f C" using NCorder[OF `axioms` `\<not> col C E f`] by blast
-	have "oppo_side C E f G" sorry
+	have "oppo_side C E f G" using oppositeside_b[OF `axioms` `bet C Q G` `col E f Q` `\<not> col E f C`] .
 	have "oppo_side d E f G" using planeseparation[OF `axioms` `same_side d C E f` `oppo_side C E f G`] .
-	obtain P where "bet d P G \<and> col E f P \<and> \<not> col E f d" sorry
+	obtain P where "bet d P G \<and> col E f P \<and> \<not> col E f d" using oppositeside_f[OF `axioms` `oppo_side d E f G`] by blast
 	have "bet d P G" using `bet d P G \<and> col E f P \<and> \<not> col E f d` by blast
 	have "cross A f G H \<or> cross A E G H"
 	proof (rule ccontr)
@@ -159,14 +159,14 @@ proof -
 	have "\<not> col C K H" using parallelNC[OF `axioms` `parallel C K E H`] by blast
 	have "\<not> col K H C" using NCorder[OF `axioms` `\<not> col C K H`] by blast
 	have "\<not> col E H K" using parallelNC[OF `axioms` `parallel E H C K`] by blast
-	have "col E H f" using col_b `axioms` `bet E H f \<and> seg_eq H f E H` by blast
+	have "col E H f" using collinear_b `axioms` `bet E H f \<and> seg_eq H f E H` by blast
 	have "H \<noteq> f" using betweennotequal[OF `axioms` `bet E H f`] by blast
 	have "f \<noteq> H" using inequalitysymmetric[OF `axioms` `H \<noteq> f`] .
 	have "H = H" using equalityreflexiveE[OF `axioms`] .
-	have "col E H H" using col_b `axioms` `H = H` by blast
+	have "col E H H" using collinear_b `axioms` `H = H` by blast
 	have "\<not> col f H K" using NChelper[OF `axioms` `\<not> col E H K` `col E H f` `col E H H` `f \<noteq> H`] .
 	have "\<not> col K H f" using NCorder[OF `axioms` `\<not> col f H K`] by blast
-	have "col K H H" using col_b `axioms` `H = H` by blast
+	have "col K H H" using collinear_b `axioms` `H = H` by blast
 	consider "cross A f G H"|"cross A E G H" using `cross A f G H \<or> cross A E G H`  by blast
 	hence parallel A b C d
 	proof (cases)
@@ -180,24 +180,24 @@ proof -
 			have "parallel A b C d" using Prop30A[OF `axioms` `parallel A b E f` `parallel C d E f` `bet G H K` `bet A G b` `bet E H f` `bet C K d` `oppo_side A G H f` `oppo_side f H K C`] .
 		next
 			case 2
-			obtain M where "bet C M E \<and> bet K M H" sorry
+			obtain M where "bet C M E \<and> bet K M H" using cross_f[OF `axioms` `cross C E K H`] by blast
 			have "bet C M E" using `bet C M E \<and> bet K M H` by blast
 			have "bet K M H" using `bet C M E \<and> bet K M H` by blast
-			have "col K M H" using col_b `axioms` `bet C M E \<and> bet K M H` by blast
+			have "col K M H" using collinear_b `axioms` `bet C M E \<and> bet K M H` by blast
 			have "col K H M" using collinearorder[OF `axioms` `col K M H`] by blast
 			have "bet f H E" using betweennesssymmetryE[OF `axioms` `bet E H f`] .
 			have "col K H M \<and> col K H H \<and> col K H M \<and> bet f H E \<and> bet C M E \<and> \<not> col K H f \<and> \<not> col K H C" using `col K H M` `col K H H` `col K H M` `bet f H E` `bet C M E \<and> bet K M H` `\<not> col K H f` `\<not> col K H C` by blast
-			have "same_side f C K H" sorry
+			have "same_side f C K H" using sameside_b[OF `axioms` `col K H H` `col K H M` `bet f H E` `bet C M E` `\<not> col K H f` `\<not> col K H C`] .
 			have "K = K" using equalityreflexiveE[OF `axioms`] .
-			have "col K H K" using col_b `axioms` `K = K` by blast
+			have "col K H K" using collinear_b `axioms` `K = K` by blast
 			have "bet C K d \<and> col K H K \<and> \<not> col K H C" using `bet C K d \<and> seg_eq K d C K` `col K H K` `col K H M \<and> col K H H \<and> col K H M \<and> bet f H E \<and> bet C M E \<and> \<not> col K H f \<and> \<not> col K H C` by blast
-			have "oppo_side C K H d" sorry
+			have "oppo_side C K H d" using oppositeside_b[OF `axioms` `bet C K d` `col K H K` `\<not> col K H C`] .
 			have "oppo_side f K H d" using planeseparation[OF `axioms` `same_side f C K H` `oppo_side C K H d`] .
-			obtain m where "bet f m d \<and> col K H m \<and> \<not> col K H f" sorry
+			obtain m where "bet f m d \<and> col K H m \<and> \<not> col K H f" using oppositeside_f[OF `axioms` `oppo_side f K H d`] by blast
 			have "bet f m d" using `bet f m d \<and> col K H m \<and> \<not> col K H f` by blast
 			have "col K H m" using `bet f m d \<and> col K H m \<and> \<not> col K H f` by blast
 			have "parallel f E C d" using parallelsymmetric[OF `axioms` `parallel C d f E`] .
-			have "\<not> (meets f E C d)" sorry
+			have "\<not> (meets f E C d)" using parallel_f[OF `axioms` `parallel f E C d`] by blast
 			have "C \<noteq> d" using `C \<noteq> d` .
 			have "col f H E" using collinearorder[OF `axioms` `col E H f`] by blast
 			have "col C K d" using `col C K d` .
@@ -209,11 +209,11 @@ proof -
 			have "bet K m H" using betweennesssymmetryE[OF `axioms` `bet H m K`] .
 			have "bet d m f" using betweennesssymmetryE[OF `axioms` `bet f m d`] .
 			have "bet d m f \<and> bet K m H" using `bet d m f` `bet K m H` by blast
-			have "cross d f K H" sorry
+			have "cross d f K H" using cross_b[OF `axioms` `bet d m f` `bet K m H`] .
 			have "\<not> col C K H" using NCorder[OF `axioms` `\<not> col K H C`] by blast
-			have "col C K d" using col_b `axioms` `bet C K d \<and> col K H K \<and> \<not> col K H C` by blast
+			have "col C K d" using collinear_b `axioms` `bet C K d \<and> col K H K \<and> \<not> col K H C` by blast
 			have "d \<noteq> K" using inequalitysymmetric[OF `axioms` `K \<noteq> d`] .
-			have "col C K K" using col_b `axioms` `K = K` by blast
+			have "col C K K" using collinear_b `axioms` `K = K` by blast
 			have "\<not> col d K H" using NChelper[OF `axioms` `\<not> col C K H` `col C K d` `col C K K` `d \<noteq> K`] .
 			have "oppo_side d H K f" using crossimpliesopposite[OF `axioms` `cross d f K H` `\<not> col d K H`] by blast
 			have "parallel A b E f" using `parallel A b E f` .
@@ -230,26 +230,26 @@ proof -
 		hence parallel A b C d
 		proof (cases)
 			case 1
-			obtain M where "bet C M f \<and> bet K M H" sorry
+			obtain M where "bet C M f \<and> bet K M H" using cross_f[OF `axioms` `cross C f K H`] by blast
 			have "bet C M f" using `bet C M f \<and> bet K M H` by blast
 			have "bet K M H" using `bet C M f \<and> bet K M H` by blast
-			have "col K M H" using col_b `axioms` `bet C M f \<and> bet K M H` by blast
+			have "col K M H" using collinear_b `axioms` `bet C M f \<and> bet K M H` by blast
 			have "col K H M" using collinearorder[OF `axioms` `col K M H`] by blast
 			have "bet E H f" using `bet E H f` .
 			have "\<not> col K H E" using NCorder[OF `axioms` `\<not> col E H K`] by blast
 			have "\<not> col K H C" using NCorder[OF `axioms` `\<not> col C K H`] by blast
 			have "col K H M \<and> col K H H \<and> col K H M \<and> bet E H f \<and> bet C M f \<and> \<not> col K H E \<and> \<not> col K H C" using `col K H M` `col K H H` `col K H M` `bet E H f \<and> seg_eq H f E H` `bet C M f \<and> bet K M H` `\<not> col K H E` `\<not> col K H C` by blast
-			have "same_side E C K H" sorry
+			have "same_side E C K H" using sameside_b[OF `axioms` `col K H H` `col K H M` `bet E H f` `bet C M f` `\<not> col K H E` `\<not> col K H C`] .
 			have "K = K" using equalityreflexiveE[OF `axioms`] .
-			have "col K H K" using col_b `axioms` `K = K` by blast
+			have "col K H K" using collinear_b `axioms` `K = K` by blast
 			have "bet C K d \<and> col K H K \<and> \<not> col K H C" using `bet C K d \<and> seg_eq K d C K` `col K H K` `col K H M \<and> col K H H \<and> col K H M \<and> bet E H f \<and> bet C M f \<and> \<not> col K H E \<and> \<not> col K H C` by blast
-			have "oppo_side C K H d" sorry
+			have "oppo_side C K H d" using oppositeside_b[OF `axioms` `bet C K d` `col K H K` `\<not> col K H C`] .
 			have "oppo_side E K H d" using planeseparation[OF `axioms` `same_side E C K H` `oppo_side C K H d`] .
-			obtain m where "bet E m d \<and> col K H m \<and> \<not> col K H E" sorry
+			obtain m where "bet E m d \<and> col K H m \<and> \<not> col K H E" using oppositeside_f[OF `axioms` `oppo_side E K H d`] by blast
 			have "bet E m d" using `bet E m d \<and> col K H m \<and> \<not> col K H E` by blast
 			have "col K H m" using `bet E m d \<and> col K H m \<and> \<not> col K H E` by blast
 			have "parallel E f C d" using parallelsymmetric[OF `axioms` `parallel C d E f`] .
-			have "\<not> (meets E f C d)" sorry
+			have "\<not> (meets E f C d)" using parallel_f[OF `axioms` `parallel E f C d`] by blast
 			have "C \<noteq> d" using `C \<noteq> d` .
 			have "col E H f" using collinearorder[OF `axioms` `col E f H`] by blast
 			have "col C K d" using `col C K d` .
@@ -261,11 +261,11 @@ proof -
 			have "bet K m H" using betweennesssymmetryE[OF `axioms` `bet H m K`] .
 			have "bet d m E" using betweennesssymmetryE[OF `axioms` `bet E m d`] .
 			have "bet d m E \<and> bet K m H" using `bet d m E` `bet K m H` by blast
-			have "cross d E K H" sorry
+			have "cross d E K H" using cross_b[OF `axioms` `bet d m E` `bet K m H`] .
 			have "\<not> col C K H" using NCorder[OF `axioms` `\<not> col K H C`] by blast
-			have "col C K d" using col_b `axioms` `bet C K d \<and> col K H K \<and> \<not> col K H C` by blast
+			have "col C K d" using collinear_b `axioms` `bet C K d \<and> col K H K \<and> \<not> col K H C` by blast
 			have "d \<noteq> K" using inequalitysymmetric[OF `axioms` `K \<noteq> d`] .
-			have "col C K K" using col_b `axioms` `K = K` by blast
+			have "col C K K" using collinear_b `axioms` `K = K` by blast
 			have "\<not> col d K H" using NChelper[OF `axioms` `\<not> col C K H` `col C K d` `col C K K` `d \<noteq> K`] .
 			have "oppo_side d H K E" using crossimpliesopposite[OF `axioms` `cross d E K H` `\<not> col d K H`] by blast
 			have "parallel d C f E" using parallelflip[OF `axioms` `parallel C d E f`] by blast

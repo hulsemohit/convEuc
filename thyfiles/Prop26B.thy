@@ -19,16 +19,16 @@ proof -
 	have "\<not> (B = C)"
 	proof (rule ccontr)
 		assume "B = C"
-		have "col A B C" using col_b `axioms` `B = C` by blast
-		have "\<not> col A B C" sorry
+		have "col A B C" using collinear_b `axioms` `B = C` by blast
+		have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 		show "False" using `\<not> col A B C` `col A B C` by blast
 	qed
 	hence "B \<noteq> C" by blast
 	have "\<not> (E = F)"
 	proof (rule ccontr)
 		assume "E = F"
-		have "col D E F" using col_b `axioms` `E = F` by blast
-		have "\<not> col D E F" sorry
+		have "col D E F" using collinear_b `axioms` `E = F` by blast
+		have "\<not> col D E F" using triangle_f[OF `axioms` `triangle D E F`] .
 		show "False" using `\<not> col D E F` `col D E F` by blast
 	qed
 	hence "E \<noteq> F" by blast

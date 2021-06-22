@@ -10,7 +10,7 @@ theorem Prop04:
 	shows: "seg_eq B C b c \<and> ang_eq A B C a b c \<and> ang_eq A C B a c b"
 proof -
 	have "\<not> col b a c" using equalanglesNC[OF `axioms` `ang_eq B A C b a c`] .
-	obtain U V u v where "ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C" sorry
+	obtain U V u v where "ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C" using equalangles_f[OF `axioms` `ang_eq B A C b a c`] by blast
 	have "ray_on A B U" using `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
 	have "ray_on a b u" using `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
 	have "ray_on a c v" using `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
@@ -29,7 +29,7 @@ proof -
 	have "\<not> (A = B)"
 	proof (rule ccontr)
 		assume "A = B"
-		have "col A B C" using col_b `axioms` `A = B` by blast
+		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		have "col B A C" using collinearorder[OF `axioms` `col A B C`] by blast
 		show "False" using `col B A C` `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
 	qed
@@ -37,7 +37,7 @@ proof -
 	have "\<not> (A = C)"
 	proof (rule ccontr)
 		assume "A = C"
-		have "col A B C" using col_b `axioms` `A = C` by blast
+		have "col A B C" using collinear_b `axioms` `A = C` by blast
 		have "col B A C" using collinearorder[OF `axioms` `col A B C`] by blast
 		show "False" using `col B A C` `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
 	qed
@@ -46,7 +46,7 @@ proof -
 	have "\<not> (a = c)"
 	proof (rule ccontr)
 		assume "a = c"
-		have "col b a c" using col_b `axioms` `a = c` by blast
+		have "col b a c" using collinear_b `axioms` `a = c` by blast
 		show "False" using `col b a c` `\<not> col b a c` by blast
 	qed
 	hence "a \<noteq> c" by blast
@@ -54,7 +54,7 @@ proof -
 	have "\<not> (b = c)"
 	proof (rule ccontr)
 		assume "b = c"
-		have "col b a c" using col_b `axioms` `b = c` by blast
+		have "col b a c" using collinear_b `axioms` `b = c` by blast
 		show "False" using `col b a c` `\<not> col b a c` by blast
 	qed
 	hence "b \<noteq> c" by blast
@@ -62,7 +62,7 @@ proof -
 	have "\<not> (B = C)"
 	proof (rule ccontr)
 		assume "B = C"
-		have "col A B C" using col_b `axioms` `B = C` by blast
+		have "col A B C" using collinear_b `axioms` `B = C` by blast
 		have "col B A C" using collinearorder[OF `axioms` `col A B C`] by blast
 		show "False" using `col B A C` `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
 	qed
@@ -75,10 +75,10 @@ proof -
 		case 1
 		have "seg_eq A U a u" using `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
 		have "seg_eq A B a b" using `seg_eq A B a b` .
-		have "seg_eq A U A U" using congruencereflexiveE[OF `axioms`] .
-		have "seg_lt A U A B" sorry
+		have "seg_eq A U A U" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_lt A U A B" using lessthan_b[OF `axioms` `bet A U B` `seg_eq A U A U`] .
 		have "seg_lt A U a b" using lessthancongruence[OF `axioms` `seg_lt A U A B` `seg_eq A B a b`] .
-		obtain w where "bet a w b \<and> seg_eq a w A U" sorry
+		obtain w where "bet a w b \<and> seg_eq a w A U" using lessthan_f[OF `axioms` `seg_lt A U a b`] by blast
 		have "bet a w b" using `bet a w b \<and> seg_eq a w A U` by blast
 		have "seg_eq a w A U" using `bet a w b \<and> seg_eq a w A U` by blast
 		have "seg_eq a w a u" using congruencetransitive[OF `axioms` `seg_eq a w A U` `seg_eq A U a u`] .
@@ -86,7 +86,7 @@ proof -
 		have "ray_on a b w" using ray4 `axioms` `bet a w b \<and> seg_eq a w A U` `a \<noteq> b` by blast
 		have "seg_eq a w a u" using congruencetransitive[OF `axioms` `seg_eq a w A U` `seg_eq A U a u`] .
 		have "w = u" using layoffunique[OF `axioms` `ray_on a b w` `ray_on a b u` `seg_eq a w a u`] .
-		have "bet a u b" sorry
+		have "bet a u b" using `bet a w b` `w = u` by blast
 		have "seg_eq U B u b" using differenceofparts[OF `axioms` `seg_eq A U a u` `seg_eq A B a b` `bet A U B` `bet a u b`] .
 		have "seg_eq U V u v" using `seg_eq U V u v` .
 		have "seg_eq A V a v" using `seg_eq A V a v` .
@@ -96,10 +96,10 @@ proof -
 	next
 		case 2
 		have "seg_eq U V u v" using `seg_eq U V u v` .
-		have "seg_eq B V u v" sorry
+		have "seg_eq B V u v" using `seg_eq U V u v` `B = U` by blast
 		have "seg_eq a b A B" using congruencesymmetric[OF `axioms` `seg_eq A B a b`] .
-		have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] .
-		have "seg_eq A B A U" sorry
+		have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_eq A B A U" using `seg_eq A B A B` `B = U` by blast
 		have "seg_eq A U a u" using `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
 		have "seg_eq a b A U" using congruencetransitive[OF `axioms` `seg_eq a b A B` `seg_eq A B A U`] .
 		have "seg_eq a b a u" using congruencetransitive[OF `axioms` `seg_eq a b A U` `seg_eq A U a u`] .
@@ -125,8 +125,8 @@ proof -
 				assume "b \<noteq> u"
 				have "\<not> (seg_eq a b a u)" using partnotequalwhole[OF `axioms` `bet a b u`] .
 				have "seg_eq a b A B" using congruencesymmetric[OF `axioms` `seg_eq A B a b`] .
-				have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] .
-				have "seg_eq A B A U" sorry
+				have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] by blast
+				have "seg_eq A B A U" using `seg_eq A B A B` `B = U` by blast
 				have "seg_eq A U a u" using `seg_eq A U a u` .
 				have "seg_eq A B a u" using congruencetransitive[OF `axioms` `seg_eq A B A U` `seg_eq A U a u`] .
 				have "seg_eq a b a u" using congruencetransitive[OF `axioms` `seg_eq a b A B` `seg_eq A B a u`] .
@@ -135,14 +135,14 @@ proof -
 			hence "b = u" by blast
 		next
 		have "seg_eq U V u v" using `seg_eq U V u v` .
-		have "seg_eq B V b v" sorry
+		have "seg_eq B V b v" using `seg_eq B V u v` `b = u` by blast
 	next
 		case 3
 		have "seg_eq A U a u" using `ray_on A B U \<and> ray_on A C V \<and> ray_on a b u \<and> ray_on a c v \<and> seg_eq A U a u \<and> seg_eq A V a v \<and> seg_eq U V u v \<and> \<not> col B A C` by blast
-		have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] .
-		have "seg_lt A B A U" sorry
+		have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_lt A B A U" using lessthan_b[OF `axioms` `bet A B U` `seg_eq A B A B`] .
 		have "seg_lt A B a u" using lessthancongruence[OF `axioms` `seg_lt A B A U` `seg_eq A U a u`] .
-		obtain f where "bet a f u \<and> seg_eq a f A B" sorry
+		obtain f where "bet a f u \<and> seg_eq a f A B" using lessthan_f[OF `axioms` `seg_lt A B a u`] by blast
 		have "bet a f u" using `bet a f u \<and> seg_eq a f A B` by blast
 		have "a \<noteq> u" using betweennotequal[OF `axioms` `bet a f u`] by blast
 		have "ray_on a u f" using ray4 `axioms` `bet a f u \<and> seg_eq a f A B` `a \<noteq> u` by blast
@@ -153,7 +153,7 @@ proof -
 		have "seg_eq A B a b" using `seg_eq A B a b` .
 		have "seg_eq a f a b" using congruencetransitive[OF `axioms` `seg_eq a f A B` `seg_eq A B a b`] .
 		have "f = b" using layoffunique[OF `axioms` `ray_on a u f` `ray_on a u b` `seg_eq a f a b`] .
-		have "bet a b u" sorry
+		have "bet a b u" using `bet a f u` `f = b` by blast
 		have "seg_eq B U b u" using differenceofparts[OF `axioms` `seg_eq A B a b` `seg_eq A U a u` `bet A B U` `bet a b u`] .
 		have "bet a b u" using betweennesspreserved[OF `axioms` `seg_eq A B a b` `seg_eq A U a u` `seg_eq B U b u` `bet A B U`] .
 		have "seg_eq A B a b" using `seg_eq A B a b` .
@@ -169,10 +169,10 @@ proof -
 	proof (cases)
 		case 1
 		have "seg_eq A V a v" using `seg_eq A V a v` .
-		have "seg_eq A V A V" using congruencereflexiveE[OF `axioms`] .
-		have "seg_lt A V A C" sorry
+		have "seg_eq A V A V" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_lt A V A C" using lessthan_b[OF `axioms` `bet A V C` `seg_eq A V A V`] .
 		have "seg_lt A V a c" using lessthancongruence[OF `axioms` `seg_lt A V A C` `seg_eq A C a c`] .
-		obtain g where "bet a g c \<and> seg_eq a g A V" sorry
+		obtain g where "bet a g c \<and> seg_eq a g A V" using lessthan_f[OF `axioms` `seg_lt A V a c`] by blast
 		have "bet a g c" using `bet a g c \<and> seg_eq a g A V` by blast
 		have "a \<noteq> g" using betweennotequal[OF `axioms` `bet a g c`] by blast
 		have "ray_on a g c" using ray4 `axioms` `bet a g c \<and> seg_eq a g A V` `a \<noteq> g` by blast
@@ -181,7 +181,7 @@ proof -
 		have "seg_eq a g A V" using `bet a g c \<and> seg_eq a g A V` by blast
 		have "seg_eq a g a v" using congruencetransitive[OF `axioms` `seg_eq a g A V` `seg_eq A V a v`] .
 		have "g = v" using layoffunique[OF `axioms` `ray_on a c g` `ray_on a c v` `seg_eq a g a v`] .
-		have "bet a v c" sorry
+		have "bet a v c" using `bet a g c` `g = v` by blast
 		have "seg_eq V C v c" using differenceofparts[OF `axioms` `seg_eq A V a v` `seg_eq A C a c` `bet A V C` `bet a v c`] .
 		have "seg_eq A B a b" using `seg_eq A B a b` .
 		have "seg_eq A V a v" using `seg_eq A V a v` .
@@ -191,7 +191,7 @@ proof -
 	next
 		case 2
 		have "seg_eq A V a v" using `seg_eq A V a v` .
-		have "seg_eq A C a v" sorry
+		have "seg_eq A C a v" using `seg_eq A V a v` `C = V` by blast
 		have "seg_eq A C a c" using `seg_eq A C a c` .
 		have "seg_eq a c A C" using congruencesymmetric[OF `axioms` `seg_eq A C a c`] .
 		have "seg_eq a c a v" using congruencetransitive[OF `axioms` `seg_eq a c A C` `seg_eq A C a v`] .
@@ -200,15 +200,15 @@ proof -
 		have "c = c" using equalityreflexiveE[OF `axioms`] .
 		have "ray_on a c c" using ray4 `axioms` `c = c` `a \<noteq> c` by blast
 		have "c = v" using layoffunique[OF `axioms` `ray_on a c c` `ray_on a c v` `seg_eq a c a v`] .
-		have "seg_eq B C b v" sorry
-		have "seg_eq B C b c" sorry
+		have "seg_eq B C b v" using `seg_eq B V b v` `C = V` by blast
+		have "seg_eq B C b c" using `seg_eq B C b v` `c = v` by blast
 	next
 		case 3
 		have "seg_eq A V a v" using `seg_eq A V a v` .
-		have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] .
-		have "seg_lt A C A V" sorry
+		have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_lt A C A V" using lessthan_b[OF `axioms` `bet A C V` `seg_eq A C A C`] .
 		have "seg_lt A C a v" using lessthancongruence[OF `axioms` `seg_lt A C A V` `seg_eq A V a v`] .
-		obtain g where "bet a g v \<and> seg_eq a g A C" sorry
+		obtain g where "bet a g v \<and> seg_eq a g A C" using lessthan_f[OF `axioms` `seg_lt A C a v`] by blast
 		have "bet a g v" using `bet a g v \<and> seg_eq a g A C` by blast
 		have "seg_eq a g A C" using `bet a g v \<and> seg_eq a g A C` by blast
 		have "a \<noteq> g" using betweennotequal[OF `axioms` `bet a g v`] by blast
@@ -218,7 +218,7 @@ proof -
 		have "seg_eq a c a g" using congruencesymmetric[OF `axioms` `seg_eq a g a c`] .
 		have "ray_on a v c" using ray5[OF `axioms` `ray_on a c v`] .
 		have "c = g" using layoffunique[OF `axioms` `ray_on a v c` `ray_on a v g` `seg_eq a c a g`] .
-		have "bet a c v" sorry
+		have "bet a c v" using `bet a g v` `c = g` by blast
 		have "seg_eq C V c v" using differenceofparts[OF `axioms` `seg_eq A C a c` `seg_eq A V a v` `bet A C V` `bet a c v`] .
 		have "seg_eq A B a b" using `seg_eq A B a b` .
 		have "seg_eq V B v b" using congruenceflip[OF `axioms` `seg_eq B V b v`] by blast
@@ -240,7 +240,7 @@ proof -
 	have "seg_eq B C b c" using `seg_eq B C b c` .
 	have "seg_eq A C a c" using `seg_eq A C a c` .
 	have "\<not> col A B C" using `\<not> col A B C` .
-	have "ang_eq A B C a b c" sorry
+	have "ang_eq A B C a b c" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B C C` `ray_on b a a` `ray_on b c c` `seg_eq B A b a` `seg_eq B C b c` `seg_eq A C a c` `\<not> col A B C`] .
 	have "ray_on C A A" using ray4 `axioms` `A = A` `C \<noteq> A` by blast
 	have "ray_on C B B" using ray4 `axioms` `B = B` `C \<noteq> B` by blast
 	have "ray_on c a a" using ray4 `axioms` `a = a` `c \<noteq> a` by blast
@@ -256,7 +256,7 @@ proof -
 		show "False" using `\<not> col A B C` `col A B C` by blast
 	qed
 	hence "\<not> col A C B" by blast
-	have "ang_eq A C B a c b" sorry
+	have "ang_eq A C B a c b" using equalangles_b[OF `axioms` `ray_on C A A` `ray_on C B B` `ray_on c a a` `ray_on c b b` `seg_eq C A c a` `seg_eq C B c b` `seg_eq A B a b` `\<not> col A C B`] .
 	have "seg_eq B C b c \<and> ang_eq A B C a b c \<and> ang_eq A C B a c b" using `seg_eq B C b c` `ang_eq A B C a b c` `ang_eq A C B a c b` by blast
 	thus ?thesis by blast
 qed

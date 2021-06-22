@@ -8,10 +8,10 @@ theorem supplementofright:
 		"ang_right A B C"
 	shows: "ang_right F B D \<and> ang_right D B F"
 proof -
-	have "ray_on B C D \<and> bet A B F" sorry
+	have "ray_on B C D \<and> bet A B F" using supplement_f[OF `axioms` `linear_pair A B C D F`] .
 	have "ray_on B C D" using `ray_on B C D \<and> bet A B F` by blast
 	have "bet A B F" using `ray_on B C D \<and> bet A B F` by blast
-	have "col A B F" using col_b `axioms` `ray_on B C D \<and> bet A B F` by blast
+	have "col A B F" using collinear_b `axioms` `ray_on B C D \<and> bet A B F` by blast
 	have "B \<noteq> F" using betweennotequal[OF `axioms` `bet A B F`] by blast
 	have "F \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> F`] .
 	have "ang_right F B C" using collinearright[OF `axioms` `ang_right A B C` `col A B F` `F \<noteq> B`] .

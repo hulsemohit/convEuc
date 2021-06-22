@@ -9,8 +9,8 @@ theorem supplements2:
 		"ang_suppl J K L D E F"
 	shows: "ang_eq P Q R D E F \<and> ang_eq D E F P Q R"
 proof -
-	obtain a b c d e where "linear_pair a b c d e \<and> ang_eq A B C a b c \<and> ang_eq P Q R d b e" sorry
-	obtain j k l m n where "linear_pair j k l m n \<and> ang_eq J K L j k l \<and> ang_eq D E F m k n" sorry
+	obtain a b c d e where "linear_pair a b c d e \<and> ang_eq A B C a b c \<and> ang_eq P Q R d b e" using tworightangles_f[OF `axioms` `ang_suppl A B C P Q R`] by blast
+	obtain j k l m n where "linear_pair j k l m n \<and> ang_eq J K L j k l \<and> ang_eq D E F m k n" using tworightangles_f[OF `axioms` `ang_suppl J K L D E F`] by blast
 	have "linear_pair a b c d e" using `linear_pair a b c d e \<and> ang_eq A B C a b c \<and> ang_eq P Q R d b e` by blast
 	have "ang_eq A B C a b c" using `linear_pair a b c d e \<and> ang_eq A B C a b c \<and> ang_eq P Q R d b e` by blast
 	have "ang_eq P Q R d b e" using `linear_pair a b c d e \<and> ang_eq A B C a b c \<and> ang_eq P Q R d b e` by blast

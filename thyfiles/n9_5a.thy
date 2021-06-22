@@ -10,18 +10,18 @@ theorem n9_5a:
 		"col A B R"
 	shows: "oppo_side Q A B C"
 proof -
-	obtain S where "bet P S C \<and> col A B S \<and> \<not> col A B P" sorry
+	obtain S where "bet P S C \<and> col A B S \<and> \<not> col A B P" using oppositeside_f[OF `axioms` `oppo_side P A B C`] by blast
 	have "bet P S C" using `bet P S C \<and> col A B S \<and> \<not> col A B P` by blast
 	have "\<not> col A B P" using `bet P S C \<and> col A B S \<and> \<not> col A B P` by blast
 	have "bet C S P" using betweennesssymmetryE[OF `axioms` `bet P S C`] .
-	obtain F where "bet C F Q \<and> bet R S F" using Pasch-outerE[OF `axioms` `bet C S P` `bet R P Q` `\<not> col R Q C`]  by  blast
+	obtain F where "bet C F Q \<and> bet R S F" using Pasch-outerE[OF `axioms` `bet C S P` `bet R P Q` `\<not> col R Q C`] by blast
 	have "bet C F Q" using `bet C F Q \<and> bet R S F` by blast
 	have "bet R S F" using `bet C F Q \<and> bet R S F` by blast
-	have "col R S F" using col_b `axioms` `bet C F Q \<and> bet R S F` by blast
+	have "col R S F" using collinear_b `axioms` `bet C F Q \<and> bet R S F` by blast
 	have "\<not> (A = B)"
 	proof (rule ccontr)
 		assume "A = B"
-		have "col A B P" using col_b `axioms` `A = B` by blast
+		have "col A B P" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B P` `bet P S C \<and> col A B S \<and> \<not> col A B P` by blast
 	qed
 	hence "A \<noteq> B" by blast
@@ -38,15 +38,15 @@ proof -
 	hence col A B F
 	proof (cases)
 		case 1
-		have "col R S F" using col_b `axioms` `bet C F Q \<and> bet R S F` by blast
-		have "col R B F" sorry
+		have "col R S F" using collinear_b `axioms` `bet C F Q \<and> bet R S F` by blast
+		have "col R B F" using `col R S F` `S = B` by blast
 		have "col R B A" using collinearorder[OF `axioms` `col A B R`] by blast
 		have "\<not> (R = B)"
 		proof (rule ccontr)
 			assume "R = B"
 			have "bet R S F" using `bet R S F` .
 			have "R \<noteq> S" using betweennotequal[OF `axioms` `bet R S F`] by blast
-			have "R \<noteq> B" sorry
+			have "R \<noteq> B" using `R \<noteq> S` `S = B` by blast
 			show "False" using `R \<noteq> B` `R = B` by blast
 		qed
 		hence "R \<noteq> B" by blast
@@ -73,7 +73,7 @@ proof -
 			have "\<not> (A = R)"
 			proof (rule ccontr)
 				assume "A = R"
-				have "A = B" sorry
+				have "A = B" using `A = R` `B = R` by blast
 				show "False" using `A = B` `A \<noteq> B` by blast
 			qed
 			hence "A \<noteq> R" by blast
@@ -90,7 +90,7 @@ proof -
 			have "col R Q F" using collinear4[OF `axioms` `col B R Q` `col B R F` `B \<noteq> R`] .
 		next
 		have "col F Q R" using collinearorder[OF `axioms` `col R Q F`] by blast
-		have "col C F Q" using col_b `axioms` `bet C F Q \<and> bet R S F` by blast
+		have "col C F Q" using collinear_b `axioms` `bet C F Q \<and> bet R S F` by blast
 		have "col F Q C" using collinearorder[OF `axioms` `col C F Q`] by blast
 		have "F \<noteq> Q" using betweennotequal[OF `axioms` `bet C F Q`] by blast
 		have "col Q R C" using collinear4[OF `axioms` `col F Q R` `col F Q C` `F \<noteq> Q`] .
@@ -101,7 +101,7 @@ proof -
 	hence "\<not> col A B Q" by blast
 	have "bet Q F C" using betweennesssymmetryE[OF `axioms` `bet C F Q`] .
 	have "bet Q F C \<and> col A B F \<and> \<not> col A B Q" using `bet Q F C` `col A B F` `\<not> col A B Q` by blast
-	have "oppo_side Q A B C" sorry
+	have "oppo_side Q A B C" using oppositeside_b[OF `axioms` `bet Q F C` `col A B F` `\<not> col A B Q`] .
 	thus ?thesis by blast
 qed
 

@@ -14,14 +14,14 @@ proof -
 	hence seg_eq B C b c
 	proof (cases)
 		case 1
-		have "seg_eq A A a b" sorry
+		have "seg_eq A A a b" using `seg_eq A B a b` `B = A` by blast
 		have "seg_eq a b A A" using congruencesymmetric[OF `axioms` `seg_eq A A a b`] .
 		have "a = b" using nullsegment1E[OF `axioms` `seg_eq a b A A`] .
-		have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] .
-		have "seg_eq B C A C" sorry
+		have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_eq B C A C" using `seg_eq A C A C` `B = A` by blast
 		have "seg_eq B C a c" using congruencetransitive[OF `axioms` `seg_eq B C A C` `seg_eq A C a c`] .
-		have "seg_eq b c b c" using congruencereflexiveE[OF `axioms`] .
-		have "seg_eq b c a c" sorry
+		have "seg_eq b c b c" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_eq b c a c" using `seg_eq b c b c` `a = b` by blast
 		have "seg_eq a c b c" using congruencesymmetric[OF `axioms` `seg_eq b c a c`] .
 		have "seg_eq B C b c" using congruencetransitive[OF `axioms` `seg_eq B C a c` `seg_eq a c b c`] .
 	next
@@ -29,13 +29,13 @@ proof -
 		have "\<not> (C = A)"
 		proof (rule ccontr)
 			assume "C = A"
-			have "bet A B A" sorry
-			have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] .
+			have "bet A B A" using `bet A B C` `C = A` by blast
+			have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] by blast
 			show "False" using `\<not> (bet A B A)` `bet A B A` by blast
 		qed
 		hence "C \<noteq> A" by blast
 		have "A \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> A`] .
-		obtain E where "bet C A E \<and> seg_eq A E A C" using extensionE[OF `axioms` `C \<noteq> A` `A \<noteq> C`]  by  blast
+		obtain E where "bet C A E \<and> seg_eq A E A C" using extensionE[OF `axioms` `C \<noteq> A` `A \<noteq> C`] by blast
 		have "seg_eq A C a c" using `seg_eq A C a c` .
 		have "bet C A E" using `bet C A E \<and> seg_eq A E A C` by blast
 		have "A \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> A`] .
@@ -48,15 +48,15 @@ proof -
 		qed
 		hence "c \<noteq> a" by blast
 		have "a \<noteq> c" using inequalitysymmetric[OF `axioms` `c \<noteq> a`] .
-		have "bet c a e \<and> seg_eq a e a c" using extensionE[OF `axioms` `c \<noteq> a` `a \<noteq> c`] .
+		have "bet c a e \<and> seg_eq a e a c" using extensionE[OF `axioms` `c \<noteq> a` `a \<noteq> c`] by blast
 		have "bet c a e" using `bet c a e \<and> seg_eq a e a c` by blast
 		have "seg_eq A E A C" using `bet C A E \<and> seg_eq A E A C` by blast
 		have "seg_eq a e a c" using `bet c a e \<and> seg_eq a e a c` by blast
-		have "seg_eq E A A E" using equalityreverseE[OF `axioms`] .
+		have "seg_eq E A A E" using equalityreverseE[OF `axioms`] by blast
 		have "seg_eq E A A C" using congruencetransitive[OF `axioms` `seg_eq E A A E` `seg_eq A E A C`] .
 		have "seg_eq A C a c" using `seg_eq A C a c` .
 		have "seg_eq E A a c" using congruencetransitive[OF `axioms` `seg_eq E A A C` `seg_eq A C a c`] .
-		have "seg_eq e a a e" using equalityreverseE[OF `axioms`] .
+		have "seg_eq e a a e" using equalityreverseE[OF `axioms`] by blast
 		have "seg_eq e a a c" using congruencetransitive[OF `axioms` `seg_eq e a a e` `seg_eq a e a c`] .
 		have "seg_eq a c e a" using congruencesymmetric[OF `axioms` `seg_eq e a a c`] .
 		have "seg_eq E A a c" using congruencetransitive[OF `axioms` `seg_eq E A A C` `seg_eq A C a c`] .

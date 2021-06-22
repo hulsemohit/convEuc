@@ -9,8 +9,8 @@ theorem parallelcollinear:
 		"C \<noteq> d"
 	shows: "tarski_parallel A B C d"
 proof -
-	have "c \<noteq> d" sorry
-	have "c = d \<or> c = C \<or> d = C \<or> bet d c C \<or> bet c d C \<or> bet c C d" using col_f[OF `axioms` `col c d C`] .
+	have "c \<noteq> d" using tarski_parallel_f[OF `axioms` `tarski_parallel A B c d`] by blast
+	have "c = d \<or> c = C \<or> d = C \<or> bet d c C \<or> bet c d C \<or> bet c C d" using collinear_f[OF `axioms` `col c d C`] .
 	consider "c = d"|"c = C"|"d = C"|"bet d c C"|"bet c d C"|"bet c C d" using `c = d \<or> c = C \<or> d = C \<or> bet d c C \<or> bet c d C \<or> bet c C d`  by blast
 	hence tarski_parallel A B C d
 	proof (cases)
@@ -24,7 +24,7 @@ proof -
 		hence "tarski_parallel A B C d" by blast
 	next
 		case 2
-		have "tarski_parallel A B C d" sorry
+		have "tarski_parallel A B C d" using `tarski_parallel A B c d` `c = C` by blast
 	next
 		case 3
 		have "tarski_parallel A B C d"

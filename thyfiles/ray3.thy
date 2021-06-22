@@ -8,8 +8,8 @@ theorem ray3:
 		"ray_on B C V"
 	shows: "ray_on B D V"
 proof -
-	obtain E where "bet E B D \<and> bet E B C" sorry
-	obtain H where "bet H B V \<and> bet H B C" sorry
+	obtain E where "bet E B D \<and> bet E B C" using ray_f[OF `axioms` `ray_on B C D`] by blast
+	obtain H where "bet H B V \<and> bet H B C" using ray_f[OF `axioms` `ray_on B C V`] by blast
 	have "bet E B C" using `bet E B D \<and> bet E B C` by blast
 	have "bet E B D" using `bet E B D \<and> bet E B C` by blast
 	have "bet H B V" using `bet H B V \<and> bet H B C` by blast
@@ -36,11 +36,11 @@ proof -
 		have "bet C B E" using betweennesssymmetryE[OF `axioms` `bet E B C`] .
 		have "bet C B H" using betweennesssymmetryE[OF `axioms` `bet H B C`] .
 		have "H = E" using outerconnectivity[OF `axioms` `bet C B H` `bet C B E` `\<not> (bet B H E)` `\<not> (bet B E H)`] .
-		have "bet E B V" sorry
+		have "bet E B V" using `bet H B V` `H = E` by blast
 		show "False" using `bet E B V` `\<not> (bet E B V)` by blast
 	qed
 	hence "bet E B V" by blast
-	have "ray_on B D V" sorry
+	have "ray_on B D V" using ray_b[OF `axioms` `bet E B V` `bet E B D`] .
 	thus ?thesis by blast
 qed
 

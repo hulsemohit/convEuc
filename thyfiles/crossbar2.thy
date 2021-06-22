@@ -10,8 +10,8 @@ theorem crossbar2:
 		"ray_on G P T"
 	shows: "\<exists> M. bet T M S \<and> ray_on G A M"
 proof -
-	have "\<not> col G H P" sorry
-	obtain J K L where "bet L K J \<and> ray_on G H L \<and> ray_on G P J \<and> ang_eq H G A H G K" sorry
+	have "\<not> col G H P" using sameside_f[OF `axioms` `same_side A P G H`] by blast
+	obtain J K L where "bet L K J \<and> ray_on G H L \<and> ray_on G P J \<and> ang_eq H G A H G K" using anglelessthan_f[OF `axioms` `ang_lt H G A H G P`] by blast
 	have "bet L K J" using `bet L K J \<and> ray_on G H L \<and> ray_on G P J \<and> ang_eq H G A H G K` by blast
 	have "ray_on G H L" using `bet L K J \<and> ray_on G H L \<and> ray_on G P J \<and> ang_eq H G A H G K` by blast
 	have "ray_on G P J" using `bet L K J \<and> ray_on G H L \<and> ray_on G P J \<and> ang_eq H G A H G K` by blast
@@ -35,7 +35,7 @@ proof -
 		show "False" using `\<not> col G H P` `col G H P` by blast
 	qed
 	hence "\<not> col L G J" by blast
-	have "triangle L G J" sorry
+	have "triangle L G J" using triangle_b[OF `axioms` `\<not> col L G J`] .
 	have "ray_on G P T" using `ray_on G P T` .
 	have "ray_on G P J" using `ray_on G P J` .
 	have "ray_on G J T" using ray3[OF `axioms` `ray_on G P J` `ray_on G P T`] .
@@ -47,13 +47,13 @@ proof -
 	have "ang_eq H G K H G A" using equalanglessymmetric[OF `axioms` `ang_eq H G A H G K`] .
 	have "G \<noteq> A" using angledistinct[OF `axioms` `ang_eq H G A H G K`] by blast
 	have "G \<noteq> M" using raystrict[OF `axioms` `ray_on G K M`] .
-	obtain N where "ray_on G A N \<and> seg_eq G N G M" using layoff[OF `axioms` `G \<noteq> A` `G \<noteq> M`]  by  blast
+	obtain N where "ray_on G A N \<and> seg_eq G N G M" using layoff[OF `axioms` `G \<noteq> A` `G \<noteq> M`] by blast
 	have "ray_on G A N" using `ray_on G A N \<and> seg_eq G N G M` by blast
 	have "H = H" using equalityreflexiveE[OF `axioms`] .
 	have "\<not> (G = H)"
 	proof (rule ccontr)
 		assume "G = H"
-		have "col G H P" using col_b `axioms` `G = H` by blast
+		have "col G H P" using collinear_b `axioms` `G = H` by blast
 		show "False" using `col G H P` `\<not> col G H P` by blast
 	qed
 	hence "G \<noteq> H" by blast
@@ -82,12 +82,12 @@ proof -
 	have "ang_eq H G M H G N" using equalanglestransitive[OF `axioms` `ang_eq H G M H G A` `ang_eq H G A H G N`] .
 	have "ang_eq H G N H G M" using equalanglessymmetric[OF `axioms` `ang_eq H G M H G N`] .
 	have "seg_eq G N G M" using `ray_on G A N \<and> seg_eq G N G M` by blast
-	have "seg_eq G H G H" using congruencereflexiveE[OF `axioms`] .
+	have "seg_eq G H G H" using congruencereflexiveE[OF `axioms`] by blast
 	have "seg_eq H N H M" using Prop04[OF `axioms` `seg_eq G H G H` `seg_eq G N G M` `ang_eq H G N H G M`] by blast
 	have "same_side A P G H" using `same_side A P G H` .
 	have "ray_on G P T" using `ray_on G P T` .
 	have "G = G" using equalityreflexiveE[OF `axioms`] .
-	have "col G G H" using col_b `axioms` `G = G` by blast
+	have "col G G H" using collinear_b `axioms` `G = G` by blast
 	have "same_side A T G H" using sameside2[OF `axioms` `same_side A P G H` `col G G H` `ray_on G P T`] .
 	have "bet S M T" using `bet S M T` .
 	have "S \<noteq> M" using betweennotequal[OF `axioms` `bet S M T`] by blast
@@ -106,7 +106,7 @@ proof -
 	have "G \<noteq> H" using `G \<noteq> H` .
 	have "M = N" using Prop07[OF `axioms` `G \<noteq> H` `seg_eq M G N G` `seg_eq M H N H` `same_side M N G H`] .
 	have "N = M" using equalitysymmetric[OF `axioms` `M = N`] .
-	have "ray_on G A M" sorry
+	have "ray_on G A M" using `ray_on G A N` `N = M` by blast
 	have "bet T M S \<and> ray_on G A M" using `bet T M S` `ray_on G A M` by blast
 	thus ?thesis by blast
 qed

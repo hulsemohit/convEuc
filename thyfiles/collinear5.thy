@@ -20,7 +20,7 @@ proof -
 	next
 		case 2
 		have "col B D E" using collinear4[OF `axioms` `col A B D` `col A B E` `A \<noteq> B`] .
-		have "col C D E" sorry
+		have "col C D E" using `col B D E` `B = C` by blast
 	next
 	thus ?thesis by blast
 qed

@@ -7,7 +7,7 @@ theorem lessthannotequal:
 		"seg_lt A B C D"
 	shows: "A \<noteq> B \<and> C \<noteq> D"
 proof -
-	obtain E where "bet C E D \<and> seg_eq C E A B" sorry
+	obtain E where "bet C E D \<and> seg_eq C E A B" using lessthan_f[OF `axioms` `seg_lt A B C D`] by blast
 	have "bet C E D" using `bet C E D \<and> seg_eq C E A B` by blast
 	have "seg_eq C E A B" using `bet C E D \<and> seg_eq C E A B` by blast
 	have "C \<noteq> E" using betweennotequal[OF `axioms` `bet C E D`] by blast

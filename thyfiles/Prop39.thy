@@ -14,8 +14,8 @@ proof -
 	have "same_side D A B C" using samesidesymmetric[OF `axioms` `same_side A D B C`] by blast
 	have "same_side A D C B" using samesideflip[OF `axioms` `same_side A D B C`] .
 	have "same_side D A C B" using samesidesymmetric[OF `axioms` `same_side A D B C`] by blast
-	have "\<not> col A B C" sorry
-	have "\<not> col D B C" sorry
+	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
+	have "\<not> col D B C" using triangle_f[OF `axioms` `triangle D B C`] .
 	have "A \<noteq> B" using NCdistinct[OF `axioms` `\<not> col A B C`] by blast
 	have "B \<noteq> D" using NCdistinct[OF `axioms` `\<not> col D B C`] by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
@@ -68,9 +68,9 @@ proof -
 		qed
 		hence "ang_eq C B D C B A" by blast
 		have "\<not> col A C B" using NCorder[OF `axioms` `\<not> col A B C`] by blast
-		have "triangle A C B" sorry
+		have "triangle A C B" using triangle_b[OF `axioms` `\<not> col A C B`] .
 		have "\<not> col D C B" using NCorder[OF `axioms` `\<not> col D B C`] by blast
-		have "triangle D C B" sorry
+		have "triangle D C B" using triangle_b[OF `axioms` `\<not> col D C B`] .
 		have "same_side A D C B" using samesideflip[OF `axioms` `same_side A D B C`] .
 		have "tri_eq_area A B C D C B" using ETpermutationE[OF `axioms` `tri_eq_area A B C D B C`] by blast
 		have "tri_eq_area D C B A B C" using ETsymmetricE[OF `axioms` `tri_eq_area A B C D C B`] .
@@ -110,7 +110,7 @@ proof -
 		qed
 		hence "ang_eq B C D B C A" by blast
 		have "ang_eq B C A B C D" using equalanglessymmetric[OF `axioms` `ang_eq B C D B C A`] .
-		have "seg_eq B C B C" using congruencereflexiveE[OF `axioms`] .
+		have "seg_eq B C B C" using congruencereflexiveE[OF `axioms`] by blast
 		have "ang_eq D B C A B C" using equalanglesflip[OF `axioms` `ang_eq C B D C B A`] .
 		have "ang_eq A B C D B C" using equalanglessymmetric[OF `axioms` `ang_eq D B C A B C`] .
 		have "seg_eq A B D B \<and> seg_eq A C D C \<and> ang_eq B A C B D C" using Prop26A[OF `axioms` `triangle A B C` `triangle D B C` `ang_eq A B C D B C` `ang_eq B C A B C D` `seg_eq B C B C`] .

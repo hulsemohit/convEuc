@@ -15,7 +15,7 @@ proof -
 	have "\<not> (B = M)"
 	proof (rule ccontr)
 		assume "B = M"
-		have "ang_right A B p" sorry
+		have "ang_right A B p" using `ang_right A M p` `B = M` by blast
 		have "col p B C" using collinearorder[OF `axioms` `col B C p`] by blast
 		have "ang_right p B A" using n8_2[OF `axioms` `ang_right A B p`] .
 		have "ang_right C B A" using collinearright[OF `axioms` `ang_right p B A` `col p B C` `C \<noteq> B`] .
@@ -40,7 +40,7 @@ proof -
 	have "\<not> (C = M)"
 	proof (rule ccontr)
 		assume "C = M"
-		have "ang_right A C p" sorry
+		have "ang_right A C p" using `ang_right A M p` `C = M` by blast
 		have "col p C B" using collinearorder[OF `axioms` `col B C p`] by blast
 		have "ang_right p C A" using n8_2[OF `axioms` `ang_right A C p`] .
 		have "ang_right B C A" using collinearright[OF `axioms` `ang_right p C A` `col p C B` `B \<noteq> C`] .
@@ -53,13 +53,13 @@ proof -
 	have "ang_right A M C" using n8_2[OF `axioms` `ang_right C M A`] .
 	have "seg_lt M B A B" using legsmallerhypotenuse[OF `axioms` `ang_right A M B`] by blast
 	have "seg_lt B A B C" using legsmallerhypotenuse[OF `axioms` `ang_right B A C`] by blast
-	have "seg_eq B A A B" using equalityreverseE[OF `axioms`] .
+	have "seg_eq B A A B" using equalityreverseE[OF `axioms`] by blast
 	have "seg_lt A B B C" using lessthancongruence2[OF `axioms` `seg_lt B A B C` `seg_eq B A A B`] .
 	have "seg_lt M B B C" using lessthantransitive[OF `axioms` `seg_lt M B A B` `seg_lt A B B C`] .
-	have "seg_eq M B B M" using equalityreverseE[OF `axioms`] .
+	have "seg_eq M B B M" using equalityreverseE[OF `axioms`] by blast
 	have "seg_lt B M B C" using lessthancongruence2[OF `axioms` `seg_lt M B B C` `seg_eq M B B M`] .
 	have "seg_lt M C A C" using legsmallerhypotenuse[OF `axioms` `ang_right A M C`] by blast
-	have "seg_eq M C C M" using equalityreverseE[OF `axioms`] .
+	have "seg_eq M C C M" using equalityreverseE[OF `axioms`] by blast
 	have "seg_lt C M A C" using lessthancongruence2[OF `axioms` `seg_lt M C A C` `seg_eq M C C M`] .
 	have "seg_lt A C B C" using legsmallerhypotenuse[OF `axioms` `ang_right B A C`] by blast
 	have "seg_lt C M B C" using lessthantransitive[OF `axioms` `seg_lt C M A C` `seg_lt A C B C`] .
@@ -67,16 +67,16 @@ proof -
 	proof (rule ccontr)
 		assume "bet M B C"
 		have "bet C B M" using betweennesssymmetryE[OF `axioms` `bet M B C`] .
-		have "seg_eq C B C B" using congruencereflexiveE[OF `axioms`] .
-		have "seg_lt C B C M" sorry
-		have "seg_eq C B B C" using equalityreverseE[OF `axioms`] .
+		have "seg_eq C B C B" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_lt C B C M" using lessthan_b[OF `axioms` `bet C B M` `seg_eq C B C B`] .
+		have "seg_eq C B B C" using equalityreverseE[OF `axioms`] by blast
 		have "seg_lt B C C M" using lessthancongruence2[OF `axioms` `seg_lt C B C M` `seg_eq C B B C`] .
 		have "\<not> (seg_lt C M B C)" using trichotomy2[OF `axioms` `seg_lt B C C M`] .
 		show "False" using `\<not> (seg_lt C M B C)` `seg_lt C M B C` by blast
 	qed
 	hence "\<not> (bet M B C)" by blast
 	have "col B C M" using `col B C M` .
-	have "B = C \<or> B = M \<or> C = M \<or> bet C B M \<or> bet B C M \<or> bet B M C" using col_f[OF `axioms` `col B C M`] .
+	have "B = C \<or> B = M \<or> C = M \<or> bet C B M \<or> bet B C M \<or> bet B M C" using collinear_f[OF `axioms` `col B C M`] .
 	consider "B = C"|"B = M"|"C = M"|"bet C B M"|"bet B C M"|"bet B M C" using `B = C \<or> B = M \<or> C = M \<or> bet C B M \<or> bet B C M \<or> bet B M C`  by blast
 	hence ray_on B C M
 	proof (cases)
@@ -127,8 +127,8 @@ proof -
 	have "\<not> (bet B C M)"
 	proof (rule ccontr)
 		assume "bet B C M"
-		have "seg_eq B C B C" using congruencereflexiveE[OF `axioms`] .
-		have "seg_lt B C B M" sorry
+		have "seg_eq B C B C" using congruencereflexiveE[OF `axioms`] by blast
+		have "seg_lt B C B M" using lessthan_b[OF `axioms` `bet B C M` `seg_eq B C B C`] .
 		have "\<not> (seg_lt B M B C)" using trichotomy2[OF `axioms` `seg_lt B C B M`] .
 		show "False" using `\<not> (seg_lt B M B C)` `seg_lt B M B C` by blast
 	qed

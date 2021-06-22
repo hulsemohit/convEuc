@@ -12,9 +12,9 @@ proof -
 	have "seg_eq A D A C" using congruencesymmetric[OF `axioms` `seg_eq A C A D`] .
 	have "bet A C B \<or> B = C \<or> bet A B C" using ray1[OF `axioms` `ray_on A B C`] .
 	have "bet A D B \<or> B = D \<or> bet A B D" using ray1[OF `axioms` `ray_on A B D`] .
-	have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] .
-	have "seg_eq C B C B" using congruencereflexiveE[OF `axioms`] .
-	have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] .
+	have "seg_eq A B A B" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq C B C B" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] by blast
 	consider "bet A C B"|"B = C"|"bet A B C" using `bet A C B \<or> B = C \<or> bet A B C`  by blast
 	hence C = D
 	proof (cases)
@@ -37,7 +37,7 @@ proof -
 			hence "C = D" by blast
 		next
 			case 2
-			have "bet A C D" sorry
+			have "bet A C D" using `bet A C B` `B = D` by blast
 			have "\<not> (C \<noteq> D)"
 			proof (rule ccontr)
 				assume "C \<noteq> D"
@@ -58,7 +58,7 @@ proof -
 		next
 	next
 		case 2
-		have "seg_eq A B A D" sorry
+		have "seg_eq A B A D" using `seg_eq A C A D` `B = C` by blast
 		have "seg_eq A D A B" using congruencesymmetric[OF `axioms` `seg_eq A B A D`] .
 		consider "bet A D B"|"B = D"|"bet A B D" using `bet A D B \<or> B = D \<or> bet A B D`  by blast
 		hence C = D
@@ -78,7 +78,7 @@ proof -
 			have "C = D" using equalitytransitiveE[OF `axioms` `C = B` `D = B`] .
 		next
 			case 3
-			have "bet A C D" sorry
+			have "bet A C D" using `bet A B D` `B = C` by blast
 			have "\<not> (C \<noteq> D)"
 			proof (rule ccontr)
 				assume "C \<noteq> D"
@@ -103,7 +103,7 @@ proof -
 			hence "C = D" by blast
 		next
 			case 2
-			have "bet A D C" sorry
+			have "bet A D C" using `bet A B C` `B = D` by blast
 			have "\<not> (C \<noteq> D)"
 			proof (rule ccontr)
 				assume "C \<noteq> D"

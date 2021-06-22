@@ -7,21 +7,21 @@ theorem diagonalsbisect:
 		"parallelogram A B C D"
 	shows: "\<exists> M. midpoint A M C \<and> midpoint B M D"
 proof -
-	obtain M where "bet A M C \<and> bet B M D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`]  by  blast
+	obtain M where "bet A M C \<and> bet B M D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`] by blast
 	have "bet A M C" using `bet A M C \<and> bet B M D` by blast
 	have "bet B M D" using `bet A M C \<and> bet B M D` by blast
-	have "parallel A B C D \<and> parallel A D B C" sorry
+	have "parallel A B C D \<and> parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] .
 	have "A \<noteq> C" using betweennotequal[OF `axioms` `bet A M C`] by blast
 	have "B \<noteq> D" using betweennotequal[OF `axioms` `bet B M D`] by blast
-	have "cross A C B D" sorry
-	have "parallel A B C D" sorry
+	have "cross A C B D" using cross_b[OF `axioms` `bet A M C` `bet B M D`] .
+	have "parallel A B C D" using parallelogram_f[OF `axioms` `parallelogram A B C D`] by blast
 	have "parallel A B D C" using parallelflip[OF `axioms` `parallel A B C D`] by blast
 	have "\<not> col A B D" using parallelNC[OF `axioms` `parallel A B C D`] by blast
 	have "oppo_side A B D C" using crossimpliesopposite[OF `axioms` `cross A C B D` `\<not> col A B D`] by blast
 	have "parallel B A D C" using parallelflip[OF `axioms` `parallel A B C D`] by blast
 	have "bet C M A" using betweennesssymmetryE[OF `axioms` `bet A M C`] .
 	have "bet D M B" using betweennesssymmetryE[OF `axioms` `bet B M D`] .
-	have "cross B D A C" sorry
+	have "cross B D A C" using cross_b[OF `axioms` `bet B M D` `bet A M C`] .
 	have "\<not> col A B C" using parallelNC[OF `axioms` `parallel A B C D`] by blast
 	have "\<not> col B A C" using NCorder[OF `axioms` `\<not> col A B C`] by blast
 	have "oppo_side B A C D" using crossimpliesopposite[OF `axioms` `cross B D A C` `\<not> col B A C`] by blast
@@ -30,7 +30,7 @@ proof -
 	have "\<not> (col M A B)"
 	proof (rule ccontr)
 		assume "col M A B"
-		have "col A M C" using col_b `axioms` `bet A M C \<and> bet B M D` by blast
+		have "col A M C" using collinear_b `axioms` `bet A M C \<and> bet B M D` by blast
 		have "col M A C" using collinearorder[OF `axioms` `col A M C`] by blast
 		have "A \<noteq> M" using betweennotequal[OF `axioms` `bet A M C`] by blast
 		have "M \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> M`] .
@@ -39,11 +39,11 @@ proof -
 		show "False" using `\<not> col A B C` `col A B C` by blast
 	qed
 	hence "\<not> col M A B" by blast
-	have "triangle M A B" sorry
+	have "triangle M A B" using triangle_b[OF `axioms` `\<not> col M A B`] .
 	have "\<not> (col M C D)"
 	proof (rule ccontr)
 		assume "col M C D"
-		have "col A M C" using col_b `axioms` `bet A M C \<and> bet B M D` by blast
+		have "col A M C" using collinear_b `axioms` `bet A M C \<and> bet B M D` by blast
 		have "col M C A" using collinearorder[OF `axioms` `col A M C`] by blast
 		have "M \<noteq> C" using betweennotequal[OF `axioms` `bet A M C`] by blast
 		have "col C D A" using collinear4[OF `axioms` `col M C D` `col M C A` `M \<noteq> C`] .
@@ -52,7 +52,7 @@ proof -
 		show "False" using `\<not> col A C D` `col A C D` by blast
 	qed
 	hence "\<not> col M C D" by blast
-	have "triangle M C D" sorry
+	have "triangle M C D" using triangle_b[OF `axioms` `\<not> col M C D`] .
 	have "seg_eq A B C D" using `seg_eq A B C D` .
 	have "parallel A B C D" using `parallel A B C D` .
 	have "parallel B A C D" using parallelflip[OF `axioms` `parallel A B C D`] by blast
@@ -77,10 +77,10 @@ proof -
 	have "ang_eq A C D M C D" using equalangleshelper[OF `axioms` `ang_eq A C D A C D` `ray_on C A M` `ray_on C D D`] .
 	have "ang_eq B A M M C D" using equalanglestransitive[OF `axioms` `ang_eq B A M A C D` `ang_eq A C D M C D`] .
 	have "\<not> col A C D" using parallelNC[OF `axioms` `parallel A B C D`] by blast
-	have "col A M C" using col_b `axioms` `bet A M C \<and> bet B M D` by blast
+	have "col A M C" using collinear_b `axioms` `bet A M C \<and> bet B M D` by blast
 	have "col A C M" using collinearorder[OF `axioms` `col A M C`] by blast
 	have "C = C" using equalityreflexiveE[OF `axioms`] .
-	have "col A C C" using col_b `axioms` `C = C` by blast
+	have "col A C C" using collinear_b `axioms` `C = C` by blast
 	have "M \<noteq> C" using betweennotequal[OF `axioms` `bet A M C`] by blast
 	have "\<not> col M C D" using NChelper[OF `axioms` `\<not> col A C D` `col A C M` `col A C C` `M \<noteq> C`] .
 	have "ang_eq M C D D C M" using ABCequalsCBA[OF `axioms` `\<not> col M C D`] .
@@ -107,10 +107,10 @@ proof -
 	have "ang_eq B D C M D C" using equalangleshelper[OF `axioms` `ang_eq B D C B D C` `ray_on D B M` `ray_on D C C`] .
 	have "ang_eq A B M M D C" using equalanglestransitive[OF `axioms` `ang_eq A B M B D C` `ang_eq B D C M D C`] .
 	have "\<not> col B D C" using parallelNC[OF `axioms` `parallel A B D C`] by blast
-	have "col B M D" using col_b `axioms` `bet A M C \<and> bet B M D` by blast
+	have "col B M D" using collinear_b `axioms` `bet A M C \<and> bet B M D` by blast
 	have "col B D M" using collinearorder[OF `axioms` `col B M D`] by blast
 	have "D = D" using equalityreflexiveE[OF `axioms`] .
-	have "col B D D" using col_b `axioms` `D = D` by blast
+	have "col B D D" using collinear_b `axioms` `D = D` by blast
 	have "M \<noteq> D" using betweennotequal[OF `axioms` `bet B M D`] by blast
 	have "\<not> col M D C" using NChelper[OF `axioms` `\<not> col B D C` `col B D M` `col B D D` `M \<noteq> D`] .
 	have "ang_eq M D C C D M" using ABCequalsCBA[OF `axioms` `\<not> col M D C`] .
@@ -121,8 +121,8 @@ proof -
 	have "seg_eq M B M D" using `seg_eq M A M C \<and> seg_eq M B M D \<and> ang_eq A M B C M D` by blast
 	have "seg_eq A M M C" using congruenceflip[OF `axioms` `seg_eq M A M C`] by blast
 	have "seg_eq B M M D" using congruenceflip[OF `axioms` `seg_eq M B M D`] by blast
-	have "midpoint A M C" sorry
-	have "midpoint B M D" sorry
+	have "midpoint A M C" using midpoint_b[OF `axioms` `bet A M C` `seg_eq A M M C`] .
+	have "midpoint B M D" using midpoint_b[OF `axioms` `bet B M D` `seg_eq B M M D`] .
 	have "midpoint A M C \<and> midpoint B M D" using `midpoint A M C` `midpoint B M D` by blast
 	thus ?thesis by blast
 qed

@@ -9,7 +9,7 @@ theorem partnotequalwhole:
 proof -
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A B C`] by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-	obtain D where "bet B A D \<and> seg_eq A D B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`]  by  blast
+	obtain D where "bet B A D \<and> seg_eq A D B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`] by blast
 	have "bet B A D" using `bet B A D \<and> seg_eq A D B A` by blast
 	have "bet D A B" using betweennesssymmetryE[OF `axioms` `bet B A D`] .
 	have "bet D A C" using n3_7b[OF `axioms` `bet D A B` `bet A B C`] .

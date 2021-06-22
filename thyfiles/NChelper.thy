@@ -13,7 +13,7 @@ proof -
 	have "\<not> (A = B)"
 	proof (rule ccontr)
 		assume "A = B"
-		have "col A B C" using col_b `axioms` `A = B` by blast
+		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "A \<noteq> B" by blast

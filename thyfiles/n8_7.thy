@@ -8,12 +8,12 @@ theorem n8_7:
 	shows: "\<not> (ang_right A C B)"
 proof -
 	have "ang_right A B C" using n8_2[OF `axioms` `ang_right C B A`] .
-	have "B \<noteq> C" sorry
+	have "B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`] by blast
 	have "C \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> C`] .
-	obtain E where "bet B C E \<and> seg_eq C E C B" using extensionE[OF `axioms` `B \<noteq> C` `C \<noteq> B`]  by  blast
+	obtain E where "bet B C E \<and> seg_eq C E C B" using extensionE[OF `axioms` `B \<noteq> C` `C \<noteq> B`] by blast
 	have "bet B C E" using `bet B C E \<and> seg_eq C E C B` by blast
 	have "seg_eq C E C B" using `bet B C E \<and> seg_eq C E C B` by blast
-	have "col B C E" using col_b `axioms` `bet B C E \<and> seg_eq C E C B` by blast
+	have "col B C E" using collinear_b `axioms` `bet B C E \<and> seg_eq C E C B` by blast
 	have "col E C B" using collinearorder[OF `axioms` `col B C E`] by blast
 	have "ang_right A B C" using n8_2[OF `axioms` `ang_right C B A`] .
 	have "ray_on B C E" using ray4 `axioms` `bet B C E \<and> seg_eq C E C B` `B \<noteq> C` by blast
@@ -23,7 +23,7 @@ proof -
 	proof (rule ccontr)
 		assume "ang_right A C B"
 		have "ang_right B C A" using n8_2[OF `axioms` `ang_right A C B`] .
-		obtain F where "bet B C F \<and> seg_eq B C F C \<and> seg_eq B A F A \<and> C \<noteq> A" sorry
+		obtain F where "bet B C F \<and> seg_eq B C F C \<and> seg_eq B A F A \<and> C \<noteq> A" using rightangle_f[OF `axioms` `ang_right B C A`] by blast
 		have "bet B C F" using `bet B C F \<and> seg_eq B C F C \<and> seg_eq B A F A \<and> C \<noteq> A` by blast
 		have "seg_eq B C F C" using `bet B C F \<and> seg_eq B C F C \<and> seg_eq B A F A \<and> C \<noteq> A` by blast
 		have "seg_eq B A F A" using `bet B C F \<and> seg_eq B C F C \<and> seg_eq B A F A \<and> C \<noteq> A` by blast
@@ -36,10 +36,10 @@ proof -
 		have "F = E" using extensionunique[OF `axioms` `bet B C F` `bet B C E` `seg_eq C F C E`] .
 		have "bet E C B" using betweennesssymmetryE[OF `axioms` `bet B C E`] .
 		have "seg_eq F A B A" using congruencesymmetric[OF `axioms` `seg_eq B A F A`] .
-		have "seg_eq E A B A" sorry
+		have "seg_eq E A B A" using `seg_eq F A B A` `F = E` by blast
 		have "seg_eq E C B C" using congruenceflip[OF `axioms` `seg_eq C E B C`] by blast
 		have "bet E C B \<and> seg_eq E C B C \<and> seg_eq E A B A \<and> C \<noteq> A" using `bet E C B` `seg_eq E C B C` `seg_eq E A B A` `bet B C F \<and> seg_eq B C F C \<and> seg_eq B A F A \<and> C \<noteq> A` by blast
-		have "ang_right E C A" sorry
+		have "ang_right E C A" using rightangle_b[OF `axioms` `bet E C B` `seg_eq E C B C` `seg_eq E A B A` `C \<noteq> A`] .
 		have "ang_right E B A" using `ang_right E B A` .
 		have "C = B" using droppedperpendicularunique[OF `axioms` `ang_right E C A` `ang_right E B A` `col E C B`] .
 		show "False" using `C = B` `C \<noteq> B` by blast

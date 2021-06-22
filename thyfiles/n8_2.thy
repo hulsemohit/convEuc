@@ -7,12 +7,12 @@ theorem n8_2:
 		"ang_right A B C"
 	shows: "ang_right C B A"
 proof -
-	obtain D where "bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C" sorry
+	obtain D where "bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`] by blast
 	have "bet A B D" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "seg_eq A B D B" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "B \<noteq> C" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "C \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> C`] .
-	obtain E where "bet C B E \<and> seg_eq B E B C" using extensionE[OF `axioms` `C \<noteq> B` `B \<noteq> C`]  by  blast
+	obtain E where "bet C B E \<and> seg_eq B E B C" using extensionE[OF `axioms` `C \<noteq> B` `B \<noteq> C`] by blast
 	have "bet C B E" using `bet C B E \<and> seg_eq B E B C` by blast
 	have "seg_eq B E B C" using `bet C B E \<and> seg_eq B E B C` by blast
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A B D`] by blast
@@ -21,9 +21,9 @@ proof -
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
 	have "ray_on B C C" using ray4 `axioms` `C = C` `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "\<not> col A B C" using rightangleNC[OF `axioms` `ang_right A B C`] .
-	have "linear_pair A B C C D" sorry
+	have "linear_pair A B C C D" using supplement_b[OF `axioms` `ray_on B C C` `bet A B D`] .
 	have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast
-	have "linear_pair C B A A E" sorry
+	have "linear_pair C B A A E" using supplement_b[OF `axioms` `ray_on B A A` `bet C B E`] .
 	have "ang_eq A B C C B A" using ABCequalsCBA[OF `axioms` `\<not> col A B C`] .
 	have "ang_eq C B D A B E" using supplements[OF `axioms` `ang_eq A B C C B A` `linear_pair A B C C D` `linear_pair C B A A E`] .
 	have "seg_eq B C B E" using congruencesymmetric[OF `axioms` `seg_eq B E B C`] .
@@ -31,7 +31,7 @@ proof -
 	have "\<not> (col E B A)"
 	proof (rule ccontr)
 		assume "col E B A"
-		have "col C B E" using col_b `axioms` `bet C B E \<and> seg_eq B E B C` by blast
+		have "col C B E" using collinear_b `axioms` `bet C B E \<and> seg_eq B E B C` by blast
 		have "col E B C" using collinearorder[OF `axioms` `col C B E`] by blast
 		have "B \<noteq> E" using betweennotequal[OF `axioms` `bet C B E`] by blast
 		have "E \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> E`] .
@@ -59,7 +59,7 @@ proof -
 	have "seg_eq C B E B" using congruenceflip[OF `axioms` `seg_eq B C B E`] by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
 	have "bet C B E \<and> seg_eq C B E B \<and> seg_eq C A E A \<and> B \<noteq> A" using `bet C B E \<and> seg_eq B E B C` `seg_eq C B E B` `seg_eq C A E A` `B \<noteq> A` by blast
-	have "ang_right C B A" sorry
+	have "ang_right C B A" using rightangle_b[OF `axioms` `bet C B E` `seg_eq C B E B` `seg_eq C A E A` `B \<noteq> A`] .
 	thus ?thesis by blast
 qed
 

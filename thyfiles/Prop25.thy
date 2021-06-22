@@ -21,7 +21,7 @@ proof -
 		show "False" using `\<not> (seg_lt E F B C)` `seg_lt E F B C` by blast
 	qed
 	hence "\<not> (ang_lt B A C E D F)" by blast
-	have "\<not> col A B C" sorry
+	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "\<not> (col B A C)"
 	proof (rule ccontr)
 		assume "col B A C"
@@ -29,7 +29,7 @@ proof -
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "\<not> col B A C" by blast
-	have "\<not> col D E F" sorry
+	have "\<not> col D E F" using triangle_f[OF `axioms` `triangle D E F`] .
 	have "\<not> (col E D F)"
 	proof (rule ccontr)
 		assume "col E D F"

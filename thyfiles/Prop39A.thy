@@ -10,20 +10,20 @@ theorem Prop39A:
 		"ray_on B D M"
 	shows: "parallel A D B C"
 proof -
-	have "\<not> col A B C" sorry
+	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "A \<noteq> B" using NCdistinct[OF `axioms` `\<not> col A B C`] by blast
-	obtain m where "bet A m B \<and> seg_eq m A m B" using Prop10[OF `axioms` `A \<noteq> B`]  by  blast
+	obtain m where "bet A m B \<and> seg_eq m A m B" using Prop10[OF `axioms` `A \<noteq> B`] by blast
 	have "bet A m B" using `bet A m B \<and> seg_eq m A m B` by blast
 	have "seg_eq m A m B" using `bet A m B \<and> seg_eq m A m B` by blast
-	have "col A m B" using col_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
+	have "col A m B" using collinear_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
 	have "col A B m" using collinearorder[OF `axioms` `col A m B`] by blast
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
-	have "col A B A" using col_b `axioms` `A = A` by blast
+	have "col A B A" using collinear_b `axioms` `A = A` by blast
 	have "A \<noteq> m" using betweennotequal[OF `axioms` `bet A m B`] by blast
 	have "\<not> col A m C" using NChelper[OF `axioms` `\<not> col A B C` `col A B A` `col A B m` `A \<noteq> m`] .
 	have "m \<noteq> C" using NCdistinct[OF `axioms` `\<not> col A m C`] by blast
 	have "C \<noteq> m" using inequalitysymmetric[OF `axioms` `m \<noteq> C`] .
-	obtain H where "bet C m H \<and> seg_eq m H m C" using extensionE[OF `axioms` `C \<noteq> m` `m \<noteq> C`]  by  blast
+	obtain H where "bet C m H \<and> seg_eq m H m C" using extensionE[OF `axioms` `C \<noteq> m` `m \<noteq> C`] by blast
 	have "bet C m H" using `bet C m H \<and> seg_eq m H m C` by blast
 	have "seg_eq m H m C" using `bet C m H \<and> seg_eq m H m C` by blast
 	have "bet B m A" using betweennesssymmetryE[OF `axioms` `bet A m B`] .
@@ -34,12 +34,12 @@ proof -
 	have "\<not> (col B A H)"
 	proof (rule ccontr)
 		assume "col B A H"
-		have "col A m B" using col_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
+		have "col A m B" using collinear_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
 		have "col B A m" using collinearorder[OF `axioms` `col A B m`] by blast
 		have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
 		have "col A H m" using collinear4[OF `axioms` `col B A H` `col B A m` `B \<noteq> A`] .
 		have "col H m A" using collinearorder[OF `axioms` `col A H m`] by blast
-		have "col C m H" using col_b `axioms` `bet C m H \<and> seg_eq m H m C` by blast
+		have "col C m H" using collinear_b `axioms` `bet C m H \<and> seg_eq m H m C` by blast
 		have "col H m C" using collinearorder[OF `axioms` `col C m H`] by blast
 		have "m \<noteq> H" using betweennotequal[OF `axioms` `bet C m H`] by blast
 		have "H \<noteq> m" using inequalitysymmetric[OF `axioms` `m \<noteq> H`] .
@@ -54,20 +54,20 @@ proof -
 	obtain E where "bet B M E \<and> bet H A E" using Euclid5E[OF `axioms` `bet C m H` `bet B m A` `bet C M A` `seg_eq B m A m` `seg_eq m C m H`]  by  blast
 	have "bet H A E" using `bet B M E \<and> bet H A E` by blast
 	have "bet H m C" using betweennesssymmetryE[OF `axioms` `bet C m H`] .
-	have "col C m H" using col_b `axioms` `bet C m H \<and> seg_eq m H m C` by blast
+	have "col C m H" using collinear_b `axioms` `bet C m H \<and> seg_eq m H m C` by blast
 	have "col m C H" using collinearorder[OF `axioms` `col C m H`] by blast
 	have "m = m" using equalityreflexiveE[OF `axioms`] .
-	have "col m C m" using col_b `axioms` `m = m` by blast
+	have "col m C m" using collinear_b `axioms` `m = m` by blast
 	have "\<not> col m C A" using NCorder[OF `axioms` `\<not> col A m C`] by blast
 	have "m \<noteq> H" using betweennotequal[OF `axioms` `bet C m H`] by blast
 	have "\<not> col m H A" using NChelper[OF `axioms` `\<not> col m C A` `col m C m` `col m C H` `m \<noteq> H`] .
 	have "\<not> col A m H" using NCorder[OF `axioms` `\<not> col m H A`] by blast
 	have "ang_eq A m H C m B" using Prop15[OF `axioms` `bet A m B` `bet H m C` `\<not> col A m H`] by blast
 	have "\<not> col H m A" using NCorder[OF `axioms` `\<not> col A m H`] by blast
-	have "col A m B" using col_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
+	have "col A m B" using collinear_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
 	have "col A B m" using collinearorder[OF `axioms` `col A m B`] by blast
 	have "B = B" using equalityreflexiveE[OF `axioms`] .
-	have "col A B B" using col_b `axioms` `B = B` by blast
+	have "col A B B" using collinear_b `axioms` `B = B` by blast
 	have "m \<noteq> B" using betweennotequal[OF `axioms` `bet A m B`] by blast
 	have "\<not> col m B C" using NChelper[OF `axioms` `\<not> col A B C` `col A B m` `col A B B` `m \<noteq> B`] .
 	have "ang_eq H m A A m H" using ABCequalsCBA[OF `axioms` `\<not> col H m A`] .
@@ -95,19 +95,19 @@ proof -
 	have "\<not> col B C H" using equalanglesNC[OF `axioms` `ang_eq A H C B C H`] .
 	have "ang_eq B C H H C B" using ABCequalsCBA[OF `axioms` `\<not> col B C H`] .
 	have "ang_eq A H C H C B" using equalanglestransitive[OF `axioms` `ang_eq A H C B C H` `ang_eq B C H H C B`] .
-	have "col C m H" using col_b `axioms` `bet C m H \<and> seg_eq m H m C` by blast
+	have "col C m H" using collinear_b `axioms` `bet C m H \<and> seg_eq m H m C` by blast
 	have "col H C m" using collinearorder[OF `axioms` `col C m H`] by blast
 	have "col H m C" using collinearorder[OF `axioms` `col C m H`] by blast
 	have "H = H" using equalityreflexiveE[OF `axioms`] .
-	have "col H m H" using col_b `axioms` `H = H` by blast
+	have "col H m H" using collinear_b `axioms` `H = H` by blast
 	have "\<not> col H m A" using `\<not> col H m A` .
 	have "H \<noteq> C" using betweennotequal[OF `axioms` `bet H m C`] by blast
 	have "\<not> col H C A" using NChelper[OF `axioms` `\<not> col H m A` `col H m H` `col H m C` `H \<noteq> C`] .
-	have "oppo_side A H C B" sorry
+	have "oppo_side A H C B" using oppositeside_b[OF `axioms` `bet A m B` `col H C m` `\<not> col H C A`] .
 	have "parallel A H C B" using Prop27B[OF `axioms` `ang_eq A H C H C B` `oppo_side A H C B`] .
-	have "col H A E" using col_b `axioms` `bet B M E \<and> bet H A E` by blast
+	have "col H A E" using collinear_b `axioms` `bet B M E \<and> bet H A E` by blast
 	have "col A H E" using collinearorder[OF `axioms` `col H A E`] by blast
-	have "col A H A" using col_b `axioms` `A = A` by blast
+	have "col A H A" using collinear_b `axioms` `A = A` by blast
 	have "A \<noteq> E" using betweennotequal[OF `axioms` `bet H A E`] by blast
 	have "parallel C B A H" using parallelsymmetric[OF `axioms` `parallel A H C B`] .
 	have "parallel C B A E" using collinearparallel2[OF `axioms` `parallel C B A H` `col A H A` `col A H E` `A \<noteq> E`] .
@@ -136,7 +136,7 @@ proof -
 		hence "parallel A D B C" by blast
 	next
 		case 2
-		have "parallel A D B C" sorry
+		have "parallel A D B C" using `parallel A E B C` `D = E` by blast
 	next
 		case 3
 		have "parallel A D B C"

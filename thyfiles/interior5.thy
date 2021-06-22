@@ -21,9 +21,9 @@ proof -
 		show "False" using `A = C` `A \<noteq> C` by blast
 	qed
 	hence "C \<noteq> A" by blast
-	obtain M where "bet C A M \<and> seg_eq A M B C" using extensionE[OF `axioms` `C \<noteq> A` `B \<noteq> C`]  by  blast
+	obtain M where "bet C A M \<and> seg_eq A M B C" using extensionE[OF `axioms` `C \<noteq> A` `B \<noteq> C`] by blast
 	have "seg_eq A M B C" using `bet C A M \<and> seg_eq A M B C` by blast
-	have "seg_eq A M M A" using equalityreverseE[OF `axioms`] .
+	have "seg_eq A M M A" using equalityreverseE[OF `axioms`] by blast
 	have "seg_eq M A A M" using congruencesymmetric[OF `axioms` `seg_eq A M M A`] .
 	have "seg_eq M A B C" using congruencetransitive[OF `axioms` `seg_eq M A A M` `seg_eq A M B C`] .
 	have "seg_eq B C b c" using `seg_eq B C b c` .
@@ -37,10 +37,10 @@ proof -
 		show "False" using `a = c` `a \<noteq> c` by blast
 	qed
 	hence "c \<noteq> a" by blast
-	obtain m where "bet c a m \<and> seg_eq a m b c" using extensionE[OF `axioms` `c \<noteq> a` `b \<noteq> c`]  by  blast
+	obtain m where "bet c a m \<and> seg_eq a m b c" using extensionE[OF `axioms` `c \<noteq> a` `b \<noteq> c`] by blast
 	have "bet c a m" using `bet c a m \<and> seg_eq a m b c` by blast
 	have "seg_eq a m b c" using `bet c a m \<and> seg_eq a m b c` by blast
-	have "seg_eq m a a m" using equalityreverseE[OF `axioms`] .
+	have "seg_eq m a a m" using equalityreverseE[OF `axioms`] by blast
 	have "seg_eq m a b c" using congruencetransitive[OF `axioms` `seg_eq m a a m` `seg_eq a m b c`] .
 	have "seg_eq M A B C" using `seg_eq M A B C` .
 	have "seg_eq B C b c" using `seg_eq B C b c` .

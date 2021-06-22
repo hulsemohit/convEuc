@@ -7,7 +7,7 @@ theorem ray2:
 		"ray_on A B C"
 	shows: "A \<noteq> B"
 proof -
-	obtain E where "bet E A C \<and> bet E A B" sorry
+	obtain E where "bet E A C \<and> bet E A B" using ray_f[OF `axioms` `ray_on A B C`] by blast
 	have "bet E A B" using `bet E A C \<and> bet E A B` by blast
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet E A B`] by blast
 	thus ?thesis by blast
