@@ -1,14 +1,14 @@
 theory collinearparallel2
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct collinear4 collinearorder collinearparallel inequalitysymmetric parallelNC parallelflip
 begin
 
 theorem collinearparallel2:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B C D"
 		"col C D E"
 		"col C D F"
 		"E \<noteq> F"
-	shows: "parallel A B E F"
+	shows "parallel A B E F"
 proof -
 	have "F \<noteq> E" using inequalitysymmetric[OF `axioms` `E \<noteq> F`] .
 	have "\<not> col A C D" using parallelNC[OF `axioms` `parallel A B C D`] by blast
@@ -18,9 +18,9 @@ proof -
 	have "col D C F" using collinearorder[OF `axioms` `col C D F`] by blast
 	have "col C E F" using collinear4[OF `axioms` `col D C E` `col D C F` `D \<noteq> C`] .
 	consider "E = D"|"E \<noteq> D" by blast
-	hence parallel A B E F
+	hence "parallel A B E F"
 	proof (cases)
-		case 1
+		assume "E = D"
 		have "D \<noteq> F" using `E \<noteq> F` `E = D` by blast
 		have "F \<noteq> D" using inequalitysymmetric[OF `axioms` `D \<noteq> F`] .
 		have "parallel A B C D" using `parallel A B C D` .
@@ -29,26 +29,30 @@ proof -
 		have "col C F D" using collinearorder[OF `axioms` `col C D F`] by blast
 		have "col C F E" using collinearorder[OF `axioms` `col C E F`] by blast
 		consider "C = F"|"C \<noteq> F" by blast
-		hence col F D E
+		hence "col F D E"
 		proof (cases)
-			case 1
+			assume "C = F"
 			have "col C D E" using collinearorder[OF `axioms` `col D C E`] by blast
 			have "col F D E" using `col C D E` `C = F` by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "C \<noteq> F"
 			have "col F D E" using collinear4[OF `axioms` `col C F D` `col C F E` `C \<noteq> F`] .
-		next
+			thus ?thesis by blast
+		qed
 		have "col D F E" using collinearorder[OF `axioms` `col F D E`] by blast
 		have "parallel A B E F" using collinearparallel[OF `axioms` `parallel A B D F` `col D F E` `E \<noteq> F`] .
+		thus ?thesis by blast
 	next
-		case 2
+		assume "E \<noteq> D"
 		have "parallel A B C D" using `parallel A B C D` .
 		have "parallel A B E D" using collinearparallel[OF `axioms` `parallel A B C D` `col C D E` `E \<noteq> D`] .
 		have "parallel A B D E" using parallelflip[OF `axioms` `parallel A B E D`] by blast
 		have "col D E F" using collinear4[OF `axioms` `col C D E` `col C D F` `C \<noteq> D`] .
 		have "parallel A B F E" using collinearparallel[OF `axioms` `parallel A B D E` `col D E F` `F \<noteq> E`] .
 		have "parallel A B E F" using parallelflip[OF `axioms` `parallel A B F E`] by blast
-	next
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

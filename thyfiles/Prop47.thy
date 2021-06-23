@@ -1,9 +1,9 @@
 theory Prop47
-	imports Axioms Definitions Theorems
+	imports n8_2 Geometry NCorder Prop47B betweennotequal collinear4 collinearorder collinearright droppedperpendicularunique equalitysymmetric inequalitysymmetric oppositesideflip paralleldef2B planeseparation squareflip squareparallelogram
 begin
 
 theorem Prop47:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"ang_right B A C"
 		"square A B F G"
@@ -12,9 +12,9 @@ theorem Prop47:
 		"oppo_side H C A B"
 		"square B C E D"
 		"oppo_side D C B A"
-	shows: "\<exists> L M. parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> qua_eq_area A B F G B M L D \<and> qua_eq_area A C K H M C E L"
+	shows "\<exists> L M. parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> qua_eq_area A B F G B M L D \<and> qua_eq_area A C K H M C E L"
 proof -
-	obtain L M where "parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A \<and> qua_eq_area A B F G B M L D" using Prop47B[OF `axioms` `triangle A B C` `ang_right B A C` `square A B F G` `oppo_side G B A C` `square B C E D` `oppo_side D C B A`] by blast
+	obtain L M where "parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A \<and> qua_eq_area A B F G B M L D" using Prop47B[OF `axioms` `triangle A B C` `ang_right B A C` `square A B F G` `oppo_side G B A C` `square B C E D` `oppo_side D C B A`]  by  blast
 	have "parallelogram B M L D" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A \<and> qua_eq_area A B F G B M L D` by blast
 	have "bet B M C" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A \<and> qua_eq_area A B F G B M L D` by blast
 	have "parallelogram M C E L" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A \<and> qua_eq_area A B F G B M L D` by blast
@@ -33,7 +33,7 @@ proof -
 	have "same_side E D B C" using tarski_parallel_f[OF `axioms` `tarski_parallel B C E D`] by blast
 	have "oppo_side E B C A" using planeseparation[OF `axioms` `same_side E D B C` `oppo_side D B C A`] .
 	have "triangle A C B \<and> ang_right C A B \<and> square A C K H \<and> oppo_side H C A B \<and> square A B F G \<and> oppo_side G B A C \<and> square C B D E \<and> oppo_side E B C A" using `triangle A C B` `ang_right C A B` `square A C K H` `oppo_side H C A B` `square A B F G` `oppo_side G B A C` `square C B D E` `oppo_side E B C A` by blast
-	obtain l m where "parallelogram C m l E \<and> bet C m B \<and> parallelogram m B D l \<and> bet E l D \<and> bet l m A \<and> ang_right E l A \<and> qua_eq_area A C K H C m l E" using Prop47B[OF `axioms` `triangle A C B` `ang_right C A B` `square A C K H` `oppo_side H C A B` `square C B D E` `oppo_side E B C A`] by blast
+	obtain l m where "parallelogram C m l E \<and> bet C m B \<and> parallelogram m B D l \<and> bet E l D \<and> bet l m A \<and> ang_right E l A \<and> qua_eq_area A C K H C m l E" using Prop47B[OF `axioms` `triangle A C B` `ang_right C A B` `square A C K H` `oppo_side H C A B` `square C B D E` `oppo_side E B C A`]  by  blast
 	have "bet E l D" using `parallelogram C m l E \<and> bet C m B \<and> parallelogram m B D l \<and> bet E l D \<and> bet l m A \<and> ang_right E l A \<and> qua_eq_area A C K H C m l E` by blast
 	have "bet l m A" using `parallelogram C m l E \<and> bet C m B \<and> parallelogram m B D l \<and> bet E l D \<and> bet l m A \<and> ang_right E l A \<and> qua_eq_area A C K H C m l E` by blast
 	have "qua_eq_area A C K H C m l E" using `parallelogram C m l E \<and> bet C m B \<and> parallelogram m B D l \<and> bet E l D \<and> bet l m A \<and> ang_right E l A \<and> qua_eq_area A C K H C m l E` by blast
@@ -70,7 +70,8 @@ proof -
 	have "col M m B" using collinearorder[OF `axioms` `col B M m`] by blast
 	have "\<not> (M \<noteq> m)"
 	proof (rule ccontr)
-		assume "M \<noteq> m"
+		assume "\<not> (\<not> (M \<noteq> m))"
+hence "M \<noteq> m" by blast
 		have "col m M A" using collinearorder[OF `axioms` `col A m M`] by blast
 		have "col m M B" using collinearorder[OF `axioms` `col B M m`] by blast
 		have "m \<noteq> M" using inequalitysymmetric[OF `axioms` `M \<noteq> m`] .

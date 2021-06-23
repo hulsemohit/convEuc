@@ -1,11 +1,11 @@
 theory squarerectangle
-	imports Axioms Definitions Theorems
+	imports Geometry PGrectangle squareparallelogram
 begin
 
 theorem squarerectangle:
-	assumes: `axioms`
+	assumes "axioms"
 		"square A B C D"
-	shows: "rectangle A B C D"
+	shows "rectangle A B C D"
 proof -
 	have "parallelogram A B C D" using squareparallelogram[OF `axioms` `square A B C D`] .
 	have "ang_right D A B" using square_f[OF `axioms` `square A B C D`] by blast

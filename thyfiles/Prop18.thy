@@ -1,17 +1,18 @@
 theory Prop18
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry Prop03 Prop05 Prop16 angleorderrespectscongruence angleorderrespectscongruence2 angleordertransitive betweennotequal collinear4 collinearorder equalangleshelper equalanglesreflexive equalanglessymmetric inequalitysymmetric ray4
 begin
 
 theorem Prop18:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"seg_lt A B A C"
-	shows: "ang_lt B C A A B C"
+	shows "ang_lt B C A A B C"
 proof -
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -19,18 +20,20 @@ proof -
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
 	have "\<not> (A = C)"
 	proof (rule ccontr)
-		assume "A = C"
+		assume "\<not> (A \<noteq> C)"
+		hence "A = C" by blast
 		have "col A B C" using collinear_b `axioms` `A = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "A \<noteq> C" by blast
 	have "C \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> C`] .
-	have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] by blast
-	obtain D where "bet A D C \<and> seg_eq A D A B" using Prop03[OF `axioms` `seg_lt A B A C` `seg_eq A C A C`] by blast
+	have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] .
+	obtain D where "bet A D C \<and> seg_eq A D A B" using Prop03[OF `axioms` `seg_lt A B A C` `seg_eq A C A C`]  by  blast
 	have "bet A D C" using `bet A D C \<and> seg_eq A D A B` by blast
 	have "\<not> (col B C D)"
 	proof (rule ccontr)
-		assume "col B C D"
+		assume "\<not> (\<not> (col B C D))"
+hence "col B C D" by blast
 		have "col D C B" using collinearorder[OF `axioms` `col B C D`] by blast
 		have "col A D C" using collinear_b `axioms` `bet A D C \<and> seg_eq A D A B` by blast
 		have "col D C A" using collinearorder[OF `axioms` `col A D C`] by blast
@@ -45,7 +48,8 @@ proof -
 	have "ang_lt D C B B D A" using Prop16[OF `axioms` `triangle B C D` `bet C D A`] by blast
 	have "\<not> (B = C)"
 	proof (rule ccontr)
-		assume "B = C"
+		assume "\<not> (B \<noteq> C)"
+		hence "B = C" by blast
 		have "col B C D" using collinear_b `axioms` `B = C` by blast
 		show "False" using `col B C D` `\<not> col B C D` by blast
 	qed
@@ -53,7 +57,8 @@ proof -
 	have "C \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> C`] .
 	have "\<not> (col A D B)"
 	proof (rule ccontr)
-		assume "col A D B"
+		assume "\<not> (\<not> (col A D B))"
+hence "col A D B" by blast
 		have "col A D C" using collinear_b `axioms` `bet A D C \<and> seg_eq A D A B` by blast
 		have "col D A C" using collinearorder[OF `axioms` `col A D C`] by blast
 		have "col D A B" using collinearorder[OF `axioms` `col A D B`] by blast
@@ -73,7 +78,8 @@ proof -
 	have "ray_on C B B" using ray4 `axioms` `B = B` `C \<noteq> B` by blast
 	have "\<not> (col A C B)"
 	proof (rule ccontr)
-		assume "col A C B"
+		assume "\<not> (\<not> (col A C B))"
+hence "col A C B" by blast
 		have "col A B C" using collinearorder[OF `axioms` `col A C B`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -88,7 +94,8 @@ proof -
 	have "ang_lt A C B A B D" using angleorderrespectscongruence[OF `axioms` `ang_lt A C B A D B` `ang_eq A B D A D B`] .
 	have "\<not> (col B C A)"
 	proof (rule ccontr)
-		assume "col B C A"
+		assume "\<not> (\<not> (col B C A))"
+hence "col B C A" by blast
 		have "col A B C" using collinearorder[OF `axioms` `col B C A`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -102,7 +109,8 @@ proof -
 	have "bet A D C" using `bet A D C` .
 	have "\<not> (col A B D)"
 	proof (rule ccontr)
-		assume "col A B D"
+		assume "\<not> (\<not> (col A B D))"
+hence "col A B D" by blast
 		have "col A D B" using collinearorder[OF `axioms` `col A B D`] by blast
 		show "False" using `col A D B` `\<not> col A D B` by blast
 	qed

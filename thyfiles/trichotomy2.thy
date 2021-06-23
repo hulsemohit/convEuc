@@ -1,21 +1,22 @@
 theory trichotomy2
-	imports Axioms Definitions Theorems
+	imports n3_6b Geometry congruencesymmetric lessthancongruence partnotequalwhole
 begin
 
 theorem trichotomy2:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_lt A B C D"
-	shows: "\<not> (seg_lt C D A B)"
+	shows "\<not> (seg_lt C D A B)"
 proof -
-	obtain E where "bet C E D \<and> seg_eq C E A B" using lessthan_f[OF `axioms` `seg_lt A B C D`] by blast
+	obtain E where "bet C E D \<and> seg_eq C E A B" using lessthan_f[OF `axioms` `seg_lt A B C D`]  by  blast
 	have "bet C E D" using `bet C E D \<and> seg_eq C E A B` by blast
 	have "seg_eq C E A B" using `bet C E D \<and> seg_eq C E A B` by blast
 	have "seg_eq A B C E" using congruencesymmetric[OF `axioms` `seg_eq C E A B`] .
 	have "\<not> (seg_lt C D A B)"
 	proof (rule ccontr)
-		assume "seg_lt C D A B"
+		assume "\<not> (\<not> (seg_lt C D A B))"
+hence "seg_lt C D A B" by blast
 		have "seg_lt C D C E" using lessthancongruence[OF `axioms` `seg_lt C D A B` `seg_eq A B C E`] .
-		obtain F where "bet C F E \<and> seg_eq C F C D" using lessthan_f[OF `axioms` `seg_lt C D C E`] by blast
+		obtain F where "bet C F E \<and> seg_eq C F C D" using lessthan_f[OF `axioms` `seg_lt C D C E`]  by  blast
 		have "bet C F E" using `bet C F E \<and> seg_eq C F C D` by blast
 		have "bet C F D" using n3_6b[OF `axioms` `bet C F E` `bet C E D`] .
 		have "\<not> (seg_eq C F C D)" using partnotequalwhole[OF `axioms` `bet C F D`] .

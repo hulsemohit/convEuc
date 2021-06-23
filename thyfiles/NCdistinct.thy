@@ -1,15 +1,16 @@
 theory NCdistinct
-	imports Axioms Definitions Theorems
+	imports Geometry inequalitysymmetric
 begin
 
 theorem NCdistinct:
-	assumes: `axioms`
+	assumes "axioms"
 		"\<not> col A B C"
-	shows: "A \<noteq> B \<and> B \<noteq> C \<and> A \<noteq> C \<and> B \<noteq> A \<and> C \<noteq> B \<and> C \<noteq> A"
+	shows "A \<noteq> B \<and> B \<noteq> C \<and> A \<noteq> C \<and> B \<noteq> A \<and> C \<noteq> B \<and> C \<noteq> A"
 proof -
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -17,7 +18,8 @@ proof -
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
 	have "\<not> (A = C)"
 	proof (rule ccontr)
-		assume "A = C"
+		assume "\<not> (A \<noteq> C)"
+		hence "A = C" by blast
 		have "col A B C" using collinear_b `axioms` `A = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -25,7 +27,8 @@ proof -
 	have "C \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> C`] .
 	have "\<not> (B = C)"
 	proof (rule ccontr)
-		assume "B = C"
+		assume "\<not> (B \<noteq> C)"
+		hence "B = C" by blast
 		have "col A B C" using collinear_b `axioms` `B = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed

@@ -1,15 +1,15 @@
 theory sameside2
-	imports Axioms Definitions Theorems
+	imports n3_6a n3_7a n9_5a n9_5b Geometry betweennotequal collinear4 collinearorder inequalitysymmetric ray1 rayimpliescollinear raystrict
 begin
 
 theorem sameside2:
-	assumes: `axioms`
+	assumes "axioms"
 		"same_side E F A C"
 		"col A B C"
 		"ray_on B F G"
-	shows: "same_side E G A C"
+	shows "same_side E G A C"
 proof -
-	obtain Q U V where "col A C U \<and> col A C V \<and> bet E U Q \<and> bet F V Q \<and> \<not> col A C E \<and> \<not> col A C F" using sameside_f[OF `axioms` `same_side E F A C`] by blast
+	obtain Q U V where "col A C U \<and> col A C V \<and> bet E U Q \<and> bet F V Q \<and> \<not> col A C E \<and> \<not> col A C F" using sameside_f[OF `axioms` `same_side E F A C`]  by  blast
 	have "col A C U" using `col A C U \<and> col A C V \<and> bet E U Q \<and> bet F V Q \<and> \<not> col A C E \<and> \<not> col A C F` by blast
 	have "col A C V" using `col A C U \<and> col A C V \<and> bet E U Q \<and> bet F V Q \<and> \<not> col A C E \<and> \<not> col A C F` by blast
 	have "bet E U Q" using `col A C U \<and> col A C V \<and> bet E U Q \<and> bet F V Q \<and> \<not> col A C E \<and> \<not> col A C F` by blast
@@ -20,7 +20,8 @@ proof -
 	have "col A C B" using collinearorder[OF `axioms` `col A B C`] by blast
 	have "\<not> (A = C)"
 	proof (rule ccontr)
-		assume "A = C"
+		assume "\<not> (A \<noteq> C)"
+		hence "A = C" by blast
 		have "col A C F" using collinear_b `axioms` `A = C` by blast
 		have "\<not> col A C F" using `\<not> col A C F` .
 		show "False" using `\<not> col A C F` `col A C F` by blast
@@ -29,44 +30,52 @@ proof -
 	have "col B F G" using rayimpliescollinear[OF `axioms` `ray_on B F G`] .
 	have "col B G F" using collinearorder[OF `axioms` `col B F G`] by blast
 	have "col A C B" using collinearorder[OF `axioms` `col A B C`] by blast
-	have "oppo_side G A C Q"
+	have "\<not> (\<not> (oppo_side G A C Q))"
 	proof (rule ccontr)
-		assume "\<not> (oppo_side G A C Q)"
+		assume "\<not> (\<not> (\<not> (oppo_side G A C Q)))"
+hence "\<not> (oppo_side G A C Q)" by blast
 		have "\<not> (F = G)"
 		proof (rule ccontr)
-			assume "F = G"
+			assume "\<not> (F \<noteq> G)"
+			hence "F = G" by blast
 			have "oppo_side G A C Q" using `oppo_side F A C Q` `F = G` by blast
 			show "False" using `oppo_side G A C Q` `\<not> (oppo_side G A C Q)` by blast
 		qed
 		hence "F \<noteq> G" by blast
 		have "\<not> (B = V)"
 		proof (rule ccontr)
-			assume "B = V"
+			assume "\<not> (B \<noteq> V)"
+			hence "B = V" by blast
 			have "bet F B Q" using `bet F V Q` `B = V` by blast
 			have "bet B G F \<or> F = G \<or> bet B F G" using ray1[OF `axioms` `ray_on B F G`] .
 			consider "bet B G F"|"F = G"|"bet B F G" using `bet B G F \<or> F = G \<or> bet B F G`  by blast
-			hence bet G B Q
+			hence "bet G B Q"
 			proof (cases)
-				case 1
+				assume "bet B G F"
 				have "bet F G B" using betweennesssymmetryE[OF `axioms` `bet B G F`] .
 				have "bet G B Q" using n3_6a[OF `axioms` `bet F G B` `bet F B Q`] .
+				thus ?thesis by blast
 			next
-				case 2
-				have "bet G B Q"
+				assume "F = G"
+				have "\<not> (\<not> (bet G B Q))"
 				proof (rule ccontr)
-					assume "\<not> (bet G B Q)"
+					assume "\<not> (\<not> (\<not> (bet G B Q)))"
+hence "\<not> (bet G B Q)" by blast
 					have "F \<noteq> G" using `F \<noteq> G` .
 					show "False" using `F \<noteq> G` `F = G` by blast
 				qed
 				hence "bet G B Q" by blast
+				thus ?thesis by blast
 			next
-				case 3
+				assume "bet B F G"
 				have "bet G F B" using betweennesssymmetryE[OF `axioms` `bet B F G`] .
 				have "bet G B Q" using n3_7a[OF `axioms` `bet G F B` `bet F B Q`] .
-			next
+				thus ?thesis by blast
+			qed
 			have "\<not> (col A C G)"
 			proof (rule ccontr)
-				assume "col A C G"
+				assume "\<not> (\<not> (col A C G))"
+hence "col A C G" by blast
 				have "col A C B" using collinearorder[OF `axioms` `col A B C`] by blast
 				have "col C G B" using collinear4[OF `axioms` `col A C G` `col A C B` `A \<noteq> C`] .
 				have "col G B C" using collinearorder[OF `axioms` `col C G B`] by blast
@@ -76,7 +85,8 @@ proof -
 				have "col B C F" using collinear4[OF `axioms` `col G B C` `col G B F` `G \<noteq> B`] .
 				have "\<not> (B \<noteq> C)"
 				proof (rule ccontr)
-					assume "B \<noteq> C"
+					assume "\<not> (\<not> (B \<noteq> C))"
+hence "B \<noteq> C" by blast
 					have "col B C A" using collinearorder[OF `axioms` `col A B C`] by blast
 					have "col C F A" using collinear4[OF `axioms` `col B C F` `col B C A` `B \<noteq> C`] .
 					have "col A C F" using collinearorder[OF `axioms` `col C F A`] by blast
@@ -99,7 +109,8 @@ proof -
 		hence "B \<noteq> V" by blast
 		have "\<not> (col Q F B)"
 		proof (rule ccontr)
-			assume "col Q F B"
+			assume "\<not> (\<not> (col Q F B))"
+hence "col Q F B" by blast
 			have "col F V Q" using collinear_b `axioms` `col A C U \<and> col A C V \<and> bet E U Q \<and> bet F V Q \<and> \<not> col A C E \<and> \<not> col A C F` by blast
 			have "col Q F V" using collinearorder[OF `axioms` `col F V Q`] by blast
 			have "F \<noteq> Q" using betweennotequal[OF `axioms` `bet F V Q`] by blast
@@ -114,7 +125,8 @@ proof -
 			have "col V C A" using collinearorder[OF `axioms` `col A C V`] by blast
 			have "\<not> (V \<noteq> C)"
 			proof (rule ccontr)
-				assume "V \<noteq> C"
+				assume "\<not> (\<not> (V \<noteq> C))"
+hence "V \<noteq> C" by blast
 				have "col C F A" using collinear4[OF `axioms` `col V C F` `col V C A` `V \<noteq> C`] .
 				have "col A C F" using collinearorder[OF `axioms` `col C F A`] by blast
 				have "\<not> col A C F" using `\<not> col A C F` .
@@ -140,18 +152,21 @@ proof -
 		hence "\<not> col Q F B" by blast
 		have "bet B G F \<or> F = G \<or> bet B F G" using ray1[OF `axioms` `ray_on B F G`] .
 		consider "bet B G F"|"F = G"|"bet B F G" using `bet B G F \<or> F = G \<or> bet B F G`  by blast
-		hence oppo_side G A C Q
+		hence "oppo_side G A C Q"
 		proof (cases)
-			case 1
+			assume "bet B G F"
 			have "oppo_side G A C Q" using n9_5b[OF `axioms` `oppo_side F A C Q` `bet B G F` `\<not> col Q F B` `col A C B`] .
+			thus ?thesis by blast
 		next
-			case 2
+			assume "F = G"
 			have "oppo_side G A C Q" using `oppo_side F A C Q` `F = G` by blast
+			thus ?thesis by blast
 		next
-			case 3
+			assume "bet B F G"
 			have "\<not> (col B G Q)"
 			proof (rule ccontr)
-				assume "col B G Q"
+				assume "\<not> (\<not> (col B G Q))"
+hence "col B G Q" by blast
 				have "col G B F" using collinearorder[OF `axioms` `col B F G`] by blast
 				have "B \<noteq> G" using betweennotequal[OF `axioms` `bet B F G`] by blast
 				have "G \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> G`] .
@@ -163,11 +178,12 @@ proof -
 			qed
 			hence "\<not> col B G Q" by blast
 			have "oppo_side G A C Q" using n9_5a[OF `axioms` `oppo_side F A C Q` `bet B F G` `\<not> col B G Q` `col A C B`] .
-		next
+			thus ?thesis by blast
+		qed
 		show "False" using `oppo_side G A C Q` `\<not> (oppo_side G A C Q)` by blast
 	qed
 	hence "oppo_side G A C Q" by blast
-	obtain H where "bet G H Q \<and> col A C H \<and> \<not> col A C G" using oppositeside_f[OF `axioms` `oppo_side G A C Q`] by blast
+	obtain H where "bet G H Q \<and> col A C H \<and> \<not> col A C G" using oppositeside_f[OF `axioms` `oppo_side G A C Q`]  by  blast
 	have "\<not> col A C G" using `bet G H Q \<and> col A C H \<and> \<not> col A C G` by blast
 	have "bet G H Q" using `bet G H Q \<and> col A C H \<and> \<not> col A C G` by blast
 	have "col A C H" using `bet G H Q \<and> col A C H \<and> \<not> col A C G` by blast

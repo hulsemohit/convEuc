@@ -1,23 +1,24 @@
 theory Prop31
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry NChelper NCorder Prop10 Prop27 betweennesspreserved betweennotequal collinearorder congruenceflip congruencesymmetric equalanglessymmetric equalanglestransitive inequalitysymmetric oppositesidesymmetric parallelflip pointreflectionisometry ray4
 begin
 
 theorem Prop31:
-	assumes: `axioms`
+	assumes "axioms"
 		"bet B D C"
 		"\<not> col B C A"
-	shows: "\<exists> E F M. bet E A F \<and> ang_eq F A D A D B \<and> ang_eq F A D B D A \<and> ang_eq D A F B D A \<and> ang_eq E A D A D C \<and> ang_eq E A D C D A \<and> ang_eq D A E C D A \<and> parallel E F B C \<and> seg_eq E A D C \<and> seg_eq A F B D \<and> seg_eq A M M D \<and> seg_eq E M M C \<and> seg_eq B M M F \<and> bet E M C \<and> bet B M F \<and> bet A M D"
+	shows "\<exists> E F M. bet E A F \<and> ang_eq F A D A D B \<and> ang_eq F A D B D A \<and> ang_eq D A F B D A \<and> ang_eq E A D A D C \<and> ang_eq E A D C D A \<and> ang_eq D A E C D A \<and> parallel E F B C \<and> seg_eq E A D C \<and> seg_eq A F B D \<and> seg_eq A M M D \<and> seg_eq E M M C \<and> seg_eq B M M F \<and> bet E M C \<and> bet B M F \<and> bet A M D"
 proof -
 	have "col B D C" using collinear_b `axioms` `bet B D C` by blast
 	have "\<not> (A = D)"
 	proof (rule ccontr)
-		assume "A = D"
+		assume "\<not> (A \<noteq> D)"
+		hence "A = D" by blast
 		have "col B A C" using `col B D C` `A = D` by blast
 		have "col B C A" using collinearorder[OF `axioms` `col B A C`] by blast
 		show "False" using `col B C A` `\<not> col B C A` by blast
 	qed
 	hence "A \<noteq> D" by blast
-	obtain M where "bet A M D \<and> seg_eq M A M D" using Prop10[OF `axioms` `A \<noteq> D`] by blast
+	obtain M where "bet A M D \<and> seg_eq M A M D" using Prop10[OF `axioms` `A \<noteq> D`]  by  blast
 	have "bet A M D" using `bet A M D \<and> seg_eq M A M D` by blast
 	have "seg_eq M A M D" using `bet A M D \<and> seg_eq M A M D` by blast
 	have "seg_eq A M M D" using congruenceflip[OF `axioms` `seg_eq M A M D`] by blast
@@ -42,14 +43,15 @@ proof -
 	have "\<not> col A M C" using NChelper[OF `axioms` `\<not> col A D C` `col A D A` `col A D M` `A \<noteq> M`] .
 	have "\<not> (C = M)"
 	proof (rule ccontr)
-		assume "C = M"
+		assume "\<not> (C \<noteq> M)"
+		hence "C = M" by blast
 		have "col A C M" using collinear_b `axioms` `C = M` by blast
 		have "col A M C" using collinearorder[OF `axioms` `col A C M`] by blast
 		show "False" using `col A M C` `\<not> col A M C` by blast
 	qed
 	hence "C \<noteq> M" by blast
 	have "M \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> M`] .
-	obtain E where "bet C M E \<and> seg_eq M E M C" using extensionE[OF `axioms` `C \<noteq> M` `M \<noteq> C`] by blast
+	obtain E where "bet C M E \<and> seg_eq M E M C" using extensionE[OF `axioms` `C \<noteq> M` `M \<noteq> C`]  by  blast
 	have "bet C M E" using `bet C M E \<and> seg_eq M E M C` by blast
 	have "seg_eq M E M C" using `bet C M E \<and> seg_eq M E M C` by blast
 	have "seg_eq M C M E" using congruencesymmetric[OF `axioms` `seg_eq M E M C`] .
@@ -60,14 +62,15 @@ proof -
 	have "\<not> col A M B" using NChelper[OF `axioms` `\<not> col A D B` `col A D A` `col A D M` `A \<noteq> M`] .
 	have "\<not> (B = M)"
 	proof (rule ccontr)
-		assume "B = M"
+		assume "\<not> (B \<noteq> M)"
+		hence "B = M" by blast
 		have "col A B M" using collinear_b `axioms` `B = M` by blast
 		have "col A M B" using collinearorder[OF `axioms` `col A B M`] by blast
 		show "False" using `col A M B` `\<not> col A M B` by blast
 	qed
 	hence "B \<noteq> M" by blast
 	have "M \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> M`] .
-	obtain F where "bet B M F \<and> seg_eq M F M B" using extensionE[OF `axioms` `B \<noteq> M` `M \<noteq> B`] by blast
+	obtain F where "bet B M F \<and> seg_eq M F M B" using extensionE[OF `axioms` `B \<noteq> M` `M \<noteq> B`]  by  blast
 	have "bet B M F" using `bet B M F \<and> seg_eq M F M B` by blast
 	have "seg_eq M F M B" using `bet B M F \<and> seg_eq M F M B` by blast
 	have "seg_eq M F B M" using congruenceflip[OF `axioms` `seg_eq M F M B`] by blast
@@ -118,7 +121,7 @@ proof -
 	have "ray_on D B B" using `ray_on D B B` .
 	have "ray_on D A A" using `ray_on D A A` .
 	have "seg_eq A F D B" using congruencesymmetric[OF `axioms` `seg_eq D B A F`] .
-	have "seg_eq A D D A" using equalityreverseE[OF `axioms`] by blast
+	have "seg_eq A D D A" using equalityreverseE[OF `axioms`] .
 	have "ang_eq F A D B D A" using equalangles_b[OF `axioms` `ray_on A F F` `ray_on A D D` `ray_on D B B` `ray_on D A A` `seg_eq A F D B` `seg_eq A D D A` `seg_eq F D B A` `\<not> col F A D`] .
 	have "\<not> col B D A" using NChelper[OF `axioms` `\<not> col C B A` `col C B B` `col C B D` `B \<noteq> D`] .
 	have "ang_eq B D A A D B" using ABCequalsCBA[OF `axioms` `\<not> col B D A`] .

@@ -1,13 +1,13 @@
 theory TGflip
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal congruencesymmetric congruencetransitive inequalitysymmetric lessthancongruence lessthancongruence2 nullsegment3 sumofparts
 begin
 
 theorem TGflip:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_sum_gt A a B b C c"
-	shows: "seg_sum_gt a A B b C c \<and> seg_sum_gt A a B b c C"
+	shows "seg_sum_gt a A B b C c \<and> seg_sum_gt A a B b c C"
 proof -
-	obtain H where "bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H" using togethergreater_f[OF `axioms` `seg_sum_gt A a B b C c`] by blast
+	obtain H where "bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H" using togethergreater_f[OF `axioms` `seg_sum_gt A a B b C c`]  by  blast
 	have "bet A a H" using `bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H` by blast
 	have "seg_eq a H B b" using `bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H` by blast
 	have "seg_lt C c A H" using `bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H` by blast
@@ -15,8 +15,8 @@ proof -
 	have "a \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> a`] .
 	have "a \<noteq> H" using betweennotequal[OF `axioms` `bet A a H`] by blast
 	have "B \<noteq> b" using nullsegment3[OF `axioms` `a \<noteq> H` `seg_eq a H B b`] .
-	obtain h where "bet a A h \<and> seg_eq A h B b" using extensionE[OF `axioms` `a \<noteq> A` `B \<noteq> b`] by blast
-	have "seg_eq A a a A" using equalityreverseE[OF `axioms`] by blast
+	obtain h where "bet a A h \<and> seg_eq A h B b" using extensionE[OF `axioms` `a \<noteq> A` `B \<noteq> b`]  by  blast
+	have "seg_eq A a a A" using equalityreverseE[OF `axioms`] .
 	have "seg_eq a H B b" using `seg_eq a H B b` .
 	have "seg_eq A h B b" using `bet a A h \<and> seg_eq A h B b` by blast
 	have "seg_eq B b A h" using congruencesymmetric[OF `axioms` `seg_eq A h B b`] .
@@ -26,7 +26,7 @@ proof -
 	have "seg_eq A H a h" using sumofparts[OF `axioms` `seg_eq A a a A` `seg_eq a H A h` `bet A a H` `bet a A h`] .
 	have "seg_lt C c a h" using lessthancongruence[OF `axioms` `seg_lt C c A H` `seg_eq A H a h`] .
 	have "seg_sum_gt a A B b C c" using togethergreater_b[OF `axioms` `bet a A h` `seg_eq A h B b` `seg_lt C c a h`] .
-	have "seg_eq C c c C" using equalityreverseE[OF `axioms`] by blast
+	have "seg_eq C c c C" using equalityreverseE[OF `axioms`] .
 	have "seg_lt c C A H" using lessthancongruence2[OF `axioms` `seg_lt C c A H` `seg_eq C c c C`] .
 	have "seg_sum_gt A a B b c C" using togethergreater_b[OF `axioms` `bet A a H` `seg_eq a H B b` `seg_lt c C A H`] .
 	have "seg_sum_gt a A B b C c \<and> seg_sum_gt A a B b c C" using `seg_sum_gt a A B b C c` `seg_sum_gt A a B b c C` by blast

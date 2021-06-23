@@ -1,9 +1,9 @@
 theory Prop36A
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct PGsymmetric Prop33 Prop34 Prop35 collinear4 collinearorder collinearparallel2 congruencesymmetric congruencetransitive inequalitysymmetric nullsegment3 parallelNC parallelflip parallelsymmetric
 begin
 
 theorem Prop36A:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram A B C D"
 		"parallelogram E F G H"
 		"col A D E"
@@ -13,7 +13,7 @@ theorem Prop36A:
 		"seg_eq B C F G"
 		"bet B M H"
 		"bet C M E"
-	shows: "qua_eq_area A B C D E F G H"
+	shows "qua_eq_area A B C D E F G H"
 proof -
 	have "parallel A B C D \<and> parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] .
 	have "parallel A B C D" using `parallel A B C D \<and> parallel A D B C` by blast

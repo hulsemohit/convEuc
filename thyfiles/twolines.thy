@@ -1,13 +1,13 @@
 theory twolines
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal collinear1 collinear4 collinearorder
 begin
 
 theorem twolines:
-	assumes: `axioms`
+	assumes "axioms"
 		"cuts A B C D E"
 		"cuts A B C D F"
 		"\<not> col B C D"
-	shows: "E = F"
+	shows "E = F"
 proof -
 	have "bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D" using cut_f[OF `axioms` `cuts A B C D E`] .
 	have "bet A E B" using `bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
@@ -44,12 +44,14 @@ proof -
 	have "col E F D" using `col E F D` .
 	have "\<not> (E \<noteq> F)"
 	proof (rule ccontr)
-		assume "E \<noteq> F"
+		assume "\<not> (\<not> (E \<noteq> F))"
+hence "E \<noteq> F" by blast
 		have "col F B C" using collinear4[OF `axioms` `col E F B` `col E F C` `E \<noteq> F`] .
 		have "col F B D" using collinear4[OF `axioms` `col E F B` `col E F D` `E \<noteq> F`] .
 		have "\<not> (F = B)"
 		proof (rule ccontr)
-			assume "F = B"
+			assume "\<not> (F \<noteq> B)"
+			hence "F = B" by blast
 			have "col F C D" using collinear_b `axioms` `bet A F B \<and> bet C F D \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 			have "col B C D" using `col F C D` `F = B` by blast
 			have "\<not> col B C D" using `\<not> col B C D` .

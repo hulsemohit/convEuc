@@ -1,30 +1,33 @@
 theory angledistinct
-	imports Axioms Definitions Theorems
+	imports Geometry equalanglessymmetric
 begin
 
 theorem angledistinct:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_eq A B C a b c"
-	shows: "A \<noteq> B \<and> B \<noteq> C \<and> A \<noteq> C \<and> a \<noteq> b \<and> b \<noteq> c \<and> a \<noteq> c"
+	shows "A \<noteq> B \<and> B \<noteq> C \<and> A \<noteq> C \<and> a \<noteq> b \<and> b \<noteq> c \<and> a \<noteq> c"
 proof -
 	have "\<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C a b c`] by blast
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "A \<noteq> B" by blast
 	have "\<not> (B = C)"
 	proof (rule ccontr)
-		assume "B = C"
+		assume "\<not> (B \<noteq> C)"
+		hence "B = C" by blast
 		have "col A B C" using collinear_b `axioms` `B = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "B \<noteq> C" by blast
 	have "\<not> (A = C)"
 	proof (rule ccontr)
-		assume "A = C"
+		assume "\<not> (A \<noteq> C)"
+		hence "A = C" by blast
 		have "col A B C" using collinear_b `axioms` `A = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -33,21 +36,24 @@ proof -
 	have "\<not> col a b c" using equalangles_f[OF `axioms` `ang_eq a b c A B C`] by blast
 	have "\<not> (a = b)"
 	proof (rule ccontr)
-		assume "a = b"
+		assume "\<not> (a \<noteq> b)"
+		hence "a = b" by blast
 		have "col a b c" using collinear_b `axioms` `a = b` by blast
 		show "False" using `col a b c` `\<not> col a b c` by blast
 	qed
 	hence "a \<noteq> b" by blast
 	have "\<not> (b = c)"
 	proof (rule ccontr)
-		assume "b = c"
+		assume "\<not> (b \<noteq> c)"
+		hence "b = c" by blast
 		have "col a b c" using collinear_b `axioms` `b = c` by blast
 		show "False" using `col a b c` `\<not> col a b c` by blast
 	qed
 	hence "b \<noteq> c" by blast
 	have "\<not> (a = c)"
 	proof (rule ccontr)
-		assume "a = c"
+		assume "\<not> (a \<noteq> c)"
+		hence "a = c" by blast
 		have "col a b c" using collinear_b `axioms` `a = c` by blast
 		show "False" using `col a b c` `\<not> col a b c` by blast
 	qed

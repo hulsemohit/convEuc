@@ -1,15 +1,15 @@
 theory Prop26B
-	imports Axioms Definitions Theorems
+	imports n26helper Geometry Prop04 congruenceflip congruencesymmetric equalanglessymmetric trichotomy1
 begin
 
 theorem Prop26B:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"triangle D E F"
 		"ang_eq A B C D E F"
 		"ang_eq B C A E F D"
 		"seg_eq A B D E"
-	shows: "seg_eq B C E F \<and> seg_eq A C D F \<and> ang_eq B A C E D F"
+	shows "seg_eq B C E F \<and> seg_eq A C D F \<and> ang_eq B A C E D F"
 proof -
 	have "\<not> (seg_lt E F B C)" using n26helper[OF `axioms` `triangle A B C` `ang_eq A B C D E F` `ang_eq B C A E F D` `seg_eq A B D E`] .
 	have "ang_eq D E F A B C" using equalanglessymmetric[OF `axioms` `ang_eq A B C D E F`] .
@@ -18,7 +18,8 @@ proof -
 	have "\<not> (seg_lt B C E F)" using n26helper[OF `axioms` `triangle D E F` `ang_eq D E F A B C` `ang_eq E F D B C A` `seg_eq D E A B`] .
 	have "\<not> (B = C)"
 	proof (rule ccontr)
-		assume "B = C"
+		assume "\<not> (B \<noteq> C)"
+		hence "B = C" by blast
 		have "col A B C" using collinear_b `axioms` `B = C` by blast
 		have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 		show "False" using `\<not> col A B C` `col A B C` by blast
@@ -26,7 +27,8 @@ proof -
 	hence "B \<noteq> C" by blast
 	have "\<not> (E = F)"
 	proof (rule ccontr)
-		assume "E = F"
+		assume "\<not> (E \<noteq> F)"
+		hence "E = F" by blast
 		have "col D E F" using collinear_b `axioms` `E = F` by blast
 		have "\<not> col D E F" using triangle_f[OF `axioms` `triangle D E F`] .
 		show "False" using `\<not> col D E F` `col D E F` by blast

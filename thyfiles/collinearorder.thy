@@ -1,11 +1,11 @@
 theory collinearorder
-	imports Axioms Definitions Theorems
+	imports Geometry collinear1 collinear2
 begin
 
 theorem collinearorder:
-	assumes: `axioms`
+	assumes "axioms"
 		"col A B C"
-	shows: "col B A C \<and> col B C A \<and> col C A B \<and> col A C B \<and> col C B A"
+	shows "col B A C \<and> col B C A \<and> col C A B \<and> col A C B \<and> col C B A"
 proof -
 	have "col B C A" using collinear2[OF `axioms` `col A B C`] .
 	have "col C A B" using collinear2[OF `axioms` `col B C A`] .

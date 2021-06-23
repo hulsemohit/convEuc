@@ -1,9 +1,9 @@
 theory Prop30
-	imports Axioms Definitions Theorems
+	imports n30helper Geometry NCdistinct NChelper NCorder Prop30A betweennotequal collinear4 collinearbetween collinearorder collinearparallel crossimpliesopposite inequalitysymmetric oppositesidesymmetric parallelNC paralleldef2B parallelflip parallelsymmetric planeseparation samesidesymmetric
 begin
 
 theorem Prop30:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B E F"
 		"parallel C D E F"
 		"bet G H K"
@@ -13,11 +13,11 @@ theorem Prop30:
 		"A \<noteq> G"
 		"E \<noteq> H"
 		"C \<noteq> K"
-	shows: "parallel A B C D"
+	shows "parallel A B C D"
 proof -
-	obtain b where "bet A G b \<and> seg_eq G b A G" using extensionE[OF `axioms` `A \<noteq> G` `A \<noteq> G`] by blast
-	obtain f where "bet E H f \<and> seg_eq H f E H" using extensionE[OF `axioms` `E \<noteq> H` `E \<noteq> H`] by blast
-	obtain d where "bet C K d \<and> seg_eq K d C K" using extensionE[OF `axioms` `C \<noteq> K` `C \<noteq> K`] by blast
+	obtain b where "bet A G b \<and> seg_eq G b A G" using extensionE[OF `axioms` `A \<noteq> G` `A \<noteq> G`]  by  blast
+	obtain f where "bet E H f \<and> seg_eq H f E H" using extensionE[OF `axioms` `E \<noteq> H` `E \<noteq> H`]  by  blast
+	obtain d where "bet C K d \<and> seg_eq K d C K" using extensionE[OF `axioms` `C \<noteq> K` `C \<noteq> K`]  by  blast
 	have "bet A G b" using `bet A G b \<and> seg_eq G b A G` by blast
 	have "bet E H f" using `bet E H f \<and> seg_eq H f E H` by blast
 	have "bet C K d" using `bet C K d \<and> seg_eq K d C K` by blast
@@ -96,7 +96,7 @@ proof -
 	have "bet K H G" using betweennesssymmetryE[OF `axioms` `bet G H K`] .
 	have "oppo_side K E H G" using oppositeside_b[OF `axioms` `bet K H G` `col E H H` `\<not> col E H K`] .
 	have "oppo_side C E H G" using planeseparation[OF `axioms` `same_side C K E H` `oppo_side K E H G`] .
-	obtain Q where "bet C Q G \<and> col E H Q \<and> \<not> col E H C" using oppositeside_f[OF `axioms` `oppo_side C E H G`] by blast
+	obtain Q where "bet C Q G \<and> col E H Q \<and> \<not> col E H C" using oppositeside_f[OF `axioms` `oppo_side C E H G`]  by  blast
 	have "bet C Q G" using `bet C Q G \<and> col E H Q \<and> \<not> col E H C` by blast
 	have "col E H Q" using `bet C Q G \<and> col E H Q \<and> \<not> col E H C` by blast
 	have "parallel C d E f" using `parallel C d E f` .
@@ -112,11 +112,12 @@ proof -
 	have "\<not> col E f C" using NCorder[OF `axioms` `\<not> col C E f`] by blast
 	have "oppo_side C E f G" using oppositeside_b[OF `axioms` `bet C Q G` `col E f Q` `\<not> col E f C`] .
 	have "oppo_side d E f G" using planeseparation[OF `axioms` `same_side d C E f` `oppo_side C E f G`] .
-	obtain P where "bet d P G \<and> col E f P \<and> \<not> col E f d" using oppositeside_f[OF `axioms` `oppo_side d E f G`] by blast
+	obtain P where "bet d P G \<and> col E f P \<and> \<not> col E f d" using oppositeside_f[OF `axioms` `oppo_side d E f G`]  by  blast
 	have "bet d P G" using `bet d P G \<and> col E f P \<and> \<not> col E f d` by blast
-	have "cross A f G H \<or> cross A E G H"
+	have "\<not> (\<not> (cross A f G H \<or> cross A E G H))"
 	proof (rule ccontr)
-		assume "\<not> (cross A f G H \<or> cross A E G H)"
+		assume "\<not> (\<not> (\<not> (cross A f G H \<or> cross A E G H)))"
+hence "\<not> (cross A f G H \<or> cross A E G H)" by blast
 		have "\<not> (cross A f G H) \<and> \<not> (cross A E G H)" using `\<not> (cross A f G H \<or> cross A E G H)` by blast
 		have "\<not> (cross A f G H)" using `\<not> (cross A f G H) \<and> \<not> (cross A E G H)` by blast
 		have "\<not> (cross A E G H)" using `\<not> (cross A f G H) \<and> \<not> (cross A E G H)` by blast
@@ -124,9 +125,10 @@ proof -
 		show "False" using `cross A E G H` `\<not> (cross A f G H) \<and> \<not> (cross A E G H)` by blast
 	qed
 	hence "cross A f G H \<or> cross A E G H" by blast
-	have "cross C f K H \<or> cross C E K H"
+	have "\<not> (\<not> (cross C f K H \<or> cross C E K H))"
 	proof (rule ccontr)
-		assume "\<not> (cross C f K H \<or> cross C E K H)"
+		assume "\<not> (\<not> (\<not> (cross C f K H \<or> cross C E K H)))"
+hence "\<not> (cross C f K H \<or> cross C E K H)" by blast
 		have "\<not> (cross C f K H) \<and> \<not> (cross C E K H)" using `\<not> (cross C f K H \<or> cross C E K H)` by blast
 		have "\<not> (cross C f K H)" using `\<not> (cross C f K H) \<and> \<not> (cross C E K H)` by blast
 		have "\<not> (cross C E K H)" using `\<not> (cross C f K H) \<and> \<not> (cross C E K H)` by blast
@@ -167,20 +169,21 @@ proof -
 	have "\<not> col f H K" using NChelper[OF `axioms` `\<not> col E H K` `col E H f` `col E H H` `f \<noteq> H`] .
 	have "\<not> col K H f" using NCorder[OF `axioms` `\<not> col f H K`] by blast
 	have "col K H H" using collinear_b `axioms` `H = H` by blast
-	consider "cross A f G H"|"cross A E G H" using `cross A f G H \<or> cross A E G H`  by blast
-	hence parallel A b C d
+	consider "cross A f G H"|"cross A E G H" using `\<not> (\<not> (cross A f G H \<or> cross A E G H))`  by blast
+	hence "parallel A b C d"
 	proof (cases)
-		case 1
+		assume "cross A f G H"
 		have "oppo_side A G H f" using crossimpliesopposite[OF `axioms` `cross A f G H` `\<not> col A G H`] by blast
-		consider "cross C f K H"|"cross C E K H" using `cross C f K H \<or> cross C E K H`  by blast
-		hence parallel A b C d
+		consider "cross C f K H"|"cross C E K H" using `\<not> (\<not> (cross C f K H \<or> cross C E K H))`  by blast
+		hence "parallel A b C d"
 		proof (cases)
-			case 1
+			assume "cross C f K H"
 			have "oppo_side f H K C" using crossimpliesopposite[OF `axioms` `cross C f K H` `\<not> col C K H`] by blast
 			have "parallel A b C d" using Prop30A[OF `axioms` `parallel A b E f` `parallel C d E f` `bet G H K` `bet A G b` `bet E H f` `bet C K d` `oppo_side A G H f` `oppo_side f H K C`] .
+			thus ?thesis by blast
 		next
-			case 2
-			obtain M where "bet C M E \<and> bet K M H" using cross_f[OF `axioms` `cross C E K H`] by blast
+			assume "cross C E K H"
+			obtain M where "bet C M E \<and> bet K M H" using cross_f[OF `axioms` `cross C E K H`]  by  blast
 			have "bet C M E" using `bet C M E \<and> bet K M H` by blast
 			have "bet K M H" using `bet C M E \<and> bet K M H` by blast
 			have "col K M H" using collinear_b `axioms` `bet C M E \<and> bet K M H` by blast
@@ -193,11 +196,11 @@ proof -
 			have "bet C K d \<and> col K H K \<and> \<not> col K H C" using `bet C K d \<and> seg_eq K d C K` `col K H K` `col K H M \<and> col K H H \<and> col K H M \<and> bet f H E \<and> bet C M E \<and> \<not> col K H f \<and> \<not> col K H C` by blast
 			have "oppo_side C K H d" using oppositeside_b[OF `axioms` `bet C K d` `col K H K` `\<not> col K H C`] .
 			have "oppo_side f K H d" using planeseparation[OF `axioms` `same_side f C K H` `oppo_side C K H d`] .
-			obtain m where "bet f m d \<and> col K H m \<and> \<not> col K H f" using oppositeside_f[OF `axioms` `oppo_side f K H d`] by blast
+			obtain m where "bet f m d \<and> col K H m \<and> \<not> col K H f" using oppositeside_f[OF `axioms` `oppo_side f K H d`]  by  blast
 			have "bet f m d" using `bet f m d \<and> col K H m \<and> \<not> col K H f` by blast
 			have "col K H m" using `bet f m d \<and> col K H m \<and> \<not> col K H f` by blast
 			have "parallel f E C d" using parallelsymmetric[OF `axioms` `parallel C d f E`] .
-			have "\<not> (meets f E C d)" using parallel_f[OF `axioms` `parallel f E C d`] by blast
+			have "\<not> (meets f E C d)" using parallel_f[OF `axioms` `parallel f E C d`] by fastforce
 			have "C \<noteq> d" using `C \<noteq> d` .
 			have "col f H E" using collinearorder[OF `axioms` `col E H f`] by blast
 			have "col C K d" using `col C K d` .
@@ -223,14 +226,16 @@ proof -
 			have "oppo_side A G H f" using `oppo_side A G H f` .
 			have "parallel A b d C" using Prop30A[OF `axioms` `parallel A b E f` `parallel d C E f` `bet G H K` `bet A G b` `bet E H f` `bet d K C` `oppo_side A G H f` `oppo_side f H K d`] .
 			have "parallel A b C d" using parallelflip[OF `axioms` `parallel A b d C`] by blast
-		next
+			thus ?thesis by blast
+		qed
+		thus ?thesis by blast
 	next
-		case 2
-		consider "cross C f K H"|"cross C E K H" using `cross C f K H \<or> cross C E K H`  by blast
-		hence parallel A b C d
+		assume "cross A E G H"
+		consider "cross C f K H"|"cross C E K H" using `\<not> (\<not> (cross C f K H \<or> cross C E K H))`  by blast
+		hence "parallel A b C d"
 		proof (cases)
-			case 1
-			obtain M where "bet C M f \<and> bet K M H" using cross_f[OF `axioms` `cross C f K H`] by blast
+			assume "cross C f K H"
+			obtain M where "bet C M f \<and> bet K M H" using cross_f[OF `axioms` `cross C f K H`]  by  blast
 			have "bet C M f" using `bet C M f \<and> bet K M H` by blast
 			have "bet K M H" using `bet C M f \<and> bet K M H` by blast
 			have "col K M H" using collinear_b `axioms` `bet C M f \<and> bet K M H` by blast
@@ -245,11 +250,11 @@ proof -
 			have "bet C K d \<and> col K H K \<and> \<not> col K H C" using `bet C K d \<and> seg_eq K d C K` `col K H K` `col K H M \<and> col K H H \<and> col K H M \<and> bet E H f \<and> bet C M f \<and> \<not> col K H E \<and> \<not> col K H C` by blast
 			have "oppo_side C K H d" using oppositeside_b[OF `axioms` `bet C K d` `col K H K` `\<not> col K H C`] .
 			have "oppo_side E K H d" using planeseparation[OF `axioms` `same_side E C K H` `oppo_side C K H d`] .
-			obtain m where "bet E m d \<and> col K H m \<and> \<not> col K H E" using oppositeside_f[OF `axioms` `oppo_side E K H d`] by blast
+			obtain m where "bet E m d \<and> col K H m \<and> \<not> col K H E" using oppositeside_f[OF `axioms` `oppo_side E K H d`]  by  blast
 			have "bet E m d" using `bet E m d \<and> col K H m \<and> \<not> col K H E` by blast
 			have "col K H m" using `bet E m d \<and> col K H m \<and> \<not> col K H E` by blast
 			have "parallel E f C d" using parallelsymmetric[OF `axioms` `parallel C d E f`] .
-			have "\<not> (meets E f C d)" using parallel_f[OF `axioms` `parallel E f C d`] by blast
+			have "\<not> (meets E f C d)" using parallel_f[OF `axioms` `parallel E f C d`] by fastforce
 			have "C \<noteq> d" using `C \<noteq> d` .
 			have "col E H f" using collinearorder[OF `axioms` `col E f H`] by blast
 			have "col C K d" using `col C K d` .
@@ -278,8 +283,9 @@ proof -
 			have "bet d K C" using `bet d K C` .
 			have "parallel A b d C" using Prop30A[OF `axioms` `parallel A b f E` `parallel d C f E` `bet G H K` `bet A G b` `bet f H E` `bet d K C` `oppo_side A G H E` `oppo_side E H K d`] .
 			have "parallel A b C d" using parallelflip[OF `axioms` `parallel A b d C`] by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "cross C E K H"
 			have "oppo_side C H K E" using crossimpliesopposite[OF `axioms` `cross C E K H` `\<not> col C K H`] by blast
 			have "oppo_side E H K C" using oppositesidesymmetric[OF `axioms` `oppo_side C H K E`] .
 			have "oppo_side A G H E" using crossimpliesopposite[OF `axioms` `cross A E G H` `\<not> col A G H`] by blast
@@ -288,8 +294,10 @@ proof -
 			have "bet C K d" using `bet C K d` .
 			have "bet f H E" using betweennesssymmetryE[OF `axioms` `bet E H f`] .
 			have "parallel A b C d" using Prop30A[OF `axioms` `parallel A b f E` `parallel C d f E` `bet G H K` `bet A G b` `bet f H E` `bet C K d` `oppo_side A G H E` `oppo_side E H K C`] .
-		next
-	next
+			thus ?thesis by blast
+		qed
+		thus ?thesis by blast
+	qed
 	have "parallel A b d C" using parallelflip[OF `axioms` `parallel A b C d`] by blast
 	have "col d C D" using collinearorder[OF `axioms` `col C d D`] by blast
 	have "D \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> D`] .

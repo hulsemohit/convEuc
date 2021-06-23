@@ -1,11 +1,11 @@
 theory rectangleparallelogram
-	imports Axioms Definitions Theorems
+	imports n8_2 n8_7 Geometry NCdistinct collinearorder collinearright inequalitysymmetric rightangleNC
 begin
 
 theorem rectangleparallelogram:
-	assumes: `axioms`
+	assumes "axioms"
 		"rectangle A B C D"
-	shows: "parallelogram A B C D"
+	shows "parallelogram A B C D"
 proof -
 	have "ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A \<and> cross A C B D" using rectangle_f[OF `axioms` `rectangle A B C D`] .
 	have "ang_right D A B" using `ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A \<and> cross A C B D` by blast
@@ -15,18 +15,20 @@ proof -
 	have "\<not> col D A B" using rightangleNC[OF `axioms` `ang_right D A B`] .
 	have "\<not> col A B C" using rightangleNC[OF `axioms` `ang_right A B C`] .
 	have "\<not> col C D A" using rightangleNC[OF `axioms` `ang_right C D A`] .
-	obtain M where "bet A M C \<and> bet B M D" using cross_f[OF `axioms` `cross A C B D`] by blast
+	obtain M where "bet A M C \<and> bet B M D" using cross_f[OF `axioms` `cross A C B D`]  by  blast
 	have "bet A M C" using `bet A M C \<and> bet B M D` by blast
 	have "bet B M D" using `bet A M C \<and> bet B M D` by blast
 	have "\<not> (meets A B C D)"
 	proof (rule ccontr)
-		assume "meets A B C D"
-		obtain P where "A \<noteq> B \<and> C \<noteq> D \<and> col A B P \<and> col C D P" using meet_f[OF `axioms` `meets A B C D`] by blast
+		assume "\<not> (\<not> (meets A B C D))"
+hence "meets A B C D" by blast
+		obtain P where "A \<noteq> B \<and> C \<noteq> D \<and> col A B P \<and> col C D P" using meet_f[OF `axioms` `meets A B C D`]  by  blast
 		have "col A B P" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B P \<and> col C D P` by blast
 		have "col C D P" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B P \<and> col C D P` by blast
 		have "\<not> (A = P)"
 		proof (rule ccontr)
-			assume "A = P"
+			assume "\<not> (A \<noteq> P)"
+			hence "A = P" by blast
 			have "col C D A" using `col C D P` `A = P` by blast
 			have "\<not> col C D A" using `\<not> col C D A` .
 			show "False" using `\<not> col C D A` `col C D A` by blast
@@ -34,7 +36,8 @@ proof -
 		hence "A \<noteq> P" by blast
 		have "\<not> (D = P)"
 		proof (rule ccontr)
-			assume "D = P"
+			assume "\<not> (D \<noteq> P)"
+			hence "D = P" by blast
 			have "col A B D" using `col A B P` `D = P` by blast
 			have "col D A B" using collinearorder[OF `axioms` `col A B D`] by blast
 			have "\<not> col D A B" using `\<not> col D A B` .
@@ -71,13 +74,15 @@ proof -
 	have "parallel A B C D" using parallel_b[OF `axioms` `A \<noteq> B` `C \<noteq> D` `col A B A` `col A B B` `A \<noteq> B` `col C D D` `col C D C` `D \<noteq> C` `\<not> (meets A B C D)` `bet A M C` `bet D M B`] .
 	have "\<not> (meets A D B C)"
 	proof (rule ccontr)
-		assume "meets A D B C"
-		obtain P where "A \<noteq> D \<and> B \<noteq> C \<and> col A D P \<and> col B C P" using meet_f[OF `axioms` `meets A D B C`] by blast
+		assume "\<not> (\<not> (meets A D B C))"
+hence "meets A D B C" by blast
+		obtain P where "A \<noteq> D \<and> B \<noteq> C \<and> col A D P \<and> col B C P" using meet_f[OF `axioms` `meets A D B C`]  by  blast
 		have "col A D P" using `A \<noteq> D \<and> B \<noteq> C \<and> col A D P \<and> col B C P` by blast
 		have "col B C P" using `A \<noteq> D \<and> B \<noteq> C \<and> col A D P \<and> col B C P` by blast
 		have "\<not> (A = P)"
 		proof (rule ccontr)
-			assume "A = P"
+			assume "\<not> (A \<noteq> P)"
+			hence "A = P" by blast
 			have "col B C A" using `col B C P` `A = P` by blast
 			have "col A B C" using collinearorder[OF `axioms` `col B C A`] by blast
 			have "\<not> col A B C" using `\<not> col A B C` .
@@ -86,7 +91,8 @@ proof -
 		hence "A \<noteq> P" by blast
 		have "\<not> (B = P)"
 		proof (rule ccontr)
-			assume "B = P"
+			assume "\<not> (B \<noteq> P)"
+			hence "B = P" by blast
 			have "col A D B" using `col A D P` `B = P` by blast
 			have "col D A B" using collinearorder[OF `axioms` `col A D B`] by blast
 			have "\<not> col D A B" using `\<not> col D A B` .

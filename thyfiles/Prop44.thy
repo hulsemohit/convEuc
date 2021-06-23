@@ -1,24 +1,24 @@
 theory Prop44
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct NChelper NCorder PGrotate Prop10 Prop23C Prop42B Prop44A betweennotequal collinearorder congruenceflip congruencesymmetric congruencetransitive inequalitysymmetric oppositesidesymmetric parallelNC planeseparation samesidecollinear samesideflip
 begin
 
 theorem Prop44:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle a b c"
 		"\<not> col J D N"
 		"\<not> col A B R"
-	shows: "\<exists> L M m. parallelogram A B M L \<and> ang_eq A B M J D N \<and> qua_eq_area a b m c A B M L \<and> midpoint b m c \<and> oppo_side M A B R"
+	shows "\<exists> L M m. parallelogram A B M L \<and> ang_eq A B M J D N \<and> qua_eq_area a b m c A B M L \<and> midpoint b m c \<and> oppo_side M A B R"
 proof -
 	have "A \<noteq> B" using NCdistinct[OF `axioms` `\<not> col A B R`] by blast
 	have "\<not> col a b c" using triangle_f[OF `axioms` `triangle a b c`] .
 	have "b \<noteq> c" using NCdistinct[OF `axioms` `\<not> col a b c`] by blast
-	obtain m where "bet b m c \<and> seg_eq m b m c" using Prop10[OF `axioms` `b \<noteq> c`] by blast
+	obtain m where "bet b m c \<and> seg_eq m b m c" using Prop10[OF `axioms` `b \<noteq> c`]  by  blast
 	have "bet b m c" using `bet b m c \<and> seg_eq m b m c` by blast
 	have "seg_eq m b m c" using `bet b m c \<and> seg_eq m b m c` by blast
 	have "seg_eq b m m c" using congruenceflip[OF `axioms` `seg_eq m b m c`] by blast
 	have "midpoint b m c" using midpoint_b[OF `axioms` `bet b m c` `seg_eq b m m c`] .
 	have "m \<noteq> c" using betweennotequal[OF `axioms` `bet b m c`] by blast
-	obtain E where "bet A B E \<and> seg_eq B E m c" using extensionE[OF `axioms` `A \<noteq> B` `m \<noteq> c`] by blast
+	obtain E where "bet A B E \<and> seg_eq B E m c" using extensionE[OF `axioms` `A \<noteq> B` `m \<noteq> c`]  by  blast
 	have "bet A B E" using `bet A B E \<and> seg_eq B E m c` by blast
 	have "seg_eq B E m c" using `bet A B E \<and> seg_eq B E m c` by blast
 	have "B \<noteq> E" using betweennotequal[OF `axioms` `bet A B E`] by blast
@@ -30,11 +30,11 @@ proof -
 	have "\<not> col B E R" using NChelper[OF `axioms` `\<not> col B A R` `col B A B` `col B A E` `B \<noteq> E`] .
 	obtain e g where "ray_on B E e \<and> ang_eq g B e J D N \<and> same_side g R B E" using Prop23C[OF `axioms` `B \<noteq> E` `\<not> col J D N` `\<not> col B E R`]  by  blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-	obtain P where "bet B A P \<and> seg_eq A P B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`] by blast
+	obtain P where "bet B A P \<and> seg_eq A P B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`]  by  blast
 	have "B \<noteq> E" using betweennotequal[OF `axioms` `bet A B E`] by blast
 	have "E \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> E`] .
 	have "b \<noteq> m" using betweennotequal[OF `axioms` `bet b m c`] by blast
-	obtain Q where "bet E B Q \<and> seg_eq B Q b m" using extensionE[OF `axioms` `E \<noteq> B` `b \<noteq> m`] by blast
+	obtain Q where "bet E B Q \<and> seg_eq B Q b m" using extensionE[OF `axioms` `E \<noteq> B` `b \<noteq> m`]  by  blast
 	have "bet E B Q" using `bet E B Q \<and> seg_eq B Q b m` by blast
 	have "seg_eq B Q b m" using `bet E B Q \<and> seg_eq B Q b m` by blast
 	have "seg_eq b m m c" using congruenceflip[OF `axioms` `seg_eq m b m c`] by blast

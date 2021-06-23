@@ -1,18 +1,19 @@
 theory Prop06
-	imports Axioms Definitions Theorems
+	imports Geometry Prop06a angledistinct collinearorder equalanglessymmetric trichotomy1
 begin
 
 theorem Prop06:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"ang_eq A B C A C B"
-	shows: "seg_eq A B A C"
+	shows "seg_eq A B A C"
 proof -
 	have "\<not> (seg_lt A C A B)" using Prop06a[OF `axioms` `triangle A B C` `ang_eq A B C A C B`] .
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "\<not> (col A C B)"
 	proof (rule ccontr)
-		assume "col A C B"
+		assume "\<not> (\<not> (col A C B))"
+hence "col A C B" by blast
 		have "col A B C" using collinearorder[OF `axioms` `col A C B`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed

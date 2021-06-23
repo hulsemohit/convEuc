@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <map>
 
@@ -28,7 +30,7 @@ const std::map<std::string, command> commands {
     {"OC", command{"cir_ou", 2}},
     {"CI", command{"circle", 4}},
     {"CU", command{"cuts", 5}},
-    {"SU", command{"linear_pair", 5}},
+    {"SU", command{"supplement", 5}},
     {"TC", command{"tri_cong", 6}},
     {"LT", command{"seg_lt", 4}},
     {"ME", command{"meets", 4}},
@@ -47,7 +49,7 @@ const std::map<std::string, command> commands {
     {"TG", command{"seg_sum_gt", 6}},
     {"TT", command{"seg_sum_pair_gt", 8}},
     {"IA", command{"ang_in", 4}},
-    {"RT", command{"ang_suppl", 6}},
+    {"RT", command{"ang_sum_right", 6}},
     {"AS", command{"area_sum_eq", 9}},
     {"PG", command{"parallelogram", 4}},
     {"SQ", command{"square", 4}},
@@ -56,8 +58,10 @@ const std::map<std::string, command> commands {
     {"RE", command{"rectangle", 4}},
     {"RC", command{"rec_cong", 8}},
     {"ER", command{"rec_eq_area", 8}},
-    {"TE", command{"d_eq_tri", 6}},
-    {"FE", command{"d_eq_qua", 8}}
+    {"TE", command{"tri_eq_area", 6}},
+    {"FE", command{"qua_eq_area", 8}},
+    {"BR", command{"base_rect", 5}},
+    {"FR", command{"figure_rect", 8}},
 };
 
 // A map from the name of command's definition to itself.
@@ -69,12 +73,12 @@ const std::map<std::string, std::string> euc_cmd_names{
     {"inside", "IC"},
     {"outside", "OC"},
     {"on", "ON"},
-    {"equilateral", "EQ"},
+    {"equilateral", "EL"},
     {"triangle", "TR"},
     {"ray", "RA"},
     {"lessthan", "LT"},
     {"midpoint", "MI"},
-    {"equalangles", "EE"},
+    {"equalangles", "EA"},
     {"supplement", "SU"},
     {"rightangle", "RR"},
     {"perpat", "PA"},
@@ -102,6 +106,6 @@ const std::map<std::string, std::string> euc_cmd_names{
     {"baserectangle", "BR"},
     {"figurerectangle", "FR"},
     {"equaltriangles", "TE"},
-    {"equalfigures", "FE"},
+    {"equalfigures", "EF"},
     {"equaltrianglefigure", "TF"}
 };

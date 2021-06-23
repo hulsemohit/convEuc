@@ -34,7 +34,8 @@ std::map<char, vector<int>> get_pos(string euc_statement, int offset = 0) {
 }
 
 
-theorem::theorem(vector<string> euc_assms, string euc_conc): assumptions{euc_assms}, conclusion{euc_conc} {
+theorem::theorem(vector<string> euc_assms, string euc_conc):
+    assumptions{euc_assms}, conclusion{euc_conc} {
     string vars;
 
     vector<std::map<char, vector<int>>> assms;
@@ -52,6 +53,16 @@ theorem::theorem(vector<string> euc_assms, string euc_conc): assumptions{euc_ass
         }
     }
 
+    if(vars.size() == exists.size())
+        exists = "";
+
+    // circle_f
+    if(conclusion == "CIXCAB")
+        exists = "X";
+    // deZolt1
+    if(conclusion == "NOETDBCEBC")
+        exists = "";
+
     utils::unique(vars);
 
     var_cnt = vars.size();
@@ -64,6 +75,11 @@ theorem::theorem(vector<string> euc_assms, string euc_conc): assumptions{euc_ass
 
     for(int i{}; i < var_cnt; ++i)
         conc_pos.push_back(conc[vars[i]]);
+
+    for(int i{}; i < exists.size(); ++i)
+        exists_pos.push_back(vars.find(string(1, exists[i])));
+
+    depends.insert("Geometry");
 }
 
 
@@ -106,6 +122,18 @@ int theorem::get_var_cnt() const {
 
 string theorem::get_exists() const {
     return exists;
+}
+
+void theorem::add_depends(const string& s) {
+    depends.insert(s);
+}
+
+std::set<string> theorem::get_depends() const {
+    return depends;
+}
+
+bool theorem::is_exists_pos(int p) const {
+    return std::find(exists_pos.begin(), exists_pos.end(), p) != exists_pos.end();
 }
 
 std::map<string, theorem> theorem::theorems{};

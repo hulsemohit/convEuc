@@ -28,7 +28,7 @@ namespace utils {
     string fix_name(string s) {
         if(!isalpha(s[0]))
             s = "n" + s;
-        for(char& c: s) if(c == '.') c = '_';
+        for(char& c: s) if(c == '.' || c == '-') c = '_';
         return s;
     }
 

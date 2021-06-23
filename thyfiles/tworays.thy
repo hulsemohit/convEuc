@@ -1,12 +1,12 @@
 theory tworays
-	imports Axioms Definitions Theorems
+	imports Geometry ray1 raystrict
 begin
 
 theorem tworays:
-	assumes: `axioms`
+	assumes "axioms"
 		"ray_on A B C"
 		"ray_on B A C"
-	shows: "bet A C B"
+	shows "bet A C B"
 proof -
 	have "B \<noteq> C" using raystrict[OF `axioms` `ray_on B A C`] .
 	have "A \<noteq> C" using raystrict[OF `axioms` `ray_on A B C`] .
@@ -15,28 +15,33 @@ proof -
 	have "bet B C A \<or> A = C \<or> bet B A C" using ray1[OF `axioms` `ray_on B A C`] .
 	have "bet B C A \<or> bet B A C" using `bet B C A \<or> A = C \<or> bet B A C` `A \<noteq> C` by blast
 	consider "bet A C B"|"bet A B C" using `bet A C B \<or> bet A B C`  by blast
-	hence bet A C B
+	hence "bet A C B"
 	proof (cases)
-		case 1
+		assume "bet A C B"
+		thus ?thesis by blast
 	next
-		case 2
+		assume "bet A B C"
 		consider "bet B C A"|"bet B A C" using `bet B C A \<or> bet B A C`  by blast
-		hence bet A C B
+		hence "bet A C B"
 		proof (cases)
-			case 1
+			assume "bet B C A"
 			have "bet A C B" using betweennesssymmetryE[OF `axioms` `bet B C A`] .
+			thus ?thesis by blast
 		next
-			case 2
-			have "bet A C B"
+			assume "bet B A C"
+			have "\<not> (\<not> (bet A C B))"
 			proof (rule ccontr)
-				assume "\<not> (bet A C B)"
+				assume "\<not> (\<not> (\<not> (bet A C B)))"
+hence "\<not> (bet A C B)" by blast
 				have "bet A B A" using innertransitivityE[OF `axioms` `bet A B C` `bet B A C`] .
-				have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] by blast
+				have "\<not> (bet A B A)" using betweennessidentityE[OF `axioms`] .
 				show "False" using `\<not> (bet A B A)` `bet A B A` by blast
 			qed
 			hence "bet A C B" by blast
-		next
-	next
+			thus ?thesis by blast
+		qed
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

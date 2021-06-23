@@ -1,14 +1,14 @@
 theory angleordertransitive
-	imports Axioms Definitions Theorems
+	imports n3_6b Geometry angledistinct angleorderrespectscongruence collinear4 collinearorder crossbar equalanglesNC equalangleshelper equalanglessymmetric inequalitysymmetric ray2 ray4 ray5 rayimpliescollinear raystrict
 begin
 
 theorem angleordertransitive:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_lt A B C D E F"
 		"ang_lt D E F P Q R"
-	shows: "ang_lt A B C P Q R"
+	shows "ang_lt A B C P Q R"
 proof -
-	obtain U V W where "bet U W V \<and> ray_on Q P U \<and> ray_on Q R V \<and> ang_eq D E F P Q W" using anglelessthan_f[OF `axioms` `ang_lt D E F P Q R`] by blast
+	obtain U V W where "bet U W V \<and> ray_on Q P U \<and> ray_on Q R V \<and> ang_eq D E F P Q W" using anglelessthan_f[OF `axioms` `ang_lt D E F P Q R`]  by  blast
 	have "ray_on Q P U" using `bet U W V \<and> ray_on Q P U \<and> ray_on Q R V \<and> ang_eq D E F P Q W` by blast
 	have "ray_on Q R V" using `bet U W V \<and> ray_on Q P U \<and> ray_on Q R V \<and> ang_eq D E F P Q W` by blast
 	have "ang_eq D E F P Q W" using `bet U W V \<and> ray_on Q P U \<and> ray_on Q R V \<and> ang_eq D E F P Q W` by blast
@@ -21,7 +21,7 @@ proof -
 	have "ang_eq D E F U Q W" using equalangleshelper[OF `axioms` `ang_eq D E F P Q W` `ray_on Q P U` `ray_on Q W W`] .
 	have "ang_eq U Q W D E F" using equalanglessymmetric[OF `axioms` `ang_eq D E F U Q W`] .
 	have "ang_lt A B C U Q W" using angleorderrespectscongruence[OF `axioms` `ang_lt A B C D E F` `ang_eq U Q W D E F`] .
-	obtain H S T where "bet S H T \<and> ray_on Q U S \<and> ray_on Q W T \<and> ang_eq A B C U Q H" using anglelessthan_f[OF `axioms` `ang_lt A B C U Q W`] by blast
+	obtain H S T where "bet S H T \<and> ray_on Q U S \<and> ray_on Q W T \<and> ang_eq A B C U Q H" using anglelessthan_f[OF `axioms` `ang_lt A B C U Q W`]  by  blast
 	have "ray_on Q P U" using `ray_on Q P U` .
 	have "ray_on Q U P" using ray5[OF `axioms` `ray_on Q P U`] .
 	have "ray_on Q U S" using `bet S H T \<and> ray_on Q U S \<and> ray_on Q W T \<and> ang_eq A B C U Q H` by blast
@@ -41,7 +41,8 @@ proof -
 	have "ray_on Q T W" using ray5[OF `axioms` `ray_on Q W T`] .
 	have "\<not> (col S Q T)"
 	proof (rule ccontr)
-		assume "col S Q T"
+		assume "\<not> (\<not> (col S Q T))"
+hence "col S Q T" by blast
 		have "col Q U S" using rayimpliescollinear[OF `axioms` `ray_on Q U S`] .
 		have "col U Q S" using collinearorder[OF `axioms` `col Q U S`] by blast
 		have "ray_on Q P U" using `ray_on Q P U` .

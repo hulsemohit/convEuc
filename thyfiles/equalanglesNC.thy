@@ -1,13 +1,13 @@
 theory equalanglesNC
-	imports Axioms Definitions Theorems
+	imports Geometry collinear4 collinearitypreserved collinearorder congruencesymmetric inequalitysymmetric ray2 rayimpliescollinear raystrict
 begin
 
 theorem equalanglesNC:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_eq A B C a b c"
-	shows: "\<not> col a b c"
+	shows "\<not> col a b c"
 proof -
-	obtain U V u v where "ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C a b c`] by blast
+	obtain U V u v where "ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C a b c`]  by  blast
 	have "ray_on B A U" using `ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 	have "ray_on B C V" using `ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 	have "ray_on b a u" using `ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
@@ -27,7 +27,8 @@ proof -
 	have "col a b u" using collinearorder[OF `axioms` `col b a u`] by blast
 	have "\<not> (col a b c)"
 	proof (rule ccontr)
-		assume "col a b c"
+		assume "\<not> (\<not> (col a b c))"
+hence "col a b c" by blast
 		have "col b u c" using collinear4[OF `axioms` `col a b u` `col a b c` `a \<noteq> b`] .
 		have "col c b u" using collinearorder[OF `axioms` `col b u c`] by blast
 		have "col c b v" using collinearorder[OF `axioms` `col b c v`] by blast
@@ -44,16 +45,18 @@ proof -
 		have "col U V A" using collinear4[OF `axioms` `col B U V` `col B U A` `B \<noteq> U`] .
 		have "col U V B" using collinearorder[OF `axioms` `col B U V`] by blast
 		consider "U = V"|"U \<noteq> V" by blast
-		hence col V A B
+		hence "col V A B"
 		proof (cases)
-			case 1
+			assume "U = V"
 			have "col B A U" using `col B A U` .
 			have "col B A V" using `col B A U` `U = V` by blast
 			have "col V A B" using collinearorder[OF `axioms` `col B A V`] by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "U \<noteq> V"
 			have "col V A B" using collinear4[OF `axioms` `col U V A` `col U V B` `U \<noteq> V`] .
-		next
+			thus ?thesis by blast
+		qed
 		have "col V B A" using collinearorder[OF `axioms` `col V A B`] by blast
 		have "col V B C" using collinearorder[OF `axioms` `col B C V`] by blast
 		have "B \<noteq> V" using raystrict[OF `axioms` `ray_on B C V`] .

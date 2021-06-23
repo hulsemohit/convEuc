@@ -1,17 +1,17 @@
 theory Prop32
-	imports Axioms Definitions Theorems
+	imports n3_5b n3_6a ABCequalsCBA Geometry NCdistinct NChelper NCorder Prop29 Prop31short betweennotequal collinear4 collinearbetween collinearorder collinearparallel equalanglesflip equalangleshelper equalanglessymmetric equalanglestransitive inequalitysymmetric oppositesidesymmetric parallelflip ray4
 begin
 
 theorem Prop32:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"bet B C D"
-	shows: "area_sum_eq C A B A B C A C D"
+	shows "area_sum_eq C A B A B C A C D"
 proof -
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "B \<noteq> A" using NCdistinct[OF `axioms` `\<not> col A B C`] by blast
 	have "A \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> A`] .
-	obtain F where "bet B A F \<and> seg_eq A F B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`] by blast
+	obtain F where "bet B A F \<and> seg_eq A F B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`]  by  blast
 	have "bet B A F" using `bet B A F \<and> seg_eq A F B A` by blast
 	have "col B A F" using collinear_b `axioms` `bet B A F \<and> seg_eq A F B A` by blast
 	have "col A B F" using collinearorder[OF `axioms` `col B A F`] by blast
@@ -21,16 +21,16 @@ proof -
 	have "F \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> F`] .
 	have "\<not> col F B C" using NChelper[OF `axioms` `\<not> col A B C` `col A B F` `col A B B` `F \<noteq> B`] .
 	have "bet F A B" using betweennesssymmetryE[OF `axioms` `bet B A F`] .
-	obtain E H S where "bet E C H \<and> ang_eq E C A C A B \<and> parallel E H F B \<and> bet E S B \<and> bet C S A" using Prop31short[OF `axioms` `bet F A B` `\<not> col F B C`] by blast
+	obtain E H S where "bet E C H \<and> ang_eq E C A C A B \<and> parallel E H F B \<and> bet E S B \<and> bet C S A" using Prop31short[OF `axioms` `bet F A B` `\<not> col F B C`]  by  blast
 	have "B \<noteq> C" using betweennotequal[OF `axioms` `bet B C D`] by blast
 	have "C \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> C`] .
-	obtain G where "bet C B G \<and> seg_eq B G C B" using extensionE[OF `axioms` `C \<noteq> B` `C \<noteq> B`] by blast
+	obtain G where "bet C B G \<and> seg_eq B G C B" using extensionE[OF `axioms` `C \<noteq> B` `C \<noteq> B`]  by  blast
 	have "C \<noteq> A" using NCdistinct[OF `axioms` `\<not> col A B C`] by blast
-	obtain J where "bet C A J \<and> seg_eq A J C A" using extensionE[OF `axioms` `C \<noteq> A` `C \<noteq> A`] by blast
+	obtain J where "bet C A J \<and> seg_eq A J C A" using extensionE[OF `axioms` `C \<noteq> A` `C \<noteq> A`]  by  blast
 	have "A \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> A`] .
-	obtain K where "bet A C K \<and> seg_eq C K A C" using extensionE[OF `axioms` `A \<noteq> C` `A \<noteq> C`] by blast
+	obtain K where "bet A C K \<and> seg_eq C K A C" using extensionE[OF `axioms` `A \<noteq> C` `A \<noteq> C`]  by  blast
 	have "bet A C K" using `bet A C K \<and> seg_eq C K A C` by blast
-	obtain M where "bet A B M \<and> seg_eq B M A B" using extensionE[OF `axioms` `A \<noteq> B` `A \<noteq> B`] by blast
+	obtain M where "bet A B M \<and> seg_eq B M A B" using extensionE[OF `axioms` `A \<noteq> B` `A \<noteq> B`]  by  blast
 	have "bet A B M" using `bet A B M \<and> seg_eq B M A B` by blast
 	have "parallel E H F B" using `bet E C H \<and> ang_eq E C A C A B \<and> parallel E H F B \<and> bet E S B \<and> bet C S A` by blast
 	have "col F B A" using collinearorder[OF `axioms` `col A B F`] by blast
@@ -93,7 +93,7 @@ proof -
 	have "H \<noteq> E" using inequalitysymmetric[OF `axioms` `E \<noteq> H`] .
 	have "\<not> col H E A" using NChelper[OF `axioms` `\<not> col C E A` `col C E H` `col C E E` `H \<noteq> E`] .
 	have "\<not> col E H A" using NCorder[OF `axioms` `\<not> col H E A`] by blast
-	obtain Q where "bet A Q H \<and> bet E S Q" using Pasch-outerE[OF `axioms` `bet A S C` `bet E C H` `\<not> col E H A`] by blast
+	obtain Q where "bet A Q H \<and> bet E S Q" using Pasch_outerE[OF `axioms` `bet A S C` `bet E C H` `\<not> col E H A`]  by  blast
 	have "bet A Q H" using `bet A Q H \<and> bet E S Q` by blast
 	have "bet E S Q" using `bet A Q H \<and> bet E S Q` by blast
 	have "col E S Q" using collinear_b `axioms` `bet A Q H \<and> bet E S Q` by blast
@@ -104,7 +104,7 @@ proof -
 	have "col B E Q" using collinearorder[OF `axioms` `col E B Q`] by blast
 	have "H \<noteq> E" using betweennotequal[OF `axioms` `bet H C E`] by blast
 	have "C \<noteq> E" using betweennotequal[OF `axioms` `bet H C E`] by blast
-	obtain L where "bet H E L \<and> seg_eq E L C E" using extensionE[OF `axioms` `H \<noteq> E` `C \<noteq> E`] by blast
+	obtain L where "bet H E L \<and> seg_eq E L C E" using extensionE[OF `axioms` `H \<noteq> E` `C \<noteq> E`]  by  blast
 	have "bet H E L" using `bet H E L \<and> seg_eq E L C E` by blast
 	have "bet L E H" using betweennesssymmetryE[OF `axioms` `bet H E L`] .
 	have "col L E H" using collinear_b `axioms` `bet L E H` by blast
@@ -116,8 +116,9 @@ proof -
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A B M`] by blast
 	have "\<not> (meets A M L H)"
 	proof (rule ccontr)
-		assume "meets A M L H"
-		obtain c where "A \<noteq> M \<and> L \<noteq> H \<and> col A M c \<and> col L H c" using meet_f[OF `axioms` `meets A M L H`] by blast
+		assume "\<not> (\<not> (meets A M L H))"
+hence "meets A M L H" by blast
+		obtain c where "A \<noteq> M \<and> L \<noteq> H \<and> col A M c \<and> col L H c" using meet_f[OF `axioms` `meets A M L H`]  by  blast
 		have "col A M c" using `A \<noteq> M \<and> L \<noteq> H \<and> col A M c \<and> col L H c` by blast
 		have "col L H c" using `A \<noteq> M \<and> L \<noteq> H \<and> col A M c \<and> col L H c` by blast
 		have "col H E L" using collinear_b `axioms` `bet H E L \<and> seg_eq E L C E` by blast
@@ -138,7 +139,7 @@ proof -
 		have "col F B c" using collinearorder[OF `axioms` `col B c F`] by blast
 		have "E \<noteq> H \<and> F \<noteq> B \<and> col E H c \<and> col F B c" using `E \<noteq> H` `F \<noteq> B` `col E H c` `col F B c` by blast
 		have "meets E H F B" using meet_b[OF `axioms` `E \<noteq> H` `F \<noteq> B` `col E H c` `col F B c`] .
-		have "\<not> (meets E H F B)" using parallel_f[OF `axioms` `parallel E H F B`] by blast
+		have "\<not> (meets E H F B)" using parallel_f[OF `axioms` `parallel E H F B`] by fastforce
 		show "False" using `\<not> (meets E H F B)` `meets E H F B` by blast
 	qed
 	hence "\<not> (meets A M L H)" by blast
@@ -155,7 +156,7 @@ proof -
 	have "col Q E E" using collinear_b `axioms` `E = E` by blast
 	have "col Q E B" using collinearorder[OF `axioms` `col B E Q`] by blast
 	have "\<not> col B E H" using NChelper[OF `axioms` `\<not> col Q E H` `col Q E B` `col Q E E` `B \<noteq> E`] .
-	obtain T where "bet B T C \<and> bet H T Q" using Pasch-innerE[OF `axioms` `bet B Q E` `bet H C E` `\<not> col B E H`] by blast
+	obtain T where "bet B T C \<and> bet H T Q" using Pasch_innerE[OF `axioms` `bet B Q E` `bet H C E` `\<not> col B E H`]  by  blast
 	have "bet B T C" using `bet B T C \<and> bet H T Q` by blast
 	have "bet H T Q" using `bet B T C \<and> bet H T Q` by blast
 	have "bet Q T H" using betweennesssymmetryE[OF `axioms` `bet H T Q`] .
@@ -171,8 +172,8 @@ proof -
 	have "bet M B A" using `bet M B A` .
 	have "ang_eq E C A C A B" using `bet E C H \<and> ang_eq E C A C A B \<and> parallel E H F B \<and> bet E S B \<and> bet C S A` by blast
 	have "ang_eq A C E B A C" using equalanglesflip[OF `axioms` `ang_eq E C A C A B`] .
-	have "ang_eq H C B C B A \<and> ang_eq D C E C B A \<and> ang_suppl E C B C B A" using Prop29[OF `axioms` `parallel H E M A` `bet H C E` `bet M B A` `bet D C B` `oppo_side H C B A`] .
-	have "ang_eq D C E C B A" using `ang_eq H C B C B A \<and> ang_eq D C E C B A \<and> ang_suppl E C B C B A` by blast
+	have "ang_eq H C B C B A \<and> ang_eq D C E C B A \<and> ang_sum_right E C B C B A" using Prop29[OF `axioms` `parallel H E M A` `bet H C E` `bet M B A` `bet D C B` `oppo_side H C B A`] .
+	have "ang_eq D C E C B A" using `ang_eq H C B C B A \<and> ang_eq D C E C B A \<and> ang_sum_right E C B C B A` by blast
 	have "ang_eq C B A A B C" using ABCequalsCBA[OF `axioms` `\<not> col C B A`] .
 	have "ang_eq D C E A B C" using equalanglestransitive[OF `axioms` `ang_eq D C E C B A` `ang_eq C B A A B C`] .
 	have "bet B T C" using `bet B T C` .
@@ -191,7 +192,7 @@ proof -
 	have "\<not> col H A D" using NCorder[OF `axioms` `\<not> col A H D`] by blast
 	have "bet H T A" using betweennesssymmetryE[OF `axioms` `bet A T H`] .
 	have "bet D C T" using betweennesssymmetryE[OF `axioms` `bet T C D`] .
-	obtain R where "bet D R A \<and> bet H C R" using Pasch-outerE[OF `axioms` `bet D C T` `bet H T A` `\<not> col H A D`] by blast
+	obtain R where "bet D R A \<and> bet H C R" using Pasch_outerE[OF `axioms` `bet D C T` `bet H T A` `\<not> col H A D`]  by  blast
 	have "bet D R A" using `bet D R A \<and> bet H C R` by blast
 	have "bet H C R" using `bet D R A \<and> bet H C R` by blast
 	have "ray_on C E R" using ray_b[OF `axioms` `bet H C R` `bet H C E`] .

@@ -1,15 +1,16 @@
 theory Prop09
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry Prop10 betweennotequal collinear4 collinearorder congruencesymmetric doublereverse equalanglessymmetric equalanglestransitive equalitysymmetric inequalitysymmetric layoff ray4 rayimpliescollinear raystrict
 begin
 
 theorem Prop09:
-	assumes: `axioms`
+	assumes "axioms"
 		"\<not> col B A C"
-	shows: "\<exists> F. ang_eq B A F F A C \<and> ang_in B A C F"
+	shows "\<exists> F. ang_eq B A F F A C \<and> ang_in B A C F"
 proof -
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "B = A" using equalitysymmetric[OF `axioms` `A = B`] .
 		have "col B A C" using collinear_b `axioms` `B = A` by blast
 		show "False" using `col B A C` `\<not> col B A C` by blast
@@ -17,17 +18,19 @@ proof -
 	hence "A \<noteq> B" by blast
 	have "\<not> (A = C)"
 	proof (rule ccontr)
-		assume "A = C"
+		assume "\<not> (A \<noteq> C)"
+		hence "A = C" by blast
 		have "col B A C" using collinear_b `axioms` `A = C` by blast
 		show "False" using `col B A C` `\<not> col B A C` by blast
 	qed
 	hence "A \<noteq> C" by blast
-	obtain E where "ray_on A C E \<and> seg_eq A E A B" using layoff[OF `axioms` `A \<noteq> C` `A \<noteq> B`] by blast
+	obtain E where "ray_on A C E \<and> seg_eq A E A B" using layoff[OF `axioms` `A \<noteq> C` `A \<noteq> B`]  by  blast
 	have "ray_on A C E" using `ray_on A C E \<and> seg_eq A E A B` by blast
 	have "seg_eq A E A B" using `ray_on A C E \<and> seg_eq A E A B` by blast
 	have "\<not> (B = E)"
 	proof (rule ccontr)
-		assume "B = E"
+		assume "\<not> (B \<noteq> E)"
+		hence "B = E" by blast
 		have "col A B E" using collinear_b `axioms` `B = E` by blast
 		have "col A C E" using rayimpliescollinear[OF `axioms` `ray_on A C E`] .
 		have "col E A B" using collinearorder[OF `axioms` `col A B E`] by blast
@@ -39,18 +42,19 @@ proof -
 		show "False" using `col B A C` `\<not> col B A C` by blast
 	qed
 	hence "B \<noteq> E" by blast
-	obtain F where "bet B F E \<and> seg_eq F B F E" using Prop10[OF `axioms` `B \<noteq> E`] by blast
+	obtain F where "bet B F E \<and> seg_eq F B F E" using Prop10[OF `axioms` `B \<noteq> E`]  by  blast
 	have "bet B F E" using `bet B F E \<and> seg_eq F B F E` by blast
 	have "seg_eq F B F E" using `bet B F E \<and> seg_eq F B F E` by blast
 	have "B = B" using equalityreflexiveE[OF `axioms`] .
 	have "F = F" using equalityreflexiveE[OF `axioms`] .
-	have "seg_eq A F A F" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq A F A F" using congruencereflexiveE[OF `axioms`] .
 	have "seg_eq A B A E" using congruencesymmetric[OF `axioms` `seg_eq A E A B`] .
 	have "seg_eq E F B F" using doublereverse[OF `axioms` `seg_eq F B F E`] by blast
 	have "seg_eq B F E F" using congruencesymmetric[OF `axioms` `seg_eq E F B F`] .
 	have "\<not> (col B A F)"
 	proof (rule ccontr)
-		assume "col B A F"
+		assume "\<not> (\<not> (col B A F))"
+hence "col B A F" by blast
 		have "col B F E" using collinear_b `axioms` `bet B F E \<and> seg_eq F B F E` by blast
 		have "col F B E" using collinearorder[OF `axioms` `col B F E`] by blast
 		have "col F B A" using collinearorder[OF `axioms` `col B A F`] by blast
@@ -70,7 +74,8 @@ proof -
 	have "ray_on A B B" using ray4 `axioms` `B = B` `A \<noteq> B` by blast
 	have "\<not> (A = F)"
 	proof (rule ccontr)
-		assume "A = F"
+		assume "\<not> (A \<noteq> F)"
+		hence "A = F" by blast
 		have "col B A F" using collinear_b `axioms` `A = F` by blast
 		show "False" using `col B A F` `\<not> col B A F` by blast
 	qed

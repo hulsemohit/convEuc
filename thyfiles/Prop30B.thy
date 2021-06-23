@@ -1,9 +1,9 @@
 theory Prop30B
-	imports Axioms Definitions Theorems
+	imports n3_5b Geometry NChelper NCorder Prop28A Prop29 betweennotequal collinear4 collinearorder equalanglesflip equalangleshelper equalanglessymmetric equalanglestransitive inequalitysymmetric parallelflip parallelsymmetric ray4 ray5 samesidesymmetric
 begin
 
 theorem Prop30B:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B E F"
 		"parallel C D E F"
 		"bet G K H"
@@ -12,13 +12,13 @@ theorem Prop30B:
 		"bet C K D"
 		"oppo_side A G H F"
 		"oppo_side C K H F"
-	shows: "parallel A B C D"
+	shows "parallel A B C D"
 proof -
 	have "G \<noteq> H" using betweennotequal[OF `axioms` `bet G K H`] by blast
 	have "H \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> H`] .
 	have "K \<noteq> H" using betweennotequal[OF `axioms` `bet G K H`] by blast
 	have "H \<noteq> K" using inequalitysymmetric[OF `axioms` `K \<noteq> H`] .
-	obtain P where "bet H G P \<and> seg_eq G P G H" using extensionE[OF `axioms` `H \<noteq> G` `G \<noteq> H`] by blast
+	obtain P where "bet H G P \<and> seg_eq G P G H" using extensionE[OF `axioms` `H \<noteq> G` `G \<noteq> H`]  by  blast
 	have "bet H G P" using `bet H G P \<and> seg_eq G P G H` by blast
 	have "bet P G H" using betweennesssymmetryE[OF `axioms` `bet H G P`] .
 	have "ang_eq A G H G H F" using Prop29[OF `axioms` `parallel A B E F` `bet A G B` `bet E H F` `bet P G H` `oppo_side A G H F`] by blast
@@ -43,8 +43,8 @@ proof -
 	have "ang_eq H K C K G A" using equalanglesflip[OF `axioms` `ang_eq C K H A G K`] .
 	have "oppo_side A G H F" using `oppo_side A G H F` .
 	have "oppo_side C K H F" using `oppo_side C K H F` .
-	obtain M where "bet A M F \<and> col G H M \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H F`] by blast
-	obtain m where "bet C m F \<and> col K H m \<and> \<not> col K H C" using oppositeside_f[OF `axioms` `oppo_side C K H F`] by blast
+	obtain M where "bet A M F \<and> col G H M \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H F`]  by  blast
+	obtain m where "bet C m F \<and> col K H m \<and> \<not> col K H C" using oppositeside_f[OF `axioms` `oppo_side C K H F`]  by  blast
 	have "bet A M F" using `bet A M F \<and> col G H M \<and> \<not> col G H A` by blast
 	have "col G H M" using `bet A M F \<and> col G H M \<and> \<not> col G H A` by blast
 	have "\<not> col G H A" using `bet A M F \<and> col G H M \<and> \<not> col G H A` by blast

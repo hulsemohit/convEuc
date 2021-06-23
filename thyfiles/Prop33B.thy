@@ -1,18 +1,19 @@
 theory Prop33B
-	imports Axioms Definitions Theorems
+	imports Geometry NCorder Prop33 collinearorder crisscross parallelNC samenotopposite
 begin
 
 theorem Prop33B:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B C D"
 		"seg_eq A B C D"
 		"same_side A C B D"
-	shows: "parallel A C B D \<and> seg_eq A C B D"
+	shows "parallel A C B D \<and> seg_eq A C B D"
 proof -
 	have "\<not> (cross A C B D)"
 	proof (rule ccontr)
-		assume "cross A C B D"
-		obtain M where "bet A M C \<and> bet B M D" using cross_f[OF `axioms` `cross A C B D`] by blast
+		assume "\<not> (\<not> (cross A C B D))"
+hence "cross A C B D" by blast
+		obtain M where "bet A M C \<and> bet B M D" using cross_f[OF `axioms` `cross A C B D`]  by  blast
 		have "bet A M C" using `bet A M C \<and> bet B M D` by blast
 		have "bet B M D" using `bet A M C \<and> bet B M D` by blast
 		have "col B M D" using collinear_b `axioms` `bet A M C \<and> bet B M D` by blast
@@ -26,7 +27,7 @@ proof -
 	qed
 	hence "\<not> (cross A C B D)" by blast
 	have "cross A D C B" using crisscross[OF `axioms` `parallel A B C D` `\<not> (cross A C B D)`] .
-	obtain m where "bet A m D \<and> bet C m B" using cross_f[OF `axioms` `cross A D C B`] by blast
+	obtain m where "bet A m D \<and> bet C m B" using cross_f[OF `axioms` `cross A D C B`]  by  blast
 	have "bet A m D" using `bet A m D \<and> bet C m B` by blast
 	have "bet C m B" using `bet A m D \<and> bet C m B` by blast
 	have "bet B m C" using betweennesssymmetryE[OF `axioms` `bet C m B`] .

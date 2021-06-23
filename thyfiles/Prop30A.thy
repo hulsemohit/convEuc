@@ -1,9 +1,9 @@
 theory Prop30A
-	imports Axioms Definitions Theorems
+	imports n3_7b Geometry NChelper NCorder Prop27 Prop29 betweennotequal collinear4 collinearbetween collinearorder equalanglesNC equalangleshelper equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric parallelsymmetric planeseparation ray4
 begin
 
 theorem Prop30A:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B E F"
 		"parallel C D E F"
 		"bet G H K"
@@ -12,19 +12,19 @@ theorem Prop30A:
 		"bet C K D"
 		"oppo_side A G H F"
 		"oppo_side F H K C"
-	shows: "parallel A B C D"
+	shows "parallel A B C D"
 proof -
 	have "parallel E F C D" using parallelsymmetric[OF `axioms` `parallel C D E F`] .
 	have "G \<noteq> H" using betweennotequal[OF `axioms` `bet G H K`] by blast
 	have "H \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> H`] .
-	obtain P where "bet H G P \<and> seg_eq G P G H" using extensionE[OF `axioms` `H \<noteq> G` `G \<noteq> H`] by blast
+	obtain P where "bet H G P \<and> seg_eq G P G H" using extensionE[OF `axioms` `H \<noteq> G` `G \<noteq> H`]  by  blast
 	have "bet H G P" using `bet H G P \<and> seg_eq G P G H` by blast
 	have "bet P G H" using betweennesssymmetryE[OF `axioms` `bet H G P`] .
 	have "bet P G K" using n3_7b[OF `axioms` `bet P G H` `bet G H K`] .
-	obtain M where "bet A M F \<and> col G H M \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H F`] by blast
-	obtain N where "bet F N C \<and> col H K N \<and> \<not> col H K F" using oppositeside_f[OF `axioms` `oppo_side F H K C`] by blast
+	obtain M where "bet A M F \<and> col G H M \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H F`]  by  blast
+	obtain N where "bet F N C \<and> col H K N \<and> \<not> col H K F" using oppositeside_f[OF `axioms` `oppo_side F H K C`]  by  blast
 	have "col G H M" using `bet A M F \<and> col G H M \<and> \<not> col G H A` by blast
-	have "\<not> (meets C D E F)" using parallel_f[OF `axioms` `parallel C D E F`] by blast
+	have "\<not> (meets C D E F)" using parallel_f[OF `axioms` `parallel C D E F`] by fastforce
 	have "\<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H F`] by blast
 	have "A \<noteq> G" using betweennotequal[OF `axioms` `bet A G B`] by blast
 	have "G \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> G`] .

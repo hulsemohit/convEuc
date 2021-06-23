@@ -1,21 +1,21 @@
 theory Prop29
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry NChelper NCorder Prop15 Prop31 angleorderrespectscongruence angleorderrespectscongruence2 angletrichotomy2 betweennotequal collinear4 collinearorder congruenceflip congruencesymmetric crossbar2 equalanglesNC equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric oppositesidesymmetric planeseparation ray4 rayimpliescollinear raystrict samesidesymmetric supplementinequality supplements supplementsymmetric
 begin
 
 theorem Prop29:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B C D"
 		"bet A G B"
 		"bet C H D"
 		"bet E G H"
 		"oppo_side A G H D"
-	shows: "ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_suppl B G H G H D"
+	shows "ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_sum_right B G H G H D"
 proof -
 	have "col C H D" using collinear_b `axioms` `bet C H D` by blast
 	have "G \<noteq> H" using betweennotequal[OF `axioms` `bet E G H`] by blast
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A G B`] by blast
 	have "C \<noteq> D" using betweennotequal[OF `axioms` `bet C H D`] by blast
-	obtain R where "bet A R D \<and> col G H R \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H D`] by blast
+	obtain R where "bet A R D \<and> col G H R \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H D`]  by  blast
 	have "oppo_side D G H A" using oppositesidesymmetric[OF `axioms` `oppo_side A G H D`] .
 	have "\<not> col G H D" using oppositeside_f[OF `axioms` `oppo_side D G H A`] by blast
 	have "\<not> col D H G" using NCorder[OF `axioms` `\<not> col G H D`] by blast
@@ -29,7 +29,7 @@ proof -
 	have "col C H D" using `col C H D` .
 	have "C \<noteq> D" using betweennotequal[OF `axioms` `bet C H D`] by blast
 	have "\<not> col C D G" using NChelper[OF `axioms` `\<not> col C H G` `col C H C` `col C H D` `C \<noteq> D`] .
-	obtain P Q S where "bet P G Q \<and> ang_eq Q G H G H C \<and> ang_eq Q G H C H G \<and> ang_eq H G Q C H G \<and> ang_eq P G H G H D \<and> ang_eq P G H D H G \<and> ang_eq H G P D H G \<and> parallel P Q C D \<and> seg_eq P G H D \<and> seg_eq G Q C H \<and> seg_eq G S S H \<and> seg_eq P S S D \<and> seg_eq C S S Q \<and> bet P S D \<and> bet C S Q \<and> bet G S H" using Prop31[OF `axioms` `bet C H D` `\<not> col C D G`] by blast
+	obtain P Q S where "bet P G Q \<and> ang_eq Q G H G H C \<and> ang_eq Q G H C H G \<and> ang_eq H G Q C H G \<and> ang_eq P G H G H D \<and> ang_eq P G H D H G \<and> ang_eq H G P D H G \<and> parallel P Q C D \<and> seg_eq P G H D \<and> seg_eq G Q C H \<and> seg_eq G S S H \<and> seg_eq P S S D \<and> seg_eq C S S Q \<and> bet P S D \<and> bet C S Q \<and> bet G S H" using Prop31[OF `axioms` `bet C H D` `\<not> col C D G`]  by  blast
 	have "bet P G Q" using `bet P G Q \<and> ang_eq Q G H G H C \<and> ang_eq Q G H C H G \<and> ang_eq H G Q C H G \<and> ang_eq P G H G H D \<and> ang_eq P G H D H G \<and> ang_eq H G P D H G \<and> parallel P Q C D \<and> seg_eq P G H D \<and> seg_eq G Q C H \<and> seg_eq G S S H \<and> seg_eq P S S D \<and> seg_eq C S S Q \<and> bet P S D \<and> bet C S Q \<and> bet G S H` by blast
 	have "ang_eq P G H G H D" using `bet P G Q \<and> ang_eq Q G H G H C \<and> ang_eq Q G H C H G \<and> ang_eq H G Q C H G \<and> ang_eq P G H G H D \<and> ang_eq P G H D H G \<and> ang_eq H G P D H G \<and> parallel P Q C D \<and> seg_eq P G H D \<and> seg_eq G Q C H \<and> seg_eq G S S H \<and> seg_eq P S S D \<and> seg_eq C S S Q \<and> bet P S D \<and> bet C S Q \<and> bet G S H` by blast
 	have "seg_eq G S S H" using `bet P G Q \<and> ang_eq Q G H G H C \<and> ang_eq Q G H C H G \<and> ang_eq H G Q C H G \<and> ang_eq P G H G H D \<and> ang_eq P G H D H G \<and> ang_eq H G P D H G \<and> parallel P Q C D \<and> seg_eq P G H D \<and> seg_eq G Q C H \<and> seg_eq G S S H \<and> seg_eq P S S D \<and> seg_eq C S S Q \<and> bet P S D \<and> bet C S Q \<and> bet G S H` by blast
@@ -38,7 +38,7 @@ proof -
 	have "bet C S Q" using `bet P G Q \<and> ang_eq Q G H G H C \<and> ang_eq Q G H C H G \<and> ang_eq H G Q C H G \<and> ang_eq P G H G H D \<and> ang_eq P G H D H G \<and> ang_eq H G P D H G \<and> parallel P Q C D \<and> seg_eq P G H D \<and> seg_eq G Q C H \<and> seg_eq G S S H \<and> seg_eq P S S D \<and> seg_eq C S S Q \<and> bet P S D \<and> bet C S Q \<and> bet G S H` by blast
 	have "bet G S H" using `bet P G Q \<and> ang_eq Q G H G H C \<and> ang_eq Q G H C H G \<and> ang_eq H G Q C H G \<and> ang_eq P G H G H D \<and> ang_eq P G H D H G \<and> ang_eq H G P D H G \<and> parallel P Q C D \<and> seg_eq P G H D \<and> seg_eq G Q C H \<and> seg_eq G S S H \<and> seg_eq P S S D \<and> seg_eq C S S Q \<and> bet P S D \<and> bet C S Q \<and> bet G S H` by blast
 	have "parallel A B C D" using `parallel A B C D` .
-	have "\<not> (meets A B C D)" using parallel_f[OF `axioms` `parallel A B C D`] by blast
+	have "\<not> (meets A B C D)" using parallel_f[OF `axioms` `parallel A B C D`] by fastforce
 	have "P = P" using equalityreflexiveE[OF `axioms`] .
 	have "P \<noteq> G" using betweennotequal[OF `axioms` `bet P G Q`] by blast
 	have "G \<noteq> P" using inequalitysymmetric[OF `axioms` `P \<noteq> G`] .
@@ -59,7 +59,8 @@ proof -
 	have "ray_on G P P" using `ray_on G P P` .
 	have "\<not> (ang_lt H G A H G P)"
 	proof (rule ccontr)
-		assume "ang_lt H G A H G P"
+		assume "\<not> (\<not> (ang_lt H G A H G P))"
+hence "ang_lt H G A H G P" by blast
 		obtain M where "bet P M H \<and> ray_on G A M" using crossbar2[OF `axioms` `ang_lt H G A H G P` `same_side A P G H` `ray_on G H H` `ray_on G P P`]  by  blast
 		have "ray_on G A M" using `bet P M H \<and> ray_on G A M` by blast
 		have "bet P S D" using `bet P S D` .
@@ -96,13 +97,15 @@ proof -
 	hence "\<not> (ang_lt H G A H G P)" by blast
 	have "\<not> (ang_lt H G P H G A)"
 	proof (rule ccontr)
-		assume "ang_lt H G P H G A"
+		assume "\<not> (\<not> (ang_lt H G P H G A))"
+hence "ang_lt H G P H G A" by blast
 		have "\<not> col P G H" using NCorder[OF `axioms` `\<not> col G H P`] by blast
 		have "ang_eq P G H H G P" using ABCequalsCBA[OF `axioms` `\<not> col P G H`] .
 		have "ang_lt P G H H G A" using angleorderrespectscongruence2[OF `axioms` `ang_lt H G P H G A` `ang_eq P G H H G P`] .
 		have "\<not> (col H G A)"
 		proof (rule ccontr)
-			assume "col H G A"
+			assume "\<not> (\<not> (col H G A))"
+hence "col H G A" by blast
 			have "col G H A" using collinearorder[OF `axioms` `col H G A`] by blast
 			have "\<not> col G H A" using `\<not> col G H A` .
 			show "False" using `\<not> col G H A` `col G H A` by blast
@@ -115,24 +118,25 @@ proof -
 		have "G \<noteq> H" using `G \<noteq> H` .
 		have "ray_on G H H" using ray4 `axioms` `H = H` `G \<noteq> H` by blast
 		have "bet P G Q" using `bet P G Q` .
-		have "linear_pair P G H H Q" using supplement_b[OF `axioms` `ray_on G H H` `bet P G Q`] .
+		have "supplement P G H H Q" using supplement_b[OF `axioms` `ray_on G H H` `bet P G Q`] .
 		have "bet D H C" using betweennesssymmetryE[OF `axioms` `bet C H D`] .
 		have "G = G" using equalityreflexiveE[OF `axioms`] .
 		have "H \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> H`] .
 		have "ray_on H G G" using ray4 `axioms` `G = G` `H \<noteq> G` by blast
-		have "linear_pair D H G G C" using supplement_b[OF `axioms` `ray_on H G G` `bet D H C`] .
+		have "supplement D H G G C" using supplement_b[OF `axioms` `ray_on H G G` `bet D H C`] .
 		have "ang_eq P G H G H D" using `ang_eq P G H G H D` .
 		have "ang_eq G H D D H G" using ABCequalsCBA[OF `axioms` `\<not> col G H D`] .
 		have "ang_eq P G H D H G" using equalanglestransitive[OF `axioms` `ang_eq P G H G H D` `ang_eq G H D D H G`] .
-		have "ang_eq H G Q G H C" using supplements[OF `axioms` `ang_eq P G H D H G` `linear_pair P G H H Q` `linear_pair D H G G C`] .
-		have "linear_pair A G H H B" using supplement_b[OF `axioms` `ray_on G H H` `bet A G B`] .
-		have "ang_lt H G B H G Q" using supplementinequality[OF `axioms` `linear_pair A G H H B` `linear_pair P G H H Q` `ang_lt P G H A G H`] .
+		have "ang_eq H G Q G H C" using supplements[OF `axioms` `ang_eq P G H D H G` `supplement P G H H Q` `supplement D H G G C`] .
+		have "supplement A G H H B" using supplement_b[OF `axioms` `ray_on G H H` `bet A G B`] .
+		have "ang_lt H G B H G Q" using supplementinequality[OF `axioms` `supplement A G H H B` `supplement P G H H Q` `ang_lt P G H A G H`] .
 		have "bet B G A" using betweennesssymmetryE[OF `axioms` `bet A G B`] .
 		have "G = G" using equalityreflexiveE[OF `axioms`] .
 		have "col G H G" using collinear_b `axioms` `G = G` by blast
 		have "\<not> (col G H B)"
 		proof (rule ccontr)
-			assume "col G H B"
+			assume "\<not> (\<not> (col G H B))"
+hence "col G H B" by blast
 			have "col A G B" using collinear_b `axioms` `bet A G B` by blast
 			have "col B G A" using collinearorder[OF `axioms` `col A G B`] by blast
 			have "col B G H" using collinearorder[OF `axioms` `col G H B`] by blast
@@ -148,7 +152,7 @@ proof -
 		have "same_side A P G H" using sameside_b[OF `axioms` `col G H R` `col G H S` `bet A R D` `bet P S D` `\<not> col G H A` `\<not> col G H P`] .
 		have "same_side P A G H" using samesidesymmetric[OF `axioms` `same_side A P G H`] by blast
 		have "oppo_side P G H B" using planeseparation[OF `axioms` `same_side P A G H` `oppo_side A G H B`] .
-		obtain L where "bet P L B \<and> col G H L \<and> \<not> col G H P" using oppositeside_f[OF `axioms` `oppo_side P G H B`] by blast
+		obtain L where "bet P L B \<and> col G H L \<and> \<not> col G H P" using oppositeside_f[OF `axioms` `oppo_side P G H B`]  by  blast
 		have "bet P L B" using `bet P L B \<and> col G H L \<and> \<not> col G H P` by blast
 		have "bet B L P" using betweennesssymmetryE[OF `axioms` `bet P L B`] .
 		have "col G H L" using `bet P L B \<and> col G H L \<and> \<not> col G H P` by blast
@@ -156,7 +160,8 @@ proof -
 		have "\<not> col H G Q" using equalanglesNC[OF `axioms` `ang_eq G H C H G Q`] .
 		have "\<not> (col G H Q)"
 		proof (rule ccontr)
-			assume "col G H Q"
+			assume "\<not> (\<not> (col G H Q))"
+hence "col G H Q" by blast
 			have "col H G Q" using collinearorder[OF `axioms` `col G H Q`] by blast
 			show "False" using `col H G Q` `\<not> col H G Q` by blast
 		qed
@@ -210,22 +215,25 @@ proof -
 	hence "\<not> (ang_lt H G P H G A)" by blast
 	have "\<not> (col H G P)"
 	proof (rule ccontr)
-		assume "col H G P"
+		assume "\<not> (\<not> (col H G P))"
+hence "col H G P" by blast
 		have "col G H P" using collinearorder[OF `axioms` `col H G P`] by blast
 		show "False" using `col G H P` `\<not> col G H P` by blast
 	qed
 	hence "\<not> col H G P" by blast
 	have "\<not> (col H G A)"
 	proof (rule ccontr)
-		assume "col H G A"
+		assume "\<not> (\<not> (col H G A))"
+hence "col H G A" by blast
 		have "col G H A" using collinearorder[OF `axioms` `col H G A`] by blast
 		have "\<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H D`] by blast
 		show "False" using `\<not> col G H A` `col G H A` by blast
 	qed
 	hence "\<not> col H G A" by blast
-	have "ang_eq H G A H G P"
+	have "\<not> (\<not> (ang_eq H G A H G P))"
 	proof (rule ccontr)
-		assume "\<not> (ang_eq H G A H G P)"
+		assume "\<not> (\<not> (\<not> (ang_eq H G A H G P)))"
+hence "\<not> (ang_eq H G A H G P)" by blast
 		have "ang_lt H G A H G P" using angletrichotomy2[OF `axioms` `\<not> col H G A` `\<not> col H G P` `\<not> (ang_eq H G A H G P)` `\<not> (ang_lt H G P H G A)`] .
 		have "\<not> (ang_lt H G A H G P)" using `\<not> (ang_lt H G A H G P)` .
 		show "False" using `\<not> (ang_lt H G A H G P)` `ang_lt H G A H G P` by blast
@@ -239,7 +247,8 @@ proof -
 	have "ang_eq H G A D H G" using equalanglestransitive[OF `axioms` `ang_eq H G A H G P` `ang_eq H G P D H G`] .
 	have "\<not> (col A G H)"
 	proof (rule ccontr)
-		assume "col A G H"
+		assume "\<not> (\<not> (col A G H))"
+hence "col A G H" by blast
 		have "col G H A" using collinearorder[OF `axioms` `col A G H`] by blast
 		have "\<not> col G H A" using `\<not> col G H A` .
 		show "False" using `\<not> col G H A` `col G H A` by blast
@@ -260,10 +269,11 @@ proof -
 	have "ang_eq A G H G H D" using `ang_eq A G H G H D` .
 	have "H = H" using equalityreflexiveE[OF `axioms`] .
 	have "ray_on G H H" using ray4 `axioms` `H = H` `G \<noteq> H` by blast
-	have "linear_pair A G H H B" using supplement_b[OF `axioms` `ray_on G H H` `bet A G B`] .
+	have "supplement A G H H B" using supplement_b[OF `axioms` `ray_on G H H` `bet A G B`] .
 	have "\<not> (col B G H)"
 	proof (rule ccontr)
-		assume "col B G H"
+		assume "\<not> (\<not> (col B G H))"
+hence "col B G H" by blast
 		have "col A G B" using collinear_b `axioms` `bet A G B` by blast
 		have "col B G A" using collinearorder[OF `axioms` `col A G B`] by blast
 		have "G \<noteq> B" using betweennotequal[OF `axioms` `bet A G B`] by blast
@@ -278,9 +288,9 @@ proof -
 	have "ang_eq G H D A G H" using equalanglessymmetric[OF `axioms` `ang_eq A G H G H D`] .
 	have "ang_eq A G H H G A" using ABCequalsCBA[OF `axioms` `\<not> col A G H`] .
 	have "ang_eq G H D H G A" using equalanglestransitive[OF `axioms` `ang_eq G H D A G H` `ang_eq A G H H G A`] .
-	have "linear_pair B G H H A" using supplementsymmetric[OF `axioms` `linear_pair A G H H B`] .
-	have "ang_suppl B G H G H D" using tworightangles_b[OF `axioms` `linear_pair B G H H A` `ang_eq B G H B G H` `ang_eq G H D H G A`] .
-	have "ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_suppl B G H G H D" using `ang_eq A G H G H D` `ang_eq E G B G H D` `ang_suppl B G H G H D` by blast
+	have "supplement B G H H A" using supplementsymmetric[OF `axioms` `supplement A G H H B`] .
+	have "ang_sum_right B G H G H D" using tworightangles_b[OF `axioms` `supplement B G H H A` `ang_eq B G H B G H` `ang_eq G H D H G A`] .
+	have "ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_sum_right B G H G H D" using `ang_eq A G H G H D` `ang_eq E G B G H D` `ang_sum_right B G H G H D` by blast
 	thus ?thesis by blast
 qed
 

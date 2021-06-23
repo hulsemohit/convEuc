@@ -1,9 +1,9 @@
 theory Prop43B
-	imports Axioms Definitions Theorems
+	imports n3_6a Geometry NCorder Prop28D Prop29C betweennotequal collinearorder collinearparallel equalanglesflip equalangleshelper equalanglesreflexive equalanglessymmetric inequalitysymmetric parallelNC paralleldef2B parallelflip parallelsymmetric ray4 ray5 sameside2 samesidecollinear samesideflip samesidesymmetric samesidetransitive supplements2
 begin
 
 theorem Prop43B:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram A B C D"
 		"bet A H D"
 		"bet A E B"
@@ -11,7 +11,7 @@ theorem Prop43B:
 		"bet B G C"
 		"parallelogram E A H K"
 		"parallelogram G K F C"
-	shows: "parallelogram E K G B"
+	shows "parallelogram E K G B"
 proof -
 	have "parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] by blast
 	have "parallel A B C D" using parallelogram_f[OF `axioms` `parallelogram A B C D`] by blast
@@ -39,18 +39,18 @@ proof -
 	have "B \<noteq> G" using betweennotequal[OF `axioms` `bet B G C`] by blast
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A E B`] by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-	obtain e where "bet B A e \<and> seg_eq A e B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`] by blast
+	obtain e where "bet B A e \<and> seg_eq A e B A" using extensionE[OF `axioms` `B \<noteq> A` `B \<noteq> A`]  by  blast
 	have "bet B A e" using `bet B A e \<and> seg_eq A e B A` by blast
 	have "bet e A B" using betweennesssymmetryE[OF `axioms` `bet B A e`] .
 	have "same_side D C A B" using samesidesymmetric[OF `axioms` `same_side C D A B`] by blast
 	have "parallel A D B C" using `parallel A D B C` .
-	have "ang_suppl D A B A B C" using Prop29C[OF `axioms` `parallel A D B C` `same_side D C A B` `bet e A B`] by blast
+	have "ang_sum_right D A B A B C" using Prop29C[OF `axioms` `parallel A D B C` `same_side D C A B` `bet e A B`] by blast
 	have "bet B E A" using betweennesssymmetryE[OF `axioms` `bet A E B`] .
 	have "bet E A e" using n3_6a[OF `axioms` `bet B E A` `bet B A e`] .
 	have "bet e A E" using betweennesssymmetryE[OF `axioms` `bet E A e`] .
 	have "parallel A H E K" using `parallel A H E K` .
 	have "same_side H K A E" using samesidesymmetric[OF `axioms` `same_side H K E A`] by blast
-	have "ang_suppl H A E A E K" using Prop29C[OF `axioms` `parallel A H E K` `same_side H K A E` `bet e A E`] by blast
+	have "ang_sum_right H A E A E K" using Prop29C[OF `axioms` `parallel A H E K` `same_side H K A E` `bet e A E`] by blast
 	have "ray_on A E B" using ray4 `axioms` `bet A E B` `A \<noteq> E` by blast
 	have "ray_on A H D" using ray4 `axioms` `bet A H D` `A \<noteq> H` by blast
 	have "\<not> col A H E" using parallelNC[OF `axioms` `parallel A H E K`] by blast
@@ -58,7 +58,7 @@ proof -
 	have "ang_eq E A H E A H" using equalanglesreflexive[OF `axioms` `\<not> col E A H`] .
 	have "ang_eq E A H B A D" using equalangleshelper[OF `axioms` `ang_eq E A H E A H` `ray_on A E B` `ray_on A H D`] .
 	have "ang_eq H A E D A B" using equalanglesflip[OF `axioms` `ang_eq E A H B A D`] .
-	have "ang_eq A E K A B C" using supplements2[OF `axioms` `ang_suppl H A E A E K` `ang_eq H A E D A B` `ang_suppl D A B A B C`] by blast
+	have "ang_eq A E K A B C" using supplements2[OF `axioms` `ang_sum_right H A E A E K` `ang_eq H A E D A B` `ang_sum_right D A B A B C`] by blast
 	have "same_side C D A B" using `same_side C D A B` .
 	have "same_side C D B A" using samesideflip[OF `axioms` `same_side C D A B`] .
 	have "col A E B" using collinear_b `axioms` `bet A E B` by blast
@@ -88,18 +88,18 @@ proof -
 	have "parallel E K G B" using parallelflip[OF `axioms` `parallel E K B G`] by blast
 	have "same_side D A C B" using `same_side D A C B` .
 	have "B \<noteq> C" using betweennotequal[OF `axioms` `bet B G C`] by blast
-	obtain c where "bet B C c \<and> seg_eq C c B C" using extensionE[OF `axioms` `B \<noteq> C` `B \<noteq> C`] by blast
+	obtain c where "bet B C c \<and> seg_eq C c B C" using extensionE[OF `axioms` `B \<noteq> C` `B \<noteq> C`]  by  blast
 	have "bet B C c" using `bet B C c \<and> seg_eq C c B C` by blast
 	have "bet c C B" using betweennesssymmetryE[OF `axioms` `bet B C c`] .
 	have "parallel C D B A" using parallelflip[OF `axioms` `parallel C D A B`] by blast
-	have "ang_suppl D C B C B A" using Prop29C[OF `axioms` `parallel C D B A` `same_side D A C B` `bet c C B`] by blast
+	have "ang_sum_right D C B C B A" using Prop29C[OF `axioms` `parallel C D B A` `same_side D A C B` `bet c C B`] by blast
 	have "parallel C F G K" using `parallel C F G K` .
 	have "same_side K F G C" using `same_side K F G C` .
 	have "same_side K F C G" using samesideflip[OF `axioms` `same_side K F G C`] .
 	have "same_side F K C G" using samesidesymmetric[OF `axioms` `same_side K F C G`] by blast
 	have "bet C G B" using betweennesssymmetryE[OF `axioms` `bet B G C`] .
 	have "bet c C G" using innertransitivityE[OF `axioms` `bet c C B` `bet C G B`] .
-	have "ang_suppl F C G C G K" using Prop29C[OF `axioms` `parallel C F G K` `same_side F K C G` `bet c C G`] by blast
+	have "ang_sum_right F C G C G K" using Prop29C[OF `axioms` `parallel C F G K` `same_side F K C G` `bet c C G`] by blast
 	have "\<not> col D B C" using parallelNC[OF `axioms` `parallel A D B C`] by blast
 	have "\<not> col D C B" using NCorder[OF `axioms` `\<not> col D B C`] by blast
 	have "ang_eq D C B D C B" using equalanglesreflexive[OF `axioms` `\<not> col D C B`] .
@@ -112,7 +112,7 @@ proof -
 	have "ray_on C G B" using ray4 `axioms` `bet C G B` `C \<noteq> G` by blast
 	have "ray_on C B G" using ray5[OF `axioms` `ray_on C G B`] .
 	have "ang_eq D C B F C G" using equalangleshelper[OF `axioms` `ang_eq D C B D C B` `ray_on C D F` `ray_on C B G`] .
-	have "ang_eq C B A C G K" using supplements2[OF `axioms` `ang_suppl D C B C B A` `ang_eq D C B F C G` `ang_suppl F C G C G K`] by blast
+	have "ang_eq C B A C G K" using supplements2[OF `axioms` `ang_sum_right D C B C B A` `ang_eq D C B F C G` `ang_sum_right F C G C G K`] by blast
 	have "ang_eq C G K C B A" using equalanglessymmetric[OF `axioms` `ang_eq C B A C G K`] .
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
 	have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast

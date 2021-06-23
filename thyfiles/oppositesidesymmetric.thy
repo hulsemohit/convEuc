@@ -1,19 +1,20 @@
 theory oppositesidesymmetric
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal collinear4 collinearorder inequalitysymmetric
 begin
 
 theorem oppositesidesymmetric:
-	assumes: `axioms`
+	assumes "axioms"
 		"oppo_side P A B Q"
-	shows: "oppo_side Q A B P"
+	shows "oppo_side Q A B P"
 proof -
-	obtain R where "bet P R Q \<and> col A B R \<and> \<not> col A B P" using oppositeside_f[OF `axioms` `oppo_side P A B Q`] by blast
+	obtain R where "bet P R Q \<and> col A B R \<and> \<not> col A B P" using oppositeside_f[OF `axioms` `oppo_side P A B Q`]  by  blast
 	have "bet P R Q" using `bet P R Q \<and> col A B R \<and> \<not> col A B P` by blast
 	have "col A B R" using `bet P R Q \<and> col A B R \<and> \<not> col A B P` by blast
 	have "\<not> col A B P" using `bet P R Q \<and> col A B R \<and> \<not> col A B P` by blast
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "col A B P" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B P` `bet P R Q \<and> col A B R \<and> \<not> col A B P` by blast
 	qed
@@ -21,7 +22,8 @@ proof -
 	have "bet Q R P" using betweennesssymmetryE[OF `axioms` `bet P R Q`] .
 	have "\<not> (col A B Q)"
 	proof (rule ccontr)
-		assume "col A B Q"
+		assume "\<not> (\<not> (col A B Q))"
+hence "col A B Q" by blast
 		have "col P R Q" using collinear_b `axioms` `bet P R Q \<and> col A B R \<and> \<not> col A B P` by blast
 		have "col A B R" using `col A B R` .
 		have "col B Q R" using collinear4[OF `axioms` `col A B Q` `col A B R` `A \<noteq> B`] .
@@ -31,9 +33,9 @@ proof -
 		have "col R B P" using collinear4[OF `axioms` `col Q R B` `col Q R P` `Q \<noteq> R`] .
 		have "col R B A" using collinearorder[OF `axioms` `col A B R`] by blast
 		consider "R = B"|"R \<noteq> B" by blast
-		hence col A P B
+		hence "col A P B"
 		proof (cases)
-			case 1
+			assume "R = B"
 			have "col P B Q" using `col P R Q` `R = B` by blast
 			have "col B Q P" using collinearorder[OF `axioms` `col P B Q`] by blast
 			have "col B Q A" using collinearorder[OF `axioms` `col A B Q`] by blast
@@ -45,11 +47,13 @@ proof -
 			have "Q \<noteq> P" using inequalitysymmetric[OF `axioms` `P \<noteq> Q`] .
 			have "col P A B" using collinear4[OF `axioms` `col Q P A` `col Q P B` `Q \<noteq> P`] .
 			have "col A P B" using collinearorder[OF `axioms` `col P A B`] by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "R \<noteq> B"
 			have "col B P A" using collinear4[OF `axioms` `col R B P` `col R B A` `R \<noteq> B`] .
 			have "col A P B" using collinearorder[OF `axioms` `col B P A`] by blast
-		next
+			thus ?thesis by blast
+		qed
 		have "col A B P" using collinearorder[OF `axioms` `col A P B`] by blast
 		show "False" using `col A B P` `bet P R Q \<and> col A B R \<and> \<not> col A B P` by blast
 	qed

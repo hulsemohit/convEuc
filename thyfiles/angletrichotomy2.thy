@@ -1,18 +1,19 @@
 theory angletrichotomy2
-	imports Axioms Definitions Theorems
+	imports n3_6a n3_6b ABCequalsCBA Geometry Prop23C angleorderrespectscongruence angleorderrespectscongruence2 betweennotequal collinear4 collinear5 collinearorder equalanglesNC equalangleshelper equalanglesreflexive equalanglessymmetric equalanglestransitive equalitysymmetric inequalitysymmetric oppositesidesymmetric outerconnectivity planeseparation ray4 ray5 rayimpliescollinear sameside2 samesidesymmetric
 begin
 
 theorem angletrichotomy2:
-	assumes: `axioms`
+	assumes "axioms"
 		"\<not> col A B C"
 		"\<not> col D E F"
 		"\<not> (ang_eq A B C D E F)"
 		"\<not> (ang_lt D E F A B C)"
-	shows: "ang_lt A B C D E F"
+	shows "ang_lt A B C D E F"
 proof -
 	have "\<not> (B = A)"
 	proof (rule ccontr)
-		assume "B = A"
+		assume "\<not> (B \<noteq> A)"
+		hence "B = A" by blast
 		have "A = B" using equalitysymmetric[OF `axioms` `B = A`] .
 		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
@@ -20,14 +21,16 @@ proof -
 	hence "B \<noteq> A" by blast
 	have "\<not> (B = C)"
 	proof (rule ccontr)
-		assume "B = C"
+		assume "\<not> (B \<noteq> C)"
+		hence "B = C" by blast
 		have "col A B C" using collinear_b `axioms` `B = C` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "B \<noteq> C" by blast
 	have "\<not> (col B A C)"
 	proof (rule ccontr)
-		assume "col B A C"
+		assume "\<not> (\<not> (col B A C))"
+hence "col B A C" by blast
 		have "col A B C" using collinearorder[OF `axioms` `col B A C`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -39,14 +42,16 @@ proof -
 	have "\<not> col B A G" using sameside_f[OF `axioms` `same_side G C B A`] by blast
 	have "\<not> (B = G)"
 	proof (rule ccontr)
-		assume "B = G"
+		assume "\<not> (B \<noteq> G)"
+		hence "B = G" by blast
 		have "col B A G" using collinear_b `axioms` `B = G` by blast
 		show "False" using `col B A G` `\<not> col B A G` by blast
 	qed
 	hence "B \<noteq> G" by blast
 	have "\<not> (A = G)"
 	proof (rule ccontr)
-		assume "A = G"
+		assume "\<not> (A \<noteq> G)"
+		hence "A = G" by blast
 		have "col B A G" using collinear_b `axioms` `A = G` by blast
 		show "False" using `col B A G` `\<not> col B A G` by blast
 	qed
@@ -59,7 +64,8 @@ proof -
 	have "\<not> col G B A" using equalanglesNC[OF `axioms` `ang_eq D E F G B A`] .
 	have "\<not> (col A B G)"
 	proof (rule ccontr)
-		assume "col A B G"
+		assume "\<not> (\<not> (col A B G))"
+hence "col A B G" by blast
 		have "col B A G" using collinearorder[OF `axioms` `col A B G`] by blast
 		show "False" using `col B A G` `\<not> col B A G` by blast
 	qed
@@ -69,26 +75,29 @@ proof -
 	have "ang_eq A B G D E F" using equalanglestransitive[OF `axioms` `ang_eq A B G G B A` `ang_eq G B A D E F`] .
 	have "\<not> (col A B G)"
 	proof (rule ccontr)
-		assume "col A B G"
+		assume "\<not> (\<not> (col A B G))"
+hence "col A B G" by blast
 		have "col G B A" using collinearorder[OF `axioms` `col A B G`] by blast
 		show "False" using `col G B A` `\<not> col G B A` by blast
 	qed
 	hence "\<not> col A B G" by blast
 	have "\<not> (G = A)"
 	proof (rule ccontr)
-		assume "G = A"
+		assume "\<not> (G \<noteq> A)"
+		hence "G = A" by blast
 		have "A = G" using equalitysymmetric[OF `axioms` `G = A`] .
 		have "col A B G" using collinear_b `axioms` `A = G` by blast
 		show "False" using `col A B G` `\<not> col A B G` by blast
 	qed
 	hence "G \<noteq> A" by blast
-	obtain P where "bet G A P \<and> seg_eq A P G A" using extensionE[OF `axioms` `G \<noteq> A` `G \<noteq> A`] by blast
+	obtain P where "bet G A P \<and> seg_eq A P G A" using extensionE[OF `axioms` `G \<noteq> A` `G \<noteq> A`]  by  blast
 	have "bet G A P" using `bet G A P \<and> seg_eq A P G A` by blast
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
 	have "col B A A" using collinear_b `axioms` `A = A` by blast
 	have "\<not> (col B A G)"
 	proof (rule ccontr)
-		assume "col B A G"
+		assume "\<not> (\<not> (col B A G))"
+hence "col B A G" by blast
 		have "col G B A" using collinearorder[OF `axioms` `col B A G`] by blast
 		show "False" using `col G B A` `\<not> col G B A` by blast
 	qed
@@ -96,15 +105,15 @@ proof -
 	have "same_side C G B A" using samesidesymmetric[OF `axioms` `same_side G C B A`] by blast
 	have "oppo_side G B A P" using oppositeside_b[OF `axioms` `bet G A P` `col B A A` `\<not> col B A G`] .
 	have "oppo_side C B A P" using planeseparation[OF `axioms` `same_side C G B A` `oppo_side G B A P`] .
-	obtain R where "bet C R P \<and> col B A R \<and> \<not> col B A C" using oppositeside_f[OF `axioms` `oppo_side C B A P`] by blast
+	obtain R where "bet C R P \<and> col B A R \<and> \<not> col B A C" using oppositeside_f[OF `axioms` `oppo_side C B A P`]  by  blast
 	have "bet C R P" using `bet C R P \<and> col B A R \<and> \<not> col B A C` by blast
 	have "bet P R C" using betweennesssymmetryE[OF `axioms` `bet C R P`] .
 	have "\<not> col B A C" using `\<not> col B A C` .
 	consider "oppo_side G B C A"|"\<not> (oppo_side G B C A)" by blast
-	hence ang_lt A B C D E F
+	hence "ang_lt A B C D E F"
 	proof (cases)
-		case 1
-		obtain H where "bet G H A \<and> col B C H \<and> \<not> col B C G" using oppositeside_f[OF `axioms` `oppo_side G B C A`] by blast
+		assume "oppo_side G B C A"
+		obtain H where "bet G H A \<and> col B C H \<and> \<not> col B C G" using oppositeside_f[OF `axioms` `oppo_side G B C A`]  by  blast
 		have "bet G H A" using `bet G H A \<and> col B C H \<and> \<not> col B C G` by blast
 		have "col B C H" using `bet G H A \<and> col B C H \<and> \<not> col B C G` by blast
 		have "bet A H G" using betweennesssymmetryE[OF `axioms` `bet G H A`] .
@@ -112,10 +121,12 @@ proof -
 		have "ray_on B G G" using `ray_on B G G` .
 		have "\<not> (col A B H)"
 		proof (rule ccontr)
-			assume "col A B H"
+			assume "\<not> (\<not> (col A B H))"
+hence "col A B H" by blast
 			have "\<not> (B = H)"
 			proof (rule ccontr)
-				assume "B = H"
+				assume "\<not> (B \<noteq> H)"
+				hence "B = H" by blast
 				have "bet A B G" using `bet A H G` `B = H` by blast
 				have "col A B G" using collinear_b `axioms` `bet A B G` by blast
 				have "col G B A" using collinearorder[OF `axioms` `col A B G`] by blast
@@ -136,7 +147,8 @@ proof -
 		have "ang_lt A B H G B A" using angleorderrespectscongruence[OF `axioms` `ang_lt A B H A B G` `ang_eq G B A A B G`] .
 		have "\<not> (col H B A)"
 		proof (rule ccontr)
-			assume "col H B A"
+			assume "\<not> (\<not> (col H B A))"
+hence "col H B A" by blast
 			have "col A B H" using collinearorder[OF `axioms` `col H B A`] by blast
 			show "False" using `col A B H` `\<not> col A B H` by blast
 		qed
@@ -156,41 +168,46 @@ proof -
 		have "same_side C H B A" using sameside2[OF `axioms` `same_side C G B A` `col B A A` `ray_on A G H`] .
 		have "\<not> (bet C B H)"
 		proof (rule ccontr)
-			assume "bet C B H"
+			assume "\<not> (\<not> (bet C B H))"
+hence "bet C B H" by blast
 			have "B = B" using equalityreflexiveE[OF `axioms`] .
 			have "col B A B" using collinear_b `axioms` `B = B` by blast
 			have "oppo_side C B A H" using oppositeside_b[OF `axioms` `bet C B H` `col B A B` `\<not> col B A C`] .
 			have "oppo_side H B A C" using oppositesidesymmetric[OF `axioms` `oppo_side C B A H`] .
 			have "oppo_side C B A C" using planeseparation[OF `axioms` `same_side C H B A` `oppo_side H B A C`] .
-			obtain M where "bet C M C \<and> col B A M \<and> \<not> col B A C" using oppositeside_f[OF `axioms` `oppo_side C B A C`] by blast
+			obtain M where "bet C M C \<and> col B A M \<and> \<not> col B A C" using oppositeside_f[OF `axioms` `oppo_side C B A C`]  by  blast
 			have "bet C M C" using `bet C M C \<and> col B A M \<and> \<not> col B A C` by blast
-			have "\<not> (bet C M C)" using betweennessidentityE[OF `axioms`] by blast
+			have "\<not> (bet C M C)" using betweennessidentityE[OF `axioms`] .
 			show "False" using `\<not> (bet C M C)` `bet C M C \<and> col B A M \<and> \<not> col B A C` by blast
 		qed
 		hence "\<not> (bet C B H)" by blast
 		have "col B C H" using `col B C H` .
 		have "B = C \<or> B = H \<or> C = H \<or> bet C B H \<or> bet B C H \<or> bet B H C" using collinear_f[OF `axioms` `col B C H`] .
 		consider "B = C"|"B = H"|"C = H"|"bet C B H"|"bet B C H"|"bet B H C" using `B = C \<or> B = H \<or> C = H \<or> bet C B H \<or> bet B C H \<or> bet B H C`  by blast
-		hence ray_on B C H
+		hence "ray_on B C H"
 		proof (cases)
-			case 1
+			assume "B = C"
 			have "col A B C" using collinear_b `axioms` `B = C` by blast
-			have "ray_on B C H"
+			have "\<not> (\<not> (ray_on B C H))"
 			proof (rule ccontr)
-				assume "\<not> (ray_on B C H)"
+				assume "\<not> (\<not> (\<not> (ray_on B C H)))"
+hence "\<not> (ray_on B C H)" by blast
 				have "\<not> col A B C" using `\<not> col A B C` .
 				show "False" using `\<not> col A B C` `col A B C` by blast
 			qed
 			hence "ray_on B C H" by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "B = H"
 			have "col B H A" using collinear_b `axioms` `B = H` by blast
-			have "ray_on B C H"
+			have "\<not> (\<not> (ray_on B C H))"
 			proof (rule ccontr)
-				assume "\<not> (ray_on B C H)"
+				assume "\<not> (\<not> (\<not> (ray_on B C H)))"
+hence "\<not> (ray_on B C H)" by blast
 				have "\<not> (col B H A)"
 				proof (rule ccontr)
-					assume "col B H A"
+					assume "\<not> (\<not> (col B H A))"
+hence "col B H A" by blast
 					have "col H B A" using collinearorder[OF `axioms` `col B H A`] by blast
 					have "\<not> col H B A" using `\<not> col H B A` .
 					show "False" using `\<not> col H B A` `col H B A` by blast
@@ -199,20 +216,23 @@ proof -
 				show "False" using `\<not> col B H A` `col B H A` by blast
 			qed
 			hence "ray_on B C H" by blast
+			thus ?thesis by blast
 		next
-			case 3
+			assume "C = H"
 			have "H = H" using equalityreflexiveE[OF `axioms`] .
 			consider "B = H"|"B \<noteq> H" by blast
-			hence ray_on B C H
+			hence "ray_on B C H"
 			proof (cases)
-				case 1
+				assume "B = H"
 				have "col B H A" using collinear_b `axioms` `B = H` by blast
-				have "ray_on B C H"
+				have "\<not> (\<not> (ray_on B C H))"
 				proof (rule ccontr)
-					assume "\<not> (ray_on B C H)"
+					assume "\<not> (\<not> (\<not> (ray_on B C H)))"
+hence "\<not> (ray_on B C H)" by blast
 					have "\<not> (col B H A)"
 					proof (rule ccontr)
-						assume "col B H A"
+						assume "\<not> (\<not> (col B H A))"
+hence "col B H A" by blast
 						have "col H B A" using collinearorder[OF `axioms` `col B H A`] by blast
 						have "\<not> col H B A" using `\<not> col H B A` .
 						show "False" using `\<not> col H B A` `col H B A` by blast
@@ -221,54 +241,65 @@ proof -
 					show "False" using `\<not> col B H A` `col B H A` by blast
 				qed
 				hence "ray_on B C H" by blast
+				thus ?thesis by blast
 			next
-				case 2
+				assume "B \<noteq> H"
 				have "ray_on B H H" using ray4 `axioms` `H = H` `B \<noteq> H` by blast
 				have "ray_on B C H" using `ray_on B H H` `C = H` by blast
-			next
+				thus ?thesis by blast
+			qed
+			thus ?thesis by blast
 		next
-			case 4
-			have "ray_on B C H"
+			assume "bet C B H"
+			have "\<not> (\<not> (ray_on B C H))"
 			proof (rule ccontr)
-				assume "\<not> (ray_on B C H)"
+				assume "\<not> (\<not> (\<not> (ray_on B C H)))"
+hence "\<not> (ray_on B C H)" by blast
 				have "\<not> (bet C B H)" using `\<not> (bet C B H)` .
 				show "False" using `\<not> (bet C B H)` `bet C B H` by blast
 			qed
 			hence "ray_on B C H" by blast
+			thus ?thesis by blast
 		next
-			case 5
+			assume "bet B C H"
 			have "B \<noteq> C" using betweennotequal[OF `axioms` `bet B C H`] by blast
 			have "ray_on B C H" using ray4 `axioms` `bet B C H` `B \<noteq> C` by blast
+			thus ?thesis by blast
 		next
-			case 6
+			assume "bet B H C"
 			have "B \<noteq> C" using betweennotequal[OF `axioms` `bet B H C`] by blast
 			have "ray_on B C H" using ray4 `axioms` `bet B H C` `B \<noteq> C` by blast
-		next
+			thus ?thesis by blast
+		qed
 		have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
 		have "ang_eq A B C A B H" using equalangleshelper[OF `axioms` `ang_eq A B C A B C` `ray_on B A A` `ray_on B C H`] .
 		have "ang_lt A B C D E F" using angleorderrespectscongruence2[OF `axioms` `ang_lt A B H D E F` `ang_eq A B C A B H`] .
+		thus ?thesis by blast
 	next
-		case 2
+		assume "\<not> (oppo_side G B C A)"
 		have "col B A R" using `bet C R P \<and> col B A R \<and> \<not> col B A C` by blast
 		have "B = A \<or> B = R \<or> A = R \<or> bet A B R \<or> bet B A R \<or> bet B R A" using collinear_f[OF `axioms` `col B A R`] .
 		consider "B = A"|"B = R"|"A = R"|"bet A B R"|"bet B A R"|"bet B R A" using `B = A \<or> B = R \<or> A = R \<or> bet A B R \<or> bet B A R \<or> bet B R A`  by blast
-		hence ang_lt A B C D E F
+		hence "ang_lt A B C D E F"
 		proof (cases)
-			case 1
-			have "ang_lt A B C D E F"
+			assume "B = A"
+			have "\<not> (\<not> (ang_lt A B C D E F))"
 			proof (rule ccontr)
-				assume "\<not> (ang_lt A B C D E F)"
+				assume "\<not> (\<not> (\<not> (ang_lt A B C D E F)))"
+hence "\<not> (ang_lt A B C D E F)" by blast
 				have "B \<noteq> A" using `B \<noteq> A` .
 				show "False" using `B \<noteq> A` `B = A` by blast
 			qed
 			hence "ang_lt A B C D E F" by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "B = R"
 			have "bet G A P" using `bet G A P` .
 			have "bet C R P" using betweennesssymmetryE[OF `axioms` `bet P R C`] .
 			have "\<not> (col C P G)"
 			proof (rule ccontr)
-				assume "col C P G"
+				assume "\<not> (\<not> (col C P G))"
+hence "col C P G" by blast
 				have "col C R P" using collinear_b `axioms` `bet C R P \<and> col B A R \<and> \<not> col B A C` by blast
 				have "col C B P" using `col C R P` `B = R` by blast
 				have "col G A P" using collinear_b `axioms` `bet G A P \<and> seg_eq A P G A` by blast
@@ -285,7 +316,7 @@ proof -
 				show "False" using `\<not> col A B C` `col A B C` by blast
 			qed
 			hence "\<not> col C P G" by blast
-			obtain Q where "bet C Q A \<and> bet G Q R" using Pasch-innerE[OF `axioms` `bet C R P` `bet G A P` `\<not> col C P G`] by blast
+			obtain Q where "bet C Q A \<and> bet G Q R" using Pasch_innerE[OF `axioms` `bet C R P` `bet G A P` `\<not> col C P G`]  by  blast
 			have "bet C Q A" using `bet C Q A \<and> bet G Q R` by blast
 			have "bet G Q R" using `bet C Q A \<and> bet G Q R` by blast
 			have "bet G Q B" using `bet G Q R` `B = R` by blast
@@ -302,27 +333,30 @@ proof -
 			have "ray_on B G G" using ray4 `axioms` `G = G` `B \<noteq> G` by blast
 			have "ray_on B Q Q" using ray4 `axioms` `Q = Q` `B \<noteq> Q` by blast
 			have "\<not> col A B G" using `\<not> col A B G` .
-			have "seg_eq A Q A Q" using congruencereflexiveE[OF `axioms`] by blast
-			have "seg_eq B Q B Q" using congruencereflexiveE[OF `axioms`] by blast
-			have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] by blast
+			have "seg_eq A Q A Q" using congruencereflexiveE[OF `axioms`] .
+			have "seg_eq B Q B Q" using congruencereflexiveE[OF `axioms`] .
+			have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] .
 			have "ang_eq A B G A B Q" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B G Q` `ray_on B A A` `ray_on B Q Q` `seg_eq B A B A` `seg_eq B Q B Q` `seg_eq A Q A Q` `\<not> col A B G`] .
 			have "bet A Q C" using betweennesssymmetryE[OF `axioms` `bet C Q A`] .
 			have "ang_lt A B G A B C" using anglelessthan_b[OF `axioms` `bet A Q C` `ray_on B A A` `ray_on B C C` `ang_eq A B G A B Q`] .
 			have "ang_eq A B G D E F" using `ang_eq A B G D E F` .
 			have "ang_eq D E F A B G" using equalanglessymmetric[OF `axioms` `ang_eq A B G D E F`] .
 			have "ang_lt D E F A B C" using angleorderrespectscongruence2[OF `axioms` `ang_lt A B G A B C` `ang_eq D E F A B G`] .
-			have "ang_lt A B C D E F"
+			have "\<not> (\<not> (ang_lt A B C D E F))"
 			proof (rule ccontr)
-				assume "\<not> (ang_lt A B C D E F)"
+				assume "\<not> (\<not> (\<not> (ang_lt A B C D E F)))"
+hence "\<not> (ang_lt A B C D E F)" by blast
 				have "\<not> (ang_lt D E F A B C)" using `\<not> (ang_lt D E F A B C)` .
 				show "False" using `\<not> (ang_lt D E F A B C)` `ang_lt D E F A B C` by blast
 			qed
 			hence "ang_lt A B C D E F" by blast
+			thus ?thesis by blast
 		next
-			case 3
-			have "ang_lt A B C D E F"
+			assume "A = R"
+			have "\<not> (\<not> (ang_lt A B C D E F))"
 			proof (rule ccontr)
-				assume "\<not> (ang_lt A B C D E F)"
+				assume "\<not> (\<not> (\<not> (ang_lt A B C D E F)))"
+hence "\<not> (ang_lt A B C D E F)" by blast
 				have "bet P A G" using betweennesssymmetryE[OF `axioms` `bet G A P`] .
 				have "bet P A C" using `bet P R C` `A = R` by blast
 				have "G = G" using equalityreflexiveE[OF `axioms`] .
@@ -334,7 +368,8 @@ proof -
 				have "ang_eq D E F A B G" using equalanglessymmetric[OF `axioms` `ang_eq A B G D E F`] .
 				have "\<not> (bet A G C)"
 				proof (rule ccontr)
-					assume "bet A G C"
+					assume "\<not> (\<not> (bet A G C))"
+hence "bet A G C" by blast
 					have "ang_eq A B G A B G" using equalanglesreflexive[OF `axioms` `\<not> col A B G`] .
 					have "ang_lt A B G A B C" using anglelessthan_b[OF `axioms` `bet A G C` `ray_on B A A` `ray_on B C C` `ang_eq A B G A B G`] .
 					have "ang_lt D E F A B C" using angleorderrespectscongruence2[OF `axioms` `ang_lt A B G A B C` `ang_eq D E F A B G`] .
@@ -344,7 +379,8 @@ proof -
 				hence "\<not> (bet A G C)" by blast
 				have "\<not> (bet A C G)"
 				proof (rule ccontr)
-					assume "bet A C G"
+					assume "\<not> (\<not> (bet A C G))"
+hence "bet A C G" by blast
 					have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
 					have "ang_lt A B C A B G" using anglelessthan_b[OF `axioms` `bet A C G` `ray_on B A A` `ray_on B G G` `ang_eq A B C A B C`] .
 					have "ang_lt A B C D E F" using angleorderrespectscongruence[OF `axioms` `ang_lt A B C A B G` `ang_eq D E F A B G`] .
@@ -360,14 +396,16 @@ proof -
 				show "False" using `ang_eq A B C D E F` `\<not> (ang_eq A B C D E F)` by blast
 			qed
 			hence "ang_lt A B C D E F" by blast
+			thus ?thesis by blast
 		next
-			case 4
+			assume "bet A B R"
 			have "bet R B A" using betweennesssymmetryE[OF `axioms` `bet A B R`] .
 			have "bet C R P" using `bet C R P` .
 			have "bet A B R" using betweennesssymmetryE[OF `axioms` `bet R B A`] .
 			have "\<not> (col C P A)"
 			proof (rule ccontr)
-				assume "col C P A"
+				assume "\<not> (\<not> (col C P A))"
+hence "col C P A" by blast
 				have "col C R P" using collinear_b `axioms` `bet C R P \<and> col B A R \<and> \<not> col B A C` by blast
 				have "col C P R" using collinearorder[OF `axioms` `col C R P`] by blast
 				have "C \<noteq> P" using betweennotequal[OF `axioms` `bet C R P`] by blast
@@ -387,7 +425,7 @@ proof -
 				show "False" using `\<not> col A B G` `col A B G` by blast
 			qed
 			hence "\<not> col C P A" by blast
-			obtain M where "bet A M P \<and> bet C B M" using Pasch-outerE[OF `axioms` `bet A B R` `bet C R P` `\<not> col C P A`] by blast
+			obtain M where "bet A M P \<and> bet C B M" using Pasch_outerE[OF `axioms` `bet A B R` `bet C R P` `\<not> col C P A`]  by  blast
 			have "bet A M P" using `bet A M P \<and> bet C B M` by blast
 			have "bet C B M" using `bet A M P \<and> bet C B M` by blast
 			have "bet G A P" using `bet G A P` .
@@ -397,7 +435,8 @@ proof -
 			have "bet G A M" using betweennesssymmetryE[OF `axioms` `bet M A G`] .
 			have "\<not> (col C M G)"
 			proof (rule ccontr)
-				assume "col C M G"
+				assume "\<not> (\<not> (col C M G))"
+hence "col C M G" by blast
 				have "bet P M A" using betweennesssymmetryE[OF `axioms` `bet A M P`] .
 				have "bet P A G" using betweennesssymmetryE[OF `axioms` `bet G A P`] .
 				have "bet P M G" using n3_6b[OF `axioms` `bet P M A` `bet P A G`] .
@@ -416,7 +455,7 @@ proof -
 				show "False" using `\<not> col C P A` `col C P A` by blast
 			qed
 			hence "\<not> col C M G" by blast
-			obtain Q where "bet C Q A \<and> bet G Q B" using Pasch-innerE[OF `axioms` `bet C B M` `bet G A M` `\<not> col C M G`] by blast
+			obtain Q where "bet C Q A \<and> bet G Q B" using Pasch_innerE[OF `axioms` `bet C B M` `bet G A M` `\<not> col C M G`]  by  blast
 			have "bet C Q A" using `bet C Q A \<and> bet G Q B` by blast
 			have "bet G Q B" using `bet C Q A \<and> bet G Q B` by blast
 			have "bet B Q G" using betweennesssymmetryE[OF `axioms` `bet G Q B`] .
@@ -432,27 +471,30 @@ proof -
 			have "ray_on B G G" using ray4 `axioms` `G = G` `B \<noteq> G` by blast
 			have "ray_on B Q Q" using ray4 `axioms` `Q = Q` `B \<noteq> Q` by blast
 			have "\<not> col A B G" using `\<not> col A B G` .
-			have "seg_eq A Q A Q" using congruencereflexiveE[OF `axioms`] by blast
-			have "seg_eq B Q B Q" using congruencereflexiveE[OF `axioms`] by blast
-			have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] by blast
+			have "seg_eq A Q A Q" using congruencereflexiveE[OF `axioms`] .
+			have "seg_eq B Q B Q" using congruencereflexiveE[OF `axioms`] .
+			have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] .
 			have "ang_eq A B G A B Q" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B G Q` `ray_on B A A` `ray_on B Q Q` `seg_eq B A B A` `seg_eq B Q B Q` `seg_eq A Q A Q` `\<not> col A B G`] .
 			have "bet A Q C" using betweennesssymmetryE[OF `axioms` `bet C Q A`] .
 			have "ang_lt A B G A B C" using anglelessthan_b[OF `axioms` `bet A Q C` `ray_on B A A` `ray_on B C C` `ang_eq A B G A B Q`] .
 			have "ang_eq A B G D E F" using `ang_eq A B G D E F` .
 			have "ang_eq D E F A B G" using equalanglessymmetric[OF `axioms` `ang_eq A B G D E F`] .
 			have "ang_lt D E F A B C" using angleorderrespectscongruence2[OF `axioms` `ang_lt A B G A B C` `ang_eq D E F A B G`] .
-			have "ang_lt A B C D E F"
+			have "\<not> (\<not> (ang_lt A B C D E F))"
 			proof (rule ccontr)
-				assume "\<not> (ang_lt A B C D E F)"
+				assume "\<not> (\<not> (\<not> (ang_lt A B C D E F)))"
+hence "\<not> (ang_lt A B C D E F)" by blast
 				have "\<not> (ang_lt D E F A B C)" using `\<not> (ang_lt D E F A B C)` .
 				show "False" using `\<not> (ang_lt D E F A B C)` `ang_lt D E F A B C` by blast
 			qed
 			hence "ang_lt A B C D E F" by blast
+			thus ?thesis by blast
 		next
-			case 5
+			assume "bet B A R"
 			have "\<not> (col P C B)"
 			proof (rule ccontr)
-				assume "col P C B"
+				assume "\<not> (\<not> (col P C B))"
+hence "col P C B" by blast
 				have "col B A R" using collinear_b[OF `axioms` `B = A \<or> B = R \<or> A = R \<or> bet A B R \<or> bet B A R \<or> bet B R A`] .
 				have "col P R C" using collinear_b `axioms` `bet P R C` by blast
 				have "col P C R" using collinearorder[OF `axioms` `col P R C`] by blast
@@ -468,19 +510,20 @@ proof -
 				show "False" using `\<not> col A B C` `col A B C` by blast
 			qed
 			hence "\<not> col P C B" by blast
-			obtain Q where "bet B Q C \<and> bet P A Q" using Pasch-outerE[OF `axioms` `bet B A R` `bet P R C` `\<not> col P C B`] by blast
+			obtain Q where "bet B Q C \<and> bet P A Q" using Pasch_outerE[OF `axioms` `bet B A R` `bet P R C` `\<not> col P C B`]  by  blast
 			have "bet B Q C" using `bet B Q C \<and> bet P A Q` by blast
 			have "col B C Q" using collinear_b `axioms` `bet B Q C \<and> bet P A Q` by blast
 			have "\<not> (G = Q)"
 			proof (rule ccontr)
-				assume "G = Q"
+				assume "\<not> (G \<noteq> Q)"
+				hence "G = Q" by blast
 				have "bet B G C" using `bet B Q C` `G = Q` by blast
 				have "ray_on B C G" using ray4 `axioms` `bet B G C` `B \<noteq> C` by blast
 				have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast
 				have "ray_on B G G" using ray4 `axioms` `G = G` `B \<noteq> G` by blast
-				have "seg_eq A G A G" using congruencereflexiveE[OF `axioms`] by blast
-				have "seg_eq B G B G" using congruencereflexiveE[OF `axioms`] by blast
-				have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] by blast
+				have "seg_eq A G A G" using congruencereflexiveE[OF `axioms`] .
+				have "seg_eq B G B G" using congruencereflexiveE[OF `axioms`] .
+				have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] .
 				have "\<not> col A B G" using `\<not> col A B G` .
 				have "ang_eq A B G A B C" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B G G` `ray_on B A A` `ray_on B C G` `seg_eq B A B A` `seg_eq B G B G` `seg_eq A G A G` `\<not> col A B G`] .
 				have "ang_eq A B C A B G" using equalanglessymmetric[OF `axioms` `ang_eq A B G A B C`] .
@@ -492,7 +535,8 @@ proof -
 			hence "G \<noteq> Q" by blast
 			have "\<not> (col B C G)"
 			proof (rule ccontr)
-				assume "col B C G"
+				assume "\<not> (\<not> (col B C G))"
+hence "col B C G" by blast
 				have "bet P A Q" using `bet B Q C \<and> bet P A Q` by blast
 				have "bet P A G" using betweennesssymmetryE[OF `axioms` `bet G A P`] .
 				have "ray_on A G Q" using ray_b[OF `axioms` `bet P A Q` `bet P A G`] .
@@ -514,7 +558,8 @@ proof -
 			hence "\<not> col B C G" by blast
 			have "\<not> (bet A Q G)"
 			proof (rule ccontr)
-				assume "bet A Q G"
+				assume "\<not> (\<not> (bet A Q G))"
+hence "bet A Q G" by blast
 				have "bet G Q A" using betweennesssymmetryE[OF `axioms` `bet A Q G`] .
 				have "oppo_side G B C A" using oppositeside_b[OF `axioms` `bet G Q A` `col B C Q` `\<not> col B C G`] .
 				show "False" using `oppo_side G B C A` `\<not> (oppo_side G B C A)` by blast
@@ -524,7 +569,8 @@ proof -
 			have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast
 			have "\<not> (bet A G Q)"
 			proof (rule ccontr)
-				assume "bet A G Q"
+				assume "\<not> (\<not> (bet A G Q))"
+hence "bet A G Q" by blast
 				have "ang_eq A B G A B G" using equalanglesreflexive[OF `axioms` `\<not> col A B G`] .
 				have "ang_lt A B G A B C" using anglelessthan_b[OF `axioms` `bet A G Q` `ray_on B A A` `ray_on B C Q` `ang_eq A B G A B G`] .
 				have "ang_eq D E F A B G" using equalanglessymmetric[OF `axioms` `ang_eq A B G D E F`] .
@@ -537,23 +583,27 @@ proof -
 			have "\<not> (bet A G Q)" using `\<not> (bet A G Q)` .
 			have "\<not> (bet A Q G)" using `\<not> (bet A Q G)` .
 			have "G = Q" using outerconnectivity[OF `axioms` `bet P A G` `bet P A Q` `\<not> (bet A G Q)` `\<not> (bet A Q G)`] .
-			have "ang_lt A B C D E F"
+			have "\<not> (\<not> (ang_lt A B C D E F))"
 			proof (rule ccontr)
-				assume "\<not> (ang_lt A B C D E F)"
+				assume "\<not> (\<not> (\<not> (ang_lt A B C D E F)))"
+hence "\<not> (ang_lt A B C D E F)" by blast
 				have "G \<noteq> Q" using `G \<noteq> Q` .
 				show "False" using `G \<noteq> Q` `G = Q` by blast
 			qed
 			hence "ang_lt A B C D E F" by blast
+			thus ?thesis by blast
 		next
-			case 6
-			have "ang_lt A B C D E F"
+			assume "bet B R A"
+			have "\<not> (\<not> (ang_lt A B C D E F))"
 			proof (rule ccontr)
-				assume "\<not> (ang_lt A B C D E F)"
+				assume "\<not> (\<not> (\<not> (ang_lt A B C D E F)))"
+hence "\<not> (ang_lt A B C D E F)" by blast
 				have "bet P A G" using betweennesssymmetryE[OF `axioms` `bet G A P`] .
 				have "bet B R A" using `bet B R A` .
 				have "\<not> (col P G B)"
 				proof (rule ccontr)
-					assume "col P G B"
+					assume "\<not> (\<not> (col P G B))"
+hence "col P G B" by blast
 					have "col P A G" using collinear_b `axioms` `bet P A G` by blast
 					have "col P G A" using collinearorder[OF `axioms` `col P A G`] by blast
 					have "P \<noteq> G" using betweennotequal[OF `axioms` `bet P A G`] by blast
@@ -563,13 +613,14 @@ proof -
 					show "False" using `\<not> col A B G` `col A B G` by blast
 				qed
 				hence "\<not> col P G B" by blast
-				obtain Q where "bet B Q G \<and> bet P R Q" using Pasch-outerE[OF `axioms` `bet B R A` `bet P A G` `\<not> col P G B`] by blast
+				obtain Q where "bet B Q G \<and> bet P R Q" using Pasch_outerE[OF `axioms` `bet B R A` `bet P A G` `\<not> col P G B`]  by  blast
 				have "bet B Q G" using `bet B Q G \<and> bet P R Q` by blast
 				have "B \<noteq> Q" using betweennotequal[OF `axioms` `bet B Q G`] by blast
 				have "ray_on B Q G" using ray4 `axioms` `bet B Q G \<and> bet P R Q` `B \<noteq> Q` by blast
 				have "\<not> (bet R C Q)"
 				proof (rule ccontr)
-					assume "bet R C Q"
+					assume "\<not> (\<not> (bet R C Q))"
+hence "bet R C Q" by blast
 					have "ray_on B A R" using ray4 `axioms` `bet B R A` `B \<noteq> A` by blast
 					have "ray_on B G Q" using ray4 `axioms` `bet B Q G \<and> bet P R Q` `B \<noteq> G` by blast
 					have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
@@ -582,15 +633,16 @@ proof -
 				hence "\<not> (bet R C Q)" by blast
 				have "\<not> (bet R Q C)"
 				proof (rule ccontr)
-					assume "bet R Q C"
+					assume "\<not> (\<not> (bet R Q C))"
+hence "bet R Q C" by blast
 					have "A = A" using equalityreflexiveE[OF `axioms`] .
 					have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast
 					have "ray_on B Q G" using ray4 `axioms` `bet B Q G \<and> bet P R Q` `B \<noteq> Q` by blast
 					have "G = G" using equalityreflexiveE[OF `axioms`] .
 					have "ray_on B G G" using ray4 `axioms` `G = G` `B \<noteq> G` by blast
-					have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] by blast
-					have "seg_eq B G B G" using congruencereflexiveE[OF `axioms`] by blast
-					have "seg_eq A G A G" using congruencereflexiveE[OF `axioms`] by blast
+					have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] .
+					have "seg_eq B G B G" using congruencereflexiveE[OF `axioms`] .
+					have "seg_eq A G A G" using congruencereflexiveE[OF `axioms`] .
 					have "\<not> col A B G" using `\<not> col A B G` .
 					have "ang_eq A B G A B Q" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B G G` `ray_on B A A` `ray_on B Q G` `seg_eq B A B A` `seg_eq B G B G` `seg_eq A G A G` `\<not> col A B G`] .
 					have "ray_on B A R" using ray4 `axioms` `bet B R A` `B \<noteq> A` by blast
@@ -613,17 +665,19 @@ proof -
 				have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast
 				have "G = G" using equalityreflexiveE[OF `axioms`] .
 				have "ray_on B G G" using ray4 `axioms` `G = G` `B \<noteq> G` by blast
-				have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] by blast
-				have "seg_eq B G B G" using congruencereflexiveE[OF `axioms`] by blast
-				have "seg_eq A G A G" using congruencereflexiveE[OF `axioms`] by blast
+				have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] .
+				have "seg_eq B G B G" using congruencereflexiveE[OF `axioms`] .
+				have "seg_eq A G A G" using congruencereflexiveE[OF `axioms`] .
 				have "ang_eq A B C A B G" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B C G` `ray_on B A A` `ray_on B G G` `seg_eq B A B A` `seg_eq B G B G` `seg_eq A G A G` `\<not> col A B C`] .
 				have "ang_eq A B C D E F" using equalanglestransitive[OF `axioms` `ang_eq A B C A B G` `ang_eq A B G D E F`] .
 				have "ang_eq A B C D E F" using `ang_eq A B C D E F` .
 				show "False" using `ang_eq A B C D E F` `\<not> (ang_eq A B C D E F)` by blast
 			qed
 			hence "ang_lt A B C D E F" by blast
-		next
-	next
+			thus ?thesis by blast
+		qed
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

@@ -1,13 +1,13 @@
 theory paralleldef2B
-	imports Axioms Definitions Theorems
+	imports n3_7b Geometry betweennotequal collinear4 collinear5 collinearorder inequalitysymmetric parallelcollinear tarskiparallelflip
 begin
 
 theorem paralleldef2B:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B C D"
-	shows: "tarski_parallel A B C D"
+	shows "tarski_parallel A B C D"
 proof -
-	obtain a b c d e where "A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b" using parallel_f[OF `axioms` `parallel A B C D`] by blast
+	obtain a b c d e where "A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b" using parallel_f[OF `axioms` `parallel A B C D`]  by  blast
 	have "col A B b" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` by blast
 	have "a \<noteq> b" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` by blast
 	have "col C D c" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` by blast
@@ -22,8 +22,9 @@ proof -
 	have "e \<noteq> b" using betweennotequal[OF `axioms` `bet c e b`] by blast
 	have "\<not> (meets a b C D)"
 	proof (rule ccontr)
-		assume "meets a b C D"
-		obtain R where "a \<noteq> b \<and> C \<noteq> D \<and> col a b R \<and> col C D R" using meet_f[OF `axioms` `meets a b C D`] by blast
+		assume "\<not> (\<not> (meets a b C D))"
+hence "meets a b C D" by blast
+		obtain R where "a \<noteq> b \<and> C \<noteq> D \<and> col a b R \<and> col C D R" using meet_f[OF `axioms` `meets a b C D`]  by  blast
 		have "col a b R" using `a \<noteq> b \<and> C \<noteq> D \<and> col a b R \<and> col C D R` by blast
 		have "col C D R" using `a \<noteq> b \<and> C \<noteq> D \<and> col a b R \<and> col C D R` by blast
 		have "col b a R" using collinearorder[OF `axioms` `col a b R`] by blast
@@ -34,13 +35,14 @@ proof -
 		have "col a B R" using collinear4[OF `axioms` `col b a B` `col b a R` `b \<noteq> a`] .
 		have "col a B A" using collinearorder[OF `axioms` `col A B a`] by blast
 		consider "a \<noteq> B"|"a = B" by blast
-		hence col A B R
+		hence "col A B R"
 		proof (cases)
-			case 1
+			assume "a \<noteq> B"
 			have "col B R A" using collinear4[OF `axioms` `col a B R` `col a B A` `a \<noteq> B`] .
 			have "col A B R" using collinearorder[OF `axioms` `col B R A`] by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "a = B"
 			have "col B A a" using collinearorder[OF `axioms` `col A B a`] by blast
 			have "col B A b" using collinearorder[OF `axioms` `col A B b`] by blast
 			have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
@@ -53,7 +55,8 @@ proof -
 			have "a \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> a`] .
 			have "col A R B" using collinear4[OF `axioms` `col a A R` `col a A B` `a \<noteq> A`] .
 			have "col A B R" using collinearorder[OF `axioms` `col A R B`] by blast
-		next
+			thus ?thesis by blast
+		qed
 		have "col C D R" using `col C D R` .
 		have "A \<noteq> B \<and> C \<noteq> D \<and> col A B R \<and> col C D R" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` `col A B R` `a \<noteq> b \<and> C \<noteq> D \<and> col a b R \<and> col C D R` by blast
 		have "meets A B C D" using meet_b[OF `axioms` `A \<noteq> B` `C \<noteq> D` `col A B R` `col C D R`] .
@@ -61,7 +64,7 @@ proof -
 		show "False" using `\<not> (meets A B C D)` `meets A B C D` by blast
 	qed
 	hence "\<not> (meets a b C D)" by blast
-	obtain P where "bet e b P \<and> seg_eq b P e b" using extensionE[OF `axioms` `e \<noteq> b` `e \<noteq> b`] by blast
+	obtain P where "bet e b P \<and> seg_eq b P e b" using extensionE[OF `axioms` `e \<noteq> b` `e \<noteq> b`]  by  blast
 	have "bet e b P" using `bet e b P \<and> seg_eq b P e b` by blast
 	have "bet P b e" using betweennesssymmetryE[OF `axioms` `bet e b P`] .
 	have "bet b e c" using betweennesssymmetryE[OF `axioms` `bet c e b`] .
@@ -69,7 +72,8 @@ proof -
 	have "bet c b P" using betweennesssymmetryE[OF `axioms` `bet P b c`] .
 	have "\<not> (col a d P)"
 	proof (rule ccontr)
-		assume "col a d P"
+		assume "\<not> (\<not> (col a d P))"
+hence "col a d P" by blast
 		have "col a e d" using collinear_b `axioms` `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` by blast
 		have "col a d e" using collinearorder[OF `axioms` `col a e d`] by blast
 		have "a \<noteq> d" using betweennotequal[OF `axioms` `bet a e d`] by blast
@@ -83,7 +87,8 @@ proof -
 		have "col d P a" using collinearorder[OF `axioms` `col a d P`] by blast
 		have "\<not> (d = P)"
 		proof (rule ccontr)
-			assume "d = P"
+			assume "\<not> (d \<noteq> P)"
+			hence "d = P" by blast
 			have "col c b P" using collinear_b `axioms` `bet c b P` by blast
 			have "col c b d" using `col c b P` `d = P` by blast
 			have "col b e c" using collinear_b `axioms` `bet b e c` by blast
@@ -118,7 +123,7 @@ proof -
 		show "False" using `\<not> (meets a b C D)` `meets a b C D` by blast
 	qed
 	hence "\<not> col a d P" by blast
-	obtain M where "bet P M d \<and> bet a b M" using Pasch-outerE[OF `axioms` `bet P b e` `bet a e d` `\<not> col a d P`] by blast
+	obtain M where "bet P M d \<and> bet a b M" using Pasch_outerE[OF `axioms` `bet P b e` `bet a e d` `\<not> col a d P`]  by  blast
 	have "bet P M d" using `bet P M d \<and> bet a b M` by blast
 	have "bet a b M" using `bet P M d \<and> bet a b M` by blast
 	have "bet P b c" using betweennesssymmetryE[OF `axioms` `bet c b P`] .
@@ -132,13 +137,14 @@ proof -
 	have "col a B M" using collinear4[OF `axioms` `col b a B` `col b a M` `b \<noteq> a`] .
 	have "col a B A" using collinearorder[OF `axioms` `col A B a`] by blast
 	consider "a \<noteq> B"|"a = B" by blast
-	hence col A B M
+	hence "col A B M"
 	proof (cases)
-		case 1
+		assume "a \<noteq> B"
 		have "col B M A" using collinear4[OF `axioms` `col a B M` `col a B A` `a \<noteq> B`] .
 		have "col A B M" using collinearorder[OF `axioms` `col B M A`] by blast
+		thus ?thesis by blast
 	next
-		case 2
+		assume "a = B"
 		have "A \<noteq> a" using `A \<noteq> B` `a = B` by blast
 		have "col A a b" using `col A B b` `a = B` by blast
 		have "col b a A" using collinearorder[OF `axioms` `col A a b`] by blast
@@ -148,19 +154,22 @@ proof -
 		have "a \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> a`] .
 		have "col A M B" using collinear4[OF `axioms` `col a A M` `col a A B` `a \<noteq> A`] .
 		have "col A B M" using collinearorder[OF `axioms` `col A M B`] by blast
-	next
+		thus ?thesis by blast
+	qed
 	have "bet c b P" using betweennesssymmetryE[OF `axioms` `bet P b c`] .
 	have "bet d M P" using betweennesssymmetryE[OF `axioms` `bet P M d`] .
 	have "\<not> (col A B c)"
 	proof (rule ccontr)
-		assume "col A B c"
+		assume "\<not> (\<not> (col A B c))"
+hence "col A B c" by blast
 		have "meets A B C D" using meet_b[OF `axioms` `A \<noteq> B` `C \<noteq> D` `col A B c` `col C D c`] .
 		show "False" using `meets A B C D` `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` by blast
 	qed
 	hence "\<not> col A B c" by blast
 	have "\<not> (col A B d)"
 	proof (rule ccontr)
-		assume "col A B d"
+		assume "\<not> (\<not> (col A B d))"
+hence "col A B d" by blast
 		have "meets A B C D" using meet_b[OF `axioms` `A \<noteq> B` `C \<noteq> D` `col A B d` `col C D d`] .
 		show "False" using `meets A B C D` `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a e d \<and> bet c e b` by blast
 	qed
@@ -169,8 +178,9 @@ proof -
 	have "same_side c d A B" using sameside_b[OF `axioms` `col A B b` `col A B M` `bet c b P` `bet d M P` `\<not> col A B c` `\<not> col A B d`] .
 	have "\<not> (meets A B c d)"
 	proof (rule ccontr)
-		assume "meets A B c d"
-		obtain R where "A \<noteq> B \<and> c \<noteq> d \<and> col A B R \<and> col c d R" using meet_f[OF `axioms` `meets A B c d`] by blast
+		assume "\<not> (\<not> (meets A B c d))"
+hence "meets A B c d" by blast
+		obtain R where "A \<noteq> B \<and> c \<noteq> d \<and> col A B R \<and> col c d R" using meet_f[OF `axioms` `meets A B c d`]  by  blast
 		have "col A B R" using `A \<noteq> B \<and> c \<noteq> d \<and> col A B R \<and> col c d R` by blast
 		have "col C D c" using `col C D c` .
 		have "col C D d" using `col C D d` .
@@ -195,13 +205,15 @@ proof -
 	have "C = C" using equalityreflexiveE[OF `axioms`] .
 	have "col C D C" using collinear_b `axioms` `C = C` by blast
 	have "col c d C" using collinear5[OF `axioms` `C \<noteq> D` `col C D c` `col C D d` `col C D C`] .
-	have "tarski_parallel A B C D"
+	have "\<not> (\<not> (tarski_parallel A B C D))"
 	proof (rule ccontr)
-		assume "\<not> (tarski_parallel A B C D)"
+		assume "\<not> (\<not> (\<not> (tarski_parallel A B C D)))"
+hence "\<not> (tarski_parallel A B C D)" by blast
 		have "D \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> D`] .
 		have "\<not> (C \<noteq> d)"
 		proof (rule ccontr)
-			assume "C \<noteq> d"
+			assume "\<not> (\<not> (C \<noteq> d))"
+hence "C \<noteq> d" by blast
 			have "tarski_parallel A B C d" using parallelcollinear[OF `axioms` `tarski_parallel A B c d` `col c d C` `C \<noteq> d`] .
 			have "tarski_parallel A B d C" using tarskiparallelflip[OF `axioms` `tarski_parallel A B C d`] by blast
 			have "col d C D" using collinearorder[OF `axioms` `col C D d`] by blast

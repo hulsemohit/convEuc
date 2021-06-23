@@ -1,14 +1,14 @@
 theory supplementofright
-	imports Axioms Definitions Theorems
+	imports n8_2 n8_3 Geometry betweennotequal collinearright inequalitysymmetric
 begin
 
 theorem supplementofright:
-	assumes: `axioms`
-		"linear_pair A B C D F"
+	assumes "axioms"
+		"supplement A B C D F"
 		"ang_right A B C"
-	shows: "ang_right F B D \<and> ang_right D B F"
+	shows "ang_right F B D \<and> ang_right D B F"
 proof -
-	have "ray_on B C D \<and> bet A B F" using supplement_f[OF `axioms` `linear_pair A B C D F`] .
+	have "ray_on B C D \<and> bet A B F" using supplement_f[OF `axioms` `supplement A B C D F`] .
 	have "ray_on B C D" using `ray_on B C D \<and> bet A B F` by blast
 	have "bet A B F" using `ray_on B C D \<and> bet A B F` by blast
 	have "col A B F" using collinear_b `axioms` `ray_on B C D \<and> bet A B F` by blast

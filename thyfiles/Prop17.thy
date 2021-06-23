@@ -1,15 +1,15 @@
 theory Prop17
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry NCdistinct NChelper NCorder Prop16 angleorderrespectscongruence2 betweennotequal collinearorder crossbar equalangleshelper equalanglesreflexive equalanglestransitive inequalitysymmetric ray2 ray4 ray5 rayimpliescollinear
 begin
 
 theorem Prop17:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
-	shows: "\<exists> E. area_sum_eq A B C B C A E C B"
+	shows "\<exists> E. area_sum_eq A B C B C A E C B"
 proof -
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "B \<noteq> C" using NCdistinct[OF `axioms` `\<not> col A B C`] by blast
-	obtain D where "bet B C D \<and> seg_eq C D B C" using extensionE[OF `axioms` `B \<noteq> C` `B \<noteq> C`] by blast
+	obtain D where "bet B C D \<and> seg_eq C D B C" using extensionE[OF `axioms` `B \<noteq> C` `B \<noteq> C`]  by  blast
 	have "bet B C D" using `bet B C D \<and> seg_eq C D B C` by blast
 	have "\<not> col B C A" using NCorder[OF `axioms` `\<not> col A B C`] by blast
 	have "col B C D" using collinear_b `axioms` `bet B C D \<and> seg_eq C D B C` by blast
@@ -21,7 +21,7 @@ proof -
 	have "ang_lt C B A A C D" using Prop16[OF `axioms` `triangle A B C` `bet B C D`] by blast
 	have "ang_eq A B C C B A" using ABCequalsCBA[OF `axioms` `\<not> col A B C`] .
 	have "ang_lt A B C A C D" using angleorderrespectscongruence2[OF `axioms` `ang_lt C B A A C D` `ang_eq A B C C B A`] .
-	obtain a d e where "bet a e d \<and> ray_on C A a \<and> ray_on C D d \<and> ang_eq A B C A C e" using anglelessthan_f[OF `axioms` `ang_lt A B C A C D`] by blast
+	obtain a d e where "bet a e d \<and> ray_on C A a \<and> ray_on C D d \<and> ang_eq A B C A C e" using anglelessthan_f[OF `axioms` `ang_lt A B C A C D`]  by  blast
 	have "bet a e d" using `bet a e d \<and> ray_on C A a \<and> ray_on C D d \<and> ang_eq A B C A C e` by blast
 	have "ray_on C A a" using `bet a e d \<and> ray_on C A a \<and> ray_on C D d \<and> ang_eq A B C A C e` by blast
 	have "ray_on C D d" using `bet a e d \<and> ray_on C A a \<and> ray_on C D d \<and> ang_eq A B C A C e` by blast
@@ -82,7 +82,7 @@ proof -
 	have "ang_eq A B C a C e" using equalanglestransitive[OF `axioms` `ang_eq A B C A C e` `ang_eq A C e a C e`] .
 	have "ang_eq A B C A C E" using equalanglestransitive[OF `axioms` `ang_eq A B C a C e` `ang_eq a C e A C E`] .
 	have "B = B" using equalityreflexiveE[OF `axioms`] .
-	obtain F where "bet A F C \<and> bet B F E" using Pasch-innerE[OF `axioms` `bet A E D` `bet B C D` `\<not> col A D B`] by blast
+	obtain F where "bet A F C \<and> bet B F E" using Pasch_innerE[OF `axioms` `bet A E D` `bet B C D` `\<not> col A D B`]  by  blast
 	have "bet A F C" using `bet A F C \<and> bet B F E` by blast
 	have "bet B F E" using `bet A F C \<and> bet B F E` by blast
 	have "\<not> col A C B" using NCorder[OF `axioms` `\<not> col A B C`] by blast

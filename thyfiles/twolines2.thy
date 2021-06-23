@@ -1,9 +1,9 @@
 theory twolines2
-	imports Axioms Definitions Theorems
+	imports Geometry collinear4 collinearorder equalitysymmetric inequalitysymmetric
 begin
 
 theorem twolines2:
-	assumes: `axioms`
+	assumes "axioms"
 		"A \<noteq> B"
 		"C \<noteq> D"
 		"col P A B"
@@ -11,13 +11,14 @@ theorem twolines2:
 		"col Q A B"
 		"col Q C D"
 		"\<not> (col A C D \<and> col B C D)"
-	shows: "P = Q"
+	shows "P = Q"
 proof -
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
 	have "D \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> D`] .
 	have "\<not> (P \<noteq> Q)"
 	proof (rule ccontr)
-		assume "P \<noteq> Q"
+		assume "\<not> (\<not> (P \<noteq> Q))"
+hence "P \<noteq> Q" by blast
 		have "col D C P" using collinearorder[OF `axioms` `col P C D`] by blast
 		have "col D C Q" using collinearorder[OF `axioms` `col Q C D`] by blast
 		have "col C P Q" using collinear4[OF `axioms` `col D C P` `col D C Q` `D \<noteq> C`] .
@@ -31,7 +32,8 @@ proof -
 		have "col Q C D" using collinearorder[OF `axioms` `col D C Q`] by blast
 		have "\<not> (Q = C)"
 		proof (rule ccontr)
-			assume "Q = C"
+			assume "\<not> (Q \<noteq> C)"
+			hence "Q = C" by blast
 			have "col C P D" using collinearorder[OF `axioms` `col D C P`] by blast
 			have "col Q P B" using collinearorder[OF `axioms` `col B P Q`] by blast
 			have "col B A Q" using collinearorder[OF `axioms` `col A B Q`] by blast
@@ -45,7 +47,8 @@ proof -
 			have "col P C D" using collinearorder[OF `axioms` `col C P D`] by blast
 			have "\<not> (P = C)"
 			proof (rule ccontr)
-				assume "P = C"
+				assume "\<not> (P \<noteq> C)"
+				hence "P = C" by blast
 				have "P = Q" using `P = C` `Q = C` by blast
 				show "False" using `P = Q` `P \<noteq> Q` by blast
 			qed
@@ -62,7 +65,8 @@ proof -
 		have "col B C D" using collinearorder[OF `axioms` `col C B D`] by blast
 		have "\<not> (B = A)"
 		proof (rule ccontr)
-			assume "B = A"
+			assume "\<not> (B \<noteq> A)"
+			hence "B = A" by blast
 			have "A = B" using equalitysymmetric[OF `axioms` `B = A`] .
 			show "False" using `A = B` `A \<noteq> B` by blast
 		qed

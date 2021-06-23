@@ -1,13 +1,13 @@
 theory samesidesymmetric
-	imports Axioms Definitions Theorems
+	imports Geometry NCorder collinearorder
 begin
 
 theorem samesidesymmetric:
-	assumes: `axioms`
+	assumes "axioms"
 		"same_side P Q A B"
-	shows: "same_side Q P A B \<and> same_side P Q B A \<and> same_side Q P B A"
+	shows "same_side Q P A B \<and> same_side P Q B A \<and> same_side Q P B A"
 proof -
-	obtain E F G where "col A B E \<and> col A B F \<and> bet P E G \<and> bet Q F G \<and> \<not> col A B P \<and> \<not> col A B Q" using sameside_f[OF `axioms` `same_side P Q A B`] by blast
+	obtain E F G where "col A B E \<and> col A B F \<and> bet P E G \<and> bet Q F G \<and> \<not> col A B P \<and> \<not> col A B Q" using sameside_f[OF `axioms` `same_side P Q A B`]  by  blast
 	have "col A B E" using `col A B E \<and> col A B F \<and> bet P E G \<and> bet Q F G \<and> \<not> col A B P \<and> \<not> col A B Q` by blast
 	have "col A B F" using `col A B E \<and> col A B F \<and> bet P E G \<and> bet Q F G \<and> \<not> col A B P \<and> \<not> col A B Q` by blast
 	have "bet P E G" using `col A B E \<and> col A B F \<and> bet P E G \<and> bet Q F G \<and> \<not> col A B P \<and> \<not> col A B Q` by blast

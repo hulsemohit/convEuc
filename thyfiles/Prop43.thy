@@ -1,9 +1,9 @@
 theory Prop43
-	imports Axioms Definitions Theorems
+	imports Geometry PGflip Prop34
 begin
 
 theorem Prop43:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram A B C D"
 		"bet A H D"
 		"bet A E B"
@@ -12,7 +12,7 @@ theorem Prop43:
 		"bet A K C"
 		"parallelogram E A H K"
 		"parallelogram G K F C"
-	shows: "qua_eq_area K G B E D F K H"
+	shows "qua_eq_area K G B E D F K H"
 proof -
 	have "parallelogram B A D C" using PGflip[OF `axioms` `parallelogram A B C D`] .
 	have "tri_cong A B C C D A" using Prop34[OF `axioms` `parallelogram B A D C`] by blast
@@ -40,7 +40,7 @@ proof -
 	have "qua_eq_area F D A K A K G B" using EFsymmetricE[OF `axioms` `qua_eq_area A K G B F D A K`] .
 	have "qua_eq_area F D A K G B A K" using EFpermutationE[OF `axioms` `qua_eq_area F D A K A K G B`] by blast
 	have "qua_eq_area G B A K F D A K" using EFsymmetricE[OF `axioms` `qua_eq_area F D A K G B A K`] .
-	have "qua_eq_area G B E K F D H K" sorry
+	have "qua_eq_area G B E K F D H K" using cutoff2E[OF `axioms` `bet B E A` `bet D H A` `tri_eq_area E A K H A K` `qua_eq_area G B A K F D A K`] .
 	have "qua_eq_area G B E K D F K H" using EFpermutationE[OF `axioms` `qua_eq_area G B E K F D H K`] by blast
 	have "qua_eq_area D F K H G B E K" using EFsymmetricE[OF `axioms` `qua_eq_area G B E K D F K H`] .
 	have "qua_eq_area D F K H K G B E" using EFpermutationE[OF `axioms` `qua_eq_area D F K H G B E K`] by blast

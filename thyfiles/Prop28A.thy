@@ -1,15 +1,15 @@
 theory Prop28A
-	imports Axioms Definitions Theorems
+	imports Geometry Prop15 Prop27 betweennotequal collinear4 collinearorder equalanglessymmetric equalanglestransitive inequalitysymmetric oppositesidesymmetric planeseparation samesidesymmetric
 begin
 
 theorem Prop28A:
-	assumes: `axioms`
+	assumes "axioms"
 		"bet A G B"
 		"bet C H D"
 		"bet E G H"
 		"ang_eq E G B G H D"
 		"same_side B D G H"
-	shows: "parallel A B C D"
+	shows "parallel A B C D"
 proof -
 	have "same_side D B G H" using samesidesymmetric[OF `axioms` `same_side B D G H`] by blast
 	have "\<not> col E G B" using equalangles_f[OF `axioms` `ang_eq E G B G H D`] by blast
@@ -17,7 +17,8 @@ proof -
 	have "col G H G" using collinear_b `axioms` `G = G` by blast
 	have "\<not> (col G H A)"
 	proof (rule ccontr)
-		assume "col G H A"
+		assume "\<not> (\<not> (col G H A))"
+hence "col G H A" by blast
 		have "col H G A" using collinearorder[OF `axioms` `col G H A`] by blast
 		have "col E G H" using collinear_b `axioms` `bet E G H` by blast
 		have "col H G E" using collinearorder[OF `axioms` `col E G H`] by blast

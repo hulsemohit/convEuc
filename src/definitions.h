@@ -1,22 +1,17 @@
 #pragma once
 
 #include <map>
+#include <utility>
 #include <string>
 
 #include "theorem.h"
 
 // Each definition is an if-and-only-if statement.
 // The two directions are represented by _f and _b.
-const std::map<std::string, theorem> definitions{
-
-    {"unequal_f", theorem({"NEAB"}, "NOEQAB")},
-    {"unequal_b", theorem({"NOEQAB"}, "NEAB")},
+const std::vector<std::pair<std::string, theorem>> def_list{
 
     {"collinear_f", theorem({"COABC"}, "OREQAB|EQAC|EQBC|BEBAC|BEABC|BEACB")},
     {"collinear_b", theorem({"OREQAB|EQAC|EQBC|BEBAC|BEABC|BEACB"}, "COABC")},
-
-    {"noncollinear_f", theorem({"NCABC"}, "ANNEAB+NEAC+NEBC+NOBEABC+NOBEACB+NOBEBAC")},
-    {"noncollinear_b", theorem({"NEAB", "NEAC", "NEBC", "NOBEABC", "NOBEACB", "NOBEBAC"}, "NCABC")},
 
     {"circle_f", theorem({"NEAB"}, "CIXCAB")},
     {"circle_b", theorem({"CIXCAB"}, "NEAB")},
@@ -123,16 +118,19 @@ const std::map<std::string, theorem> definitions{
     {"baserectangle_f", theorem({"BRABCDE"}, "ANREBCDE+CODEA")},
     {"baserectangle_b", theorem({"REBCDE", "CODEA"}, "BRABCDE")},
 
-    {"figurerectangle_f", theorem({"FRABCDEFGH"}, "ANREEFGH+BEEBF+BEHDG+BRCBDGF+BFABDHE")},
-    {"figurerectangle_b", theorem({"REEFGH", "BEEBF", "BEHDG", "BRCBDGF", "BFABDHE"}, "FRABCDEFGH")},
+    {"figurerectangle_f", theorem({"FRABCDEFGH"}, "ANREEFGH+BEEBF+BEHDG+BRCBDGF+BRABDHE")},
+    {"figurerectangle_b", theorem({"REEFGH", "BEEBF", "BEHDG", "BRCBDGF", "BRABDHE"}, "FRABCDEFGH")},
 
     {"equaltriangles_f", theorem({"TEABCabc"}, "ANREABXY+REabxy+COXYC+COxyc+ERABXYabxy")},
     {"equaltriangles_b", theorem({"REABXY", "REabxy", "COXYC", "COxyc", "ERABXYabxy"}, "TEABCabc")},
 
     {"equalfigures_f", theorem({"FEABCDabcd"}, "ANOSABCD+OSabcd+FRABCDXYZU+FRabcdxyzu+ERXYZUxyzu")},
     {"equalfigures_b", theorem({"OSABCD", "OSabcd", "FRABCDXYZU", "FRabcdxyzu", "ERXYZUxyzu"}, "FEABCDabcd")},
-
+/*
     {"equaltrianglefigure_f", theorem({"TFABCabcd"}, "ANBRABCXY+FRabcdxyzu+ERBCXYxyzu")},
     {"equaltrianglefigure_b", theorem({"BRABCXY", "FRabcdxyzu", "ERBCXYxyzu"}, "TFABCabcd")},
-
+*/
 };
+
+const std::map<std::string, theorem> definitions(def_list.begin(), def_list.end());
+

@@ -21,18 +21,23 @@ namespace verify {
             if(!facts.verify_facts(th_.assumptions))
                 return "";
                     
-            if(th_.conclusion == stmt)
-                return sub;
-
             fact_set f; f.add_fact(th_.conclusion);
-            if(f.trace_logical(stmt) != "FALSE")
+            if(f.trace_logical(stmt) != "FALSE") {
+                        if(stmt == "LTBCBC")
+                            Info(sub + " " + vars);
                 return sub;
+            }
 
             return "";
 
         } else {
             string s;
-            for(char c: vars) {
+            for(char c: vars + "?") {
+                if(th.is_exists_pos(sub.size()) && facts.has_var(c))
+                    continue;
+                if(c == '?' && !th.is_exists_pos(sub.size()))
+                    continue;
+
                 string sub_ = sub + c + string(th.get_var_cnt() -
                         int(sub.size()) - 1, '?');
                 theorem th_ = th.instantiate(sub_);
@@ -48,7 +53,11 @@ namespace verify {
                             [](string str){
                             return str.find("?") == string::npos;
                             })) {
+                    if(tmp.trace_logical(stmt) != "FALSE") {
+                        if(stmt == "LTBCBC")
+                            Info(sub_ + " " + vars);
                         return sub_;
+                    }
                 }
                            
                 int missing_count{};
@@ -127,8 +136,9 @@ namespace verify {
     // Generates an Isabelle reason for
     // stmt using theorem th (which has name name)
     // and facts.
-    string generate_reason(const string& name, const theorem& th,
+    string generate_reason(string name, const theorem& th,
             const string& stmt, const fact_set& facts) {
+        name = utils::fix_name(name);
         bool b{true};
         for(string h: th.assumptions)
             if(!facts.has_fact(h))
@@ -141,7 +151,9 @@ namespace verify {
             res += "] ";
             if(th.conclusion == stmt)
                 res += ".";
-            else
+            else if(name == "parallel_f" || name == "parallel_b")
+                res += "by fastforce";
+            else                    
                 res += "by blast";
             return res;
         } else {

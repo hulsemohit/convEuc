@@ -16,8 +16,12 @@ string command::convert(const string& vars) const {
         return vars[0] + string(" \\<noteq> ") + vars[1];
     
     string result{name};
-    for(char c: vars) 
-        result += " ", result += c;
+    for(char c: vars) {
+        result += " ";
+        if(c == 'O')
+            result += "p";
+        result += c;
+    }
 
     return result;
 }

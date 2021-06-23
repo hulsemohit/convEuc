@@ -1,22 +1,23 @@
 theory angletrichotomy
-	imports Axioms Definitions Theorems
+	imports n3_7a Geometry Prop07 angleordertransitive betweennotequal collinear4 collinearorder congruenceflip inequalitysymmetric layoffunique ray3 rayimpliescollinear raystrict sameside2 samesidesymmetric
 begin
 
 theorem angletrichotomy:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_lt A B C D E F"
-	shows: "\<not> (ang_lt D E F A B C)"
+	shows "\<not> (ang_lt D E F A B C)"
 proof -
 	have "\<not> (ang_lt D E F A B C)"
 	proof (rule ccontr)
-		assume "ang_lt D E F A B C"
+		assume "\<not> (\<not> (ang_lt D E F A B C))"
+hence "ang_lt D E F A B C" by blast
 		have "ang_lt A B C A B C" using angleordertransitive[OF `axioms` `ang_lt A B C D E F` `ang_lt D E F A B C`] .
-		obtain G H J where "bet G H J \<and> ray_on B A G \<and> ray_on B C J \<and> ang_eq A B C A B H" using anglelessthan_f[OF `axioms` `ang_lt A B C A B C`] by blast
+		obtain G H J where "bet G H J \<and> ray_on B A G \<and> ray_on B C J \<and> ang_eq A B C A B H" using anglelessthan_f[OF `axioms` `ang_lt A B C A B C`]  by  blast
 		have "bet G H J" using `bet G H J \<and> ray_on B A G \<and> ray_on B C J \<and> ang_eq A B C A B H` by blast
 		have "ray_on B A G" using `bet G H J \<and> ray_on B A G \<and> ray_on B C J \<and> ang_eq A B C A B H` by blast
 		have "ray_on B C J" using `bet G H J \<and> ray_on B A G \<and> ray_on B C J \<and> ang_eq A B C A B H` by blast
 		have "ang_eq A B C A B H" using `bet G H J \<and> ray_on B A G \<and> ray_on B C J \<and> ang_eq A B C A B H` by blast
-		obtain U V u v where "ray_on B A U \<and> ray_on B C V \<and> ray_on B A u \<and> ray_on B H v \<and> seg_eq B U B u \<and> seg_eq B V B v \<and> seg_eq U V u v \<and> \<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C A B H`] by blast
+		obtain U V u v where "ray_on B A U \<and> ray_on B C V \<and> ray_on B A u \<and> ray_on B H v \<and> seg_eq B U B u \<and> seg_eq B V B v \<and> seg_eq U V u v \<and> \<not> col A B C" using equalangles_f[OF `axioms` `ang_eq A B C A B H`]  by  blast
 		have "ray_on B A U" using `ray_on B A U \<and> ray_on B C V \<and> ray_on B A u \<and> ray_on B H v \<and> seg_eq B U B u \<and> seg_eq B V B v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 		have "ray_on B C V" using `ray_on B A U \<and> ray_on B C V \<and> ray_on B A u \<and> ray_on B H v \<and> seg_eq B U B u \<and> seg_eq B V B v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 		have "ray_on B A u" using `ray_on B A U \<and> ray_on B C V \<and> ray_on B A u \<and> ray_on B H v \<and> seg_eq B U B u \<and> seg_eq B V B v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
@@ -27,7 +28,8 @@ proof -
 		have "\<not> col A B C" using `ray_on B A U \<and> ray_on B C V \<and> ray_on B A u \<and> ray_on B H v \<and> seg_eq B U B u \<and> seg_eq B V B v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 		have "\<not> (A = B)"
 		proof (rule ccontr)
-			assume "A = B"
+			assume "\<not> (A \<noteq> B)"
+			hence "A = B" by blast
 			have "col A B C" using collinear_b `axioms` `A = B` by blast
 			show "False" using `col A B C` `ray_on B A U \<and> ray_on B C V \<and> ray_on B A u \<and> ray_on B H v \<and> seg_eq B U B u \<and> seg_eq B V B v \<and> seg_eq U V u v \<and> \<not> col A B C` by blast
 		qed
@@ -37,10 +39,11 @@ proof -
 		have "col B A G" using rayimpliescollinear[OF `axioms` `ray_on B A G`] .
 		have "G \<noteq> H" using betweennotequal[OF `axioms` `bet G H J`] by blast
 		have "H \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> H`] .
-		obtain P where "bet H G P \<and> seg_eq G P H G" using extensionE[OF `axioms` `H \<noteq> G` `H \<noteq> G`] by blast
+		obtain P where "bet H G P \<and> seg_eq G P H G" using extensionE[OF `axioms` `H \<noteq> G` `H \<noteq> G`]  by  blast
 		have "\<not> (col B A J)"
 		proof (rule ccontr)
-			assume "col B A J"
+			assume "\<not> (\<not> (col B A J))"
+hence "col B A J" by blast
 			have "col B C J" using rayimpliescollinear[OF `axioms` `ray_on B C J`] .
 			have "col J B A" using collinearorder[OF `axioms` `col B A J`] by blast
 			have "col J B C" using collinearorder[OF `axioms` `col B C J`] by blast
@@ -53,7 +56,8 @@ proof -
 		hence "\<not> col B A J" by blast
 		have "\<not> (col B U H)"
 		proof (rule ccontr)
-			assume "col B U H"
+			assume "\<not> (\<not> (col B U H))"
+hence "col B U H" by blast
 			have "col B A U" using rayimpliescollinear[OF `axioms` `ray_on B A U`] .
 			have "col U B A" using collinearorder[OF `axioms` `col B A U`] by blast
 			have "col U B H" using collinearorder[OF `axioms` `col B U H`] by blast
@@ -71,7 +75,8 @@ proof -
 			have "col H B A" using collinearorder[OF `axioms` `col A B H`] by blast
 			have "\<not> (H \<noteq> B)"
 			proof (rule ccontr)
-				assume "H \<noteq> B"
+				assume "\<not> (\<not> (H \<noteq> B))"
+hence "H \<noteq> B" by blast
 				have "col B J A" using collinear4[OF `axioms` `col H B J` `col H B A` `H \<noteq> B`] .
 				have "col B A J" using collinearorder[OF `axioms` `col B J A`] by blast
 				show "False" using `col B A J` `\<not> col B A J` by blast
@@ -102,7 +107,8 @@ proof -
 		have "\<not> col B U H" using `\<not> col B U H` .
 		have "\<not> (col B U J)"
 		proof (rule ccontr)
-			assume "col B U J"
+			assume "\<not> (\<not> (col B U J))"
+hence "col B U J" by blast
 			have "col B C J" using rayimpliescollinear[OF `axioms` `ray_on B C J`] .
 			have "col B J C" using collinearorder[OF `axioms` `col B C J`] by blast
 			have "col B A U" using rayimpliescollinear[OF `axioms` `ray_on B A U`] .

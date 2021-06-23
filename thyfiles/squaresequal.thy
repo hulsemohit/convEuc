@@ -1,13 +1,13 @@
 theory squaresequal
-	imports Axioms Definitions Theorems
+	imports Euclid4 Geometry Prop04 congruenceflip congruencesymmetric congruencetransitive parallelNC squareparallelogram squarerectangle
 begin
 
 theorem squaresequal:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_eq A B a b"
 		"square A B C D"
 		"square a b c d"
-	shows: "qua_eq_area A B C D a b c d"
+	shows "qua_eq_area A B C D a b c d"
 proof -
 	have "ang_right D A B" using square_f[OF `axioms` `square A B C D`] by blast
 	have "ang_right d a b" using square_f[OF `axioms` `square a b c d`] by blast
@@ -53,17 +53,17 @@ proof -
 	have "tri_eq_area B D C b d c" using ETsymmetricE[OF `axioms` `tri_eq_area b d c B D C`] .
 	have "rectangle A B C D" using squarerectangle[OF `axioms` `square A B C D`] .
 	have "cross A C B D" using rectangle_f[OF `axioms` `rectangle A B C D`] by blast
-	obtain M where "bet A M C \<and> bet B M D" using cross_f[OF `axioms` `cross A C B D`] by blast
+	obtain M where "bet A M C \<and> bet B M D" using cross_f[OF `axioms` `cross A C B D`]  by  blast
 	have "bet A M C" using `bet A M C \<and> bet B M D` by blast
 	have "bet B M D" using `bet A M C \<and> bet B M D` by blast
 	have "rectangle a b c d" using squarerectangle[OF `axioms` `square a b c d`] .
 	have "cross a c b d" using rectangle_f[OF `axioms` `rectangle a b c d`] by blast
-	obtain m where "bet a m c \<and> bet b m d" using cross_f[OF `axioms` `cross a c b d`] by blast
+	obtain m where "bet a m c \<and> bet b m d" using cross_f[OF `axioms` `cross a c b d`]  by  blast
 	have "bet a m c" using `bet a m c \<and> bet b m d` by blast
 	have "bet b m d" using `bet a m c \<and> bet b m d` by blast
 	have "tri_eq_area B D A b d a" using `tri_eq_area B D A b d a` .
 	have "tri_eq_area B D C b d c" using `tri_eq_area B D C b d c` .
-	have "qua_eq_area B A D C b a d c" sorry
+	have "qua_eq_area B A D C b a d c" using paste3E `axioms` `tri_eq_area B D A b d a` `tri_eq_area B D C b d c` `bet A M C \<and> bet B M D` `bet A M C \<and> bet B M D` `bet a m c \<and> bet b m d` `bet a m c \<and> bet b m d` by blast
 	have "qua_eq_area B A D C a b c d" using EFpermutationE[OF `axioms` `qua_eq_area B A D C b a d c`] by blast
 	have "qua_eq_area a b c d B A D C" using EFsymmetricE[OF `axioms` `qua_eq_area B A D C a b c d`] .
 	have "qua_eq_area a b c d A B C D" using EFpermutationE[OF `axioms` `qua_eq_area a b c d B A D C`] by blast

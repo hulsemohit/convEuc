@@ -1,18 +1,19 @@
 theory EFreflexive
-	imports Axioms Definitions Theorems
+	imports Geometry NCorder TCreflexive betweennotequal collinear4 collinearorder inequalitysymmetric
 begin
 
 theorem EFreflexive:
-	assumes: `axioms`
+	assumes "axioms"
 		"bet a p c"
 		"bet b p d"
 		"\<not> col a b c"
-	shows: "qua_eq_area a b c d a b c d"
+	shows "qua_eq_area a b c d a b c d"
 proof -
 	have "\<not> col a c b" using NCorder[OF `axioms` `\<not> col a b c`] by blast
 	have "\<not> (col a c d)"
 	proof (rule ccontr)
-		assume "col a c d"
+		assume "\<not> (\<not> (col a c d))"
+hence "col a c d" by blast
 		have "col b p d" using collinear_b `axioms` `bet b p d` by blast
 		have "col a p c" using collinear_b `axioms` `bet a p c` by blast
 		have "col a c p" using collinearorder[OF `axioms` `col a p c`] by blast
@@ -40,7 +41,7 @@ proof -
 	have "col a c p" using collinear_b `axioms` `bet a p c` by blast
 	have "\<not> col a c b" using NCorder[OF `axioms` `\<not> col a b c`] by blast
 	have "oppo_side b a c d" using oppositeside_b[OF `axioms` `bet b p d` `col a c p` `\<not> col a c b`] .
-	have "qua_eq_area a b c d a b c d" sorry
+	have "qua_eq_area a b c d a b c d" using paste3E `axioms` `tri_eq_area a c b a c b` `tri_eq_area a c d a c d` `bet b p d` `bet a p c` `bet b p d` `bet a p c` by blast
 	thus ?thesis by blast
 qed
 

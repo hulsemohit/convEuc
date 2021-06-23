@@ -1,18 +1,18 @@
 theory Prop39A
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry NCdistinct NChelper NCorder Prop04 Prop10 Prop15 Prop27B Prop37 betweennotequal collinear4 collinearorder collinearparallel2 congruenceflip congruencesymmetric equalanglesNC equalanglesflip equalangleshelper equalanglessymmetric equalanglestransitive inequalitysymmetric parallelflip parallelsymmetric ray1 ray3 ray4 ray5
 begin
 
 theorem Prop39A:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"tri_eq_area A B C D B C"
 		"bet A M C"
 		"ray_on B D M"
-	shows: "parallel A D B C"
+	shows "parallel A D B C"
 proof -
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "A \<noteq> B" using NCdistinct[OF `axioms` `\<not> col A B C`] by blast
-	obtain m where "bet A m B \<and> seg_eq m A m B" using Prop10[OF `axioms` `A \<noteq> B`] by blast
+	obtain m where "bet A m B \<and> seg_eq m A m B" using Prop10[OF `axioms` `A \<noteq> B`]  by  blast
 	have "bet A m B" using `bet A m B \<and> seg_eq m A m B` by blast
 	have "seg_eq m A m B" using `bet A m B \<and> seg_eq m A m B` by blast
 	have "col A m B" using collinear_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
@@ -23,7 +23,7 @@ proof -
 	have "\<not> col A m C" using NChelper[OF `axioms` `\<not> col A B C` `col A B A` `col A B m` `A \<noteq> m`] .
 	have "m \<noteq> C" using NCdistinct[OF `axioms` `\<not> col A m C`] by blast
 	have "C \<noteq> m" using inequalitysymmetric[OF `axioms` `m \<noteq> C`] .
-	obtain H where "bet C m H \<and> seg_eq m H m C" using extensionE[OF `axioms` `C \<noteq> m` `m \<noteq> C`] by blast
+	obtain H where "bet C m H \<and> seg_eq m H m C" using extensionE[OF `axioms` `C \<noteq> m` `m \<noteq> C`]  by  blast
 	have "bet C m H" using `bet C m H \<and> seg_eq m H m C` by blast
 	have "seg_eq m H m C" using `bet C m H \<and> seg_eq m H m C` by blast
 	have "bet B m A" using betweennesssymmetryE[OF `axioms` `bet A m B`] .
@@ -33,7 +33,8 @@ proof -
 	have "seg_eq m C m H" using congruencesymmetric[OF `axioms` `seg_eq m H m C`] .
 	have "\<not> (col B A H)"
 	proof (rule ccontr)
-		assume "col B A H"
+		assume "\<not> (\<not> (col B A H))"
+hence "col B A H" by blast
 		have "col A m B" using collinear_b `axioms` `bet A m B \<and> seg_eq m A m B` by blast
 		have "col B A m" using collinearorder[OF `axioms` `col A B m`] by blast
 		have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
@@ -124,30 +125,35 @@ proof -
 	have "ray_on B D E" using ray3[OF `axioms` `ray_on B M D` `ray_on B M E`] .
 	have "bet B E D \<or> D = E \<or> bet B D E" using ray1[OF `axioms` `ray_on B D E`] .
 	consider "bet B E D"|"D = E"|"bet B D E" using `bet B E D \<or> D = E \<or> bet B D E`  by blast
-	hence parallel A D B C
+	hence "parallel A D B C"
 	proof (cases)
-		case 1
-		have "parallel A D B C"
+		assume "bet B E D"
+		have "\<not> (\<not> (parallel A D B C))"
 		proof (rule ccontr)
-			assume "\<not> (parallel A D B C)"
+			assume "\<not> (\<not> (\<not> (parallel A D B C)))"
+hence "\<not> (parallel A D B C)" by blast
 			have "\<not> (tri_eq_area D B C E B C)" using deZolt1E[OF `axioms` `bet B E D`] .
 			show "False" using `\<not> (tri_eq_area D B C E B C)` `tri_eq_area D B C E B C` by blast
 		qed
 		hence "parallel A D B C" by blast
+		thus ?thesis by blast
 	next
-		case 2
+		assume "D = E"
 		have "parallel A D B C" using `parallel A E B C` `D = E` by blast
+		thus ?thesis by blast
 	next
-		case 3
-		have "parallel A D B C"
+		assume "bet B D E"
+		have "\<not> (\<not> (parallel A D B C))"
 		proof (rule ccontr)
-			assume "\<not> (parallel A D B C)"
+			assume "\<not> (\<not> (\<not> (parallel A D B C)))"
+hence "\<not> (parallel A D B C)" by blast
 			have "\<not> (tri_eq_area E B C D B C)" using deZolt1E[OF `axioms` `bet B D E`] .
 			have "tri_eq_area E B C D B C" using ETsymmetricE[OF `axioms` `tri_eq_area D B C E B C`] .
 			show "False" using `tri_eq_area E B C D B C` `\<not> (tri_eq_area E B C D B C)` by blast
 		qed
 		hence "parallel A D B C" by blast
-	next
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

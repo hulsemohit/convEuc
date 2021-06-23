@@ -1,15 +1,16 @@
 theory ray1
-	imports Axioms Definitions Theorems
+	imports Geometry inequalitysymmetric ray
 begin
 
 theorem ray1:
-	assumes: `axioms`
+	assumes "axioms"
 		"ray_on A B P"
-	shows: "bet A P B \<or> B = P \<or> bet A B P"
+	shows "bet A P B \<or> B = P \<or> bet A B P"
 proof -
-	have "bet A P B \<or> B = P \<or> bet A B P"
+	have "\<not> (\<not> (bet A P B \<or> B = P \<or> bet A B P))"
 	proof (rule ccontr)
-		assume "\<not> (bet A P B \<or> B = P \<or> bet A B P)"
+		assume "\<not> (\<not> (\<not> (bet A P B \<or> B = P \<or> bet A B P)))"
+hence "\<not> (bet A P B \<or> B = P \<or> bet A B P)" by blast
 		have "\<not> (bet A P B) \<and> B \<noteq> P \<and> \<not> (bet A B P)" using `\<not> (bet A P B \<or> B = P \<or> bet A B P)` by blast
 		have "\<not> (bet A P B)" using `\<not> (bet A P B) \<and> B \<noteq> P \<and> \<not> (bet A B P)` by blast
 		have "B \<noteq> P" using `\<not> (bet A P B) \<and> B \<noteq> P \<and> \<not> (bet A B P)` by blast

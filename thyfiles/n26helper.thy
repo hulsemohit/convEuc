@@ -1,14 +1,14 @@
 theory n26helper
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry Prop04 Prop16 angledistinct angleorderrespectscongruence2 angletrichotomy betweennotequal collinear4 collinearorder congruenceflip equalangleshelper equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric ray4
 begin
 
 theorem n26helper:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"ang_eq A B C D E F"
 		"ang_eq B C A E F D"
 		"seg_eq A B D E"
-	shows: "\<not> (seg_lt E F B C)"
+	shows "\<not> (seg_lt E F B C)"
 proof -
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
@@ -20,8 +20,9 @@ proof -
 	have "C \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> C`] .
 	have "\<not> (seg_lt E F B C)"
 	proof (rule ccontr)
-		assume "seg_lt E F B C"
-		obtain H where "bet B H C \<and> seg_eq B H E F" using lessthan_f[OF `axioms` `seg_lt E F B C`] by blast
+		assume "\<not> (\<not> (seg_lt E F B C))"
+hence "seg_lt E F B C" by blast
+		obtain H where "bet B H C \<and> seg_eq B H E F" using lessthan_f[OF `axioms` `seg_lt E F B C`]  by  blast
 		have "bet B H C" using `bet B H C \<and> seg_eq B H E F` by blast
 		have "seg_eq B H E F" using `bet B H C \<and> seg_eq B H E F` by blast
 		have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
@@ -36,7 +37,8 @@ proof -
 		have "ang_eq E F D B C A" using equalanglessymmetric[OF `axioms` `ang_eq B C A E F D`] .
 		have "\<not> (col A C H)"
 		proof (rule ccontr)
-			assume "col A C H"
+			assume "\<not> (\<not> (col A C H))"
+hence "col A C H" by blast
 			have "col H C A" using collinearorder[OF `axioms` `col A C H`] by blast
 			have "col B H C" using collinear_b `axioms` `bet B H C \<and> seg_eq B H E F` by blast
 			have "col H C B" using collinearorder[OF `axioms` `col B H C`] by blast
@@ -54,7 +56,8 @@ proof -
 		have "ray_on C A A" using ray4 `axioms` `A = A` `C \<noteq> A` by blast
 		have "\<not> (col B C A)"
 		proof (rule ccontr)
-			assume "col B C A"
+			assume "\<not> (\<not> (col B C A))"
+hence "col B C A" by blast
 			have "col A B C" using collinearorder[OF `axioms` `col B C A`] by blast
 			show "False" using `col A B C` `\<not> col A B C` by blast
 		qed
@@ -66,7 +69,8 @@ proof -
 		have "ang_eq B H A E F D" using `seg_eq A H D F \<and> ang_eq B A H E D F \<and> ang_eq B H A E F D` by blast
 		have "\<not> (col A H B)"
 		proof (rule ccontr)
-			assume "col A H B"
+			assume "\<not> (\<not> (col A H B))"
+hence "col A H B" by blast
 			have "col H B A" using collinearorder[OF `axioms` `col A H B`] by blast
 			have "col B H C" using collinear_b `axioms` `bet B H C \<and> seg_eq B H E F` by blast
 			have "col H B C" using collinearorder[OF `axioms` `col B H C`] by blast

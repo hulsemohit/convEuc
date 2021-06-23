@@ -1,13 +1,13 @@
 theory diagonalsbisect
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry NCdistinct NChelper NCorder Prop26A Prop29B Prop34 betweennotequal collinear4 collinearorder congruenceflip crossimpliesopposite diagonalsmeet equalanglesflip equalangleshelper equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric parallelNC parallelflip ray4
 begin
 
 theorem diagonalsbisect:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram A B C D"
-	shows: "\<exists> M. midpoint A M C \<and> midpoint B M D"
+	shows "\<exists> M. midpoint A M C \<and> midpoint B M D"
 proof -
-	obtain M where "bet A M C \<and> bet B M D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`] by blast
+	obtain M where "bet A M C \<and> bet B M D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`]  by  blast
 	have "bet A M C" using `bet A M C \<and> bet B M D` by blast
 	have "bet B M D" using `bet A M C \<and> bet B M D` by blast
 	have "parallel A B C D \<and> parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] .
@@ -29,7 +29,8 @@ proof -
 	have "seg_eq A B C D" using congruenceflip[OF `axioms` `seg_eq A B D C`] by blast
 	have "\<not> (col M A B)"
 	proof (rule ccontr)
-		assume "col M A B"
+		assume "\<not> (\<not> (col M A B))"
+hence "col M A B" by blast
 		have "col A M C" using collinear_b `axioms` `bet A M C \<and> bet B M D` by blast
 		have "col M A C" using collinearorder[OF `axioms` `col A M C`] by blast
 		have "A \<noteq> M" using betweennotequal[OF `axioms` `bet A M C`] by blast
@@ -42,7 +43,8 @@ proof -
 	have "triangle M A B" using triangle_b[OF `axioms` `\<not> col M A B`] .
 	have "\<not> (col M C D)"
 	proof (rule ccontr)
-		assume "col M C D"
+		assume "\<not> (\<not> (col M C D))"
+hence "col M C D" by blast
 		have "col A M C" using collinear_b `axioms` `bet A M C \<and> bet B M D` by blast
 		have "col M C A" using collinearorder[OF `axioms` `col A M C`] by blast
 		have "M \<noteq> C" using betweennotequal[OF `axioms` `bet A M C`] by blast

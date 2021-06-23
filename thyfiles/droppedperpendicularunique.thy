@@ -1,22 +1,23 @@
 theory droppedperpendicularunique
-	imports Axioms Definitions Theorems
+	imports n3_7a n3_7b Geometry altitudebisectsbase betweennotequal collinear4 collinearorder collinearright congruenceflip inequalitysymmetric midpointunique rightreverse
 begin
 
 theorem droppedperpendicularunique:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_right A M P"
 		"ang_right A J P"
 		"col A M J"
-	shows: "M = J"
+	shows "M = J"
 proof -
 	have "\<not> (M \<noteq> J)"
 	proof (rule ccontr)
-		assume "M \<noteq> J"
+		assume "\<not> (\<not> (M \<noteq> J))"
+hence "M \<noteq> J" by blast
 		have "J \<noteq> M" using inequalitysymmetric[OF `axioms` `M \<noteq> J`] .
-		obtain E where "bet M J E \<and> seg_eq J E M J" using extensionE[OF `axioms` `M \<noteq> J` `M \<noteq> J`] by blast
+		obtain E where "bet M J E \<and> seg_eq J E M J" using extensionE[OF `axioms` `M \<noteq> J` `M \<noteq> J`]  by  blast
 		have "bet M J E" using `bet M J E \<and> seg_eq J E M J` by blast
 		have "M \<noteq> E" using betweennotequal[OF `axioms` `bet M J E`] by blast
-		obtain F where "bet J M F \<and> seg_eq M F M E" using extensionE[OF `axioms` `J \<noteq> M` `M \<noteq> E`] by blast
+		obtain F where "bet J M F \<and> seg_eq M F M E" using extensionE[OF `axioms` `J \<noteq> M` `M \<noteq> E`]  by  blast
 		have "seg_eq M F M E" using `bet J M F \<and> seg_eq M F M E` by blast
 		have "bet J M F" using `bet J M F \<and> seg_eq M F M E` by blast
 		have "bet E J M" using betweennesssymmetryE[OF `axioms` `bet M J E`] .

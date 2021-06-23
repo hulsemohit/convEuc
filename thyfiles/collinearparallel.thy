@@ -1,15 +1,15 @@
 theory collinearparallel
-	imports Axioms Definitions Theorems
+	imports Geometry collinear4 collinearorder
 begin
 
 theorem collinearparallel:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B c d"
 		"col c d C"
 		"C \<noteq> d"
-	shows: "parallel A B C d"
+	shows "parallel A B C d"
 proof -
-	obtain R a b p q where "A \<noteq> B \<and> c \<noteq> d \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col c d p \<and> col c d q \<and> p \<noteq> q \<and> \<not> (meets A B c d) \<and> bet a R q \<and> bet p R b" using parallel_f[OF `axioms` `parallel A B c d`] by blast
+	obtain R a b p q where "A \<noteq> B \<and> c \<noteq> d \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col c d p \<and> col c d q \<and> p \<noteq> q \<and> \<not> (meets A B c d) \<and> bet a R q \<and> bet p R b" using parallel_f[OF `axioms` `parallel A B c d`]  by  blast
 	have "A \<noteq> B" using `A \<noteq> B \<and> c \<noteq> d \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col c d p \<and> col c d q \<and> p \<noteq> q \<and> \<not> (meets A B c d) \<and> bet a R q \<and> bet p R b` by blast
 	have "c \<noteq> d" using `A \<noteq> B \<and> c \<noteq> d \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col c d p \<and> col c d q \<and> p \<noteq> q \<and> \<not> (meets A B c d) \<and> bet a R q \<and> bet p R b` by blast
 	have "col A B a" using `A \<noteq> B \<and> c \<noteq> d \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col c d p \<and> col c d q \<and> p \<noteq> q \<and> \<not> (meets A B c d) \<and> bet a R q \<and> bet p R b` by blast
@@ -27,8 +27,9 @@ proof -
 	have "col C d q" using collinearorder[OF `axioms` `col d C q`] by blast
 	have "\<not> (meets A B C d)"
 	proof (rule ccontr)
-		assume "meets A B C d"
-		obtain E where "A \<noteq> B \<and> C \<noteq> d \<and> col A B E \<and> col C d E" using meet_f[OF `axioms` `meets A B C d`] by blast
+		assume "\<not> (\<not> (meets A B C d))"
+hence "meets A B C d" by blast
+		obtain E where "A \<noteq> B \<and> C \<noteq> d \<and> col A B E \<and> col C d E" using meet_f[OF `axioms` `meets A B C d`]  by  blast
 		have "col A B E" using `A \<noteq> B \<and> C \<noteq> d \<and> col A B E \<and> col C d E` by blast
 		have "col C d E" using `A \<noteq> B \<and> C \<noteq> d \<and> col A B E \<and> col C d E` by blast
 		have "col C d c" using collinearorder[OF `axioms` `col c d C`] by blast

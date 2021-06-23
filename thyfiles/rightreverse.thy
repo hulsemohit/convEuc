@@ -1,15 +1,15 @@
 theory rightreverse
-	imports Axioms Definitions Theorems
+	imports Geometry congruenceflip congruencesymmetric congruencetransitive extensionunique
 begin
 
 theorem rightreverse:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_right A B C"
 		"bet A B D"
 		"seg_eq A B B D"
-	shows: "seg_eq A C D C"
+	shows "seg_eq A C D C"
 proof -
-	obtain E where "bet A B E \<and> seg_eq A B E B \<and> seg_eq A C E C \<and> B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`] by blast
+	obtain E where "bet A B E \<and> seg_eq A B E B \<and> seg_eq A C E C \<and> B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`]  by  blast
 	have "bet A B E" using `bet A B E \<and> seg_eq A B E B \<and> seg_eq A C E C \<and> B \<noteq> C` by blast
 	have "seg_eq A B E B" using `bet A B E \<and> seg_eq A B E B \<and> seg_eq A C E C \<and> B \<noteq> C` by blast
 	have "seg_eq A C E C" using `bet A B E \<and> seg_eq A B E B \<and> seg_eq A C E C \<and> B \<noteq> C` by blast

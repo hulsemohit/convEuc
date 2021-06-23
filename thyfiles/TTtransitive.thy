@@ -1,25 +1,25 @@
 theory TTtransitive
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal congruencesymmetric congruencetransitive layoffunique lessthantransitive ray4
 begin
 
 theorem TTtransitive:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_sum_pair_gt A B C D E F G H"
 		"seg_sum_pair_gt E F G H P Q R S"
-	shows: "seg_sum_pair_gt A B C D P Q R S"
+	shows "seg_sum_pair_gt A B C D P Q R S"
 proof -
-	obtain K where "bet E F K \<and> seg_eq F K G H \<and> seg_sum_gt A B C D E K" using togetherfour_f[OF `axioms` `seg_sum_pair_gt A B C D E F G H`] by blast
+	obtain K where "bet E F K \<and> seg_eq F K G H \<and> seg_sum_gt A B C D E K" using togetherfour_f[OF `axioms` `seg_sum_pair_gt A B C D E F G H`]  by  blast
 	have "bet E F K" using `bet E F K \<and> seg_eq F K G H \<and> seg_sum_gt A B C D E K` by blast
 	have "seg_sum_gt A B C D E K" using `bet E F K \<and> seg_eq F K G H \<and> seg_sum_gt A B C D E K` by blast
-	obtain J where "bet A B J \<and> seg_eq B J C D \<and> seg_lt E K A J" using togethergreater_f[OF `axioms` `seg_sum_gt A B C D E K`] by blast
+	obtain J where "bet A B J \<and> seg_eq B J C D \<and> seg_lt E K A J" using togethergreater_f[OF `axioms` `seg_sum_gt A B C D E K`]  by  blast
 	have "bet A B J" using `bet A B J \<and> seg_eq B J C D \<and> seg_lt E K A J` by blast
 	have "seg_eq B J C D" using `bet A B J \<and> seg_eq B J C D \<and> seg_lt E K A J` by blast
 	have "seg_lt E K A J" using `bet A B J \<and> seg_eq B J C D \<and> seg_lt E K A J` by blast
-	obtain L where "bet P Q L \<and> seg_eq Q L R S \<and> seg_sum_gt E F G H P L" using togetherfour_f[OF `axioms` `seg_sum_pair_gt E F G H P Q R S`] by blast
+	obtain L where "bet P Q L \<and> seg_eq Q L R S \<and> seg_sum_gt E F G H P L" using togetherfour_f[OF `axioms` `seg_sum_pair_gt E F G H P Q R S`]  by  blast
 	have "bet P Q L" using `bet P Q L \<and> seg_eq Q L R S \<and> seg_sum_gt E F G H P L` by blast
 	have "seg_eq Q L R S" using `bet P Q L \<and> seg_eq Q L R S \<and> seg_sum_gt E F G H P L` by blast
 	have "seg_sum_gt E F G H P L" using `bet P Q L \<and> seg_eq Q L R S \<and> seg_sum_gt E F G H P L` by blast
-	obtain M where "bet E F M \<and> seg_eq F M G H \<and> seg_lt P L E M" using togethergreater_f[OF `axioms` `seg_sum_gt E F G H P L`] by blast
+	obtain M where "bet E F M \<and> seg_eq F M G H \<and> seg_lt P L E M" using togethergreater_f[OF `axioms` `seg_sum_gt E F G H P L`]  by  blast
 	have "bet E F M" using `bet E F M \<and> seg_eq F M G H \<and> seg_lt P L E M` by blast
 	have "seg_lt P L E M" using `bet E F M \<and> seg_eq F M G H \<and> seg_lt P L E M` by blast
 	have "K = K" using equalityreflexiveE[OF `axioms`] .

@@ -1,12 +1,12 @@
 theory equalanglestransitive
-	imports Axioms Definitions Theorems
+	imports Geometry Prop04 angledistinct congruencesymmetric congruencetransitive equalangleshelper equalanglessymmetric inequalitysymmetric layoff ray4 raystrict
 begin
 
 theorem equalanglestransitive:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_eq A B C D E F"
 		"ang_eq D E F P Q R"
-	shows: "ang_eq A B C P Q R"
+	shows "ang_eq A B C P Q R"
 proof -
 	have "A \<noteq> B" using angledistinct[OF `axioms` `ang_eq A B C D E F`] by blast
 	have "D \<noteq> E" using angledistinct[OF `axioms` `ang_eq A B C D E F`] by blast
@@ -16,16 +16,16 @@ proof -
 	have "B \<noteq> C" using angledistinct[OF `axioms` `ang_eq A B C D E F`] by blast
 	have "P \<noteq> Q" using angledistinct[OF `axioms` `ang_eq D E F P Q R`] by blast
 	have "Q \<noteq> P" using inequalitysymmetric[OF `axioms` `P \<noteq> Q`] .
-	obtain U where "ray_on E D U \<and> seg_eq E U B A" using layoff[OF `axioms` `E \<noteq> D` `B \<noteq> A`] by blast
-	obtain V where "ray_on E F V \<and> seg_eq E V B C" using layoff[OF `axioms` `E \<noteq> F` `B \<noteq> C`] by blast
+	obtain U where "ray_on E D U \<and> seg_eq E U B A" using layoff[OF `axioms` `E \<noteq> D` `B \<noteq> A`]  by  blast
+	obtain V where "ray_on E F V \<and> seg_eq E V B C" using layoff[OF `axioms` `E \<noteq> F` `B \<noteq> C`]  by  blast
 	have "ray_on E D U" using `ray_on E D U \<and> seg_eq E U B A` by blast
 	have "ray_on E F V" using `ray_on E F V \<and> seg_eq E V B C` by blast
 	have "E \<noteq> U" using raystrict[OF `axioms` `ray_on E D U`] .
 	have "E \<noteq> V" using raystrict[OF `axioms` `ray_on E F V`] .
 	have "ang_eq P Q R D E F" using equalanglessymmetric[OF `axioms` `ang_eq D E F P Q R`] .
 	have "Q \<noteq> R" using angledistinct[OF `axioms` `ang_eq D E F P Q R`] by blast
-	obtain u where "ray_on Q P u \<and> seg_eq Q u E U" using layoff[OF `axioms` `Q \<noteq> P` `E \<noteq> U`] by blast
-	obtain v where "ray_on Q R v \<and> seg_eq Q v E V" using layoff[OF `axioms` `Q \<noteq> R` `E \<noteq> V`] by blast
+	obtain u where "ray_on Q P u \<and> seg_eq Q u E U" using layoff[OF `axioms` `Q \<noteq> P` `E \<noteq> U`]  by  blast
+	obtain v where "ray_on Q R v \<and> seg_eq Q v E V" using layoff[OF `axioms` `Q \<noteq> R` `E \<noteq> V`]  by  blast
 	have "seg_eq E U B A" using `ray_on E D U \<and> seg_eq E U B A` by blast
 	have "seg_eq E V B C" using `ray_on E F V \<and> seg_eq E V B C` by blast
 	have "ray_on Q P u" using `ray_on Q P u \<and> seg_eq Q u E U` by blast

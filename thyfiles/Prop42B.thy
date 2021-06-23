@@ -1,16 +1,16 @@
 theory Prop42B
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct NChelper NCorder Prop04 Prop23C Prop42 betweennotequal collinearorder collinearparallel congruenceflip congruencesymmetric congruencetransitive equalanglesNC equalangleshelper equalanglessymmetric inequalitysymmetric interior5 layoff paralleldef2B parallelflip parallelsymmetric ray5 sameside2 samesidecollinear samesideflip samesidesymmetric samesidetransitive sumofparts
 begin
 
 theorem Prop42B:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle a b c"
 		"midpoint b e c"
 		"\<not> col J D K"
 		"midpoint B E C"
 		"seg_eq E C e c"
 		"\<not> col R E C"
-	shows: "\<exists> F G. parallelogram F E C G \<and> qua_eq_area a b e c F E C G \<and> ang_eq C E F J D K \<and> same_side R F E C"
+	shows "\<exists> F G. parallelogram F E C G \<and> qua_eq_area a b e c F E C G \<and> ang_eq C E F J D K \<and> same_side R F E C"
 proof -
 	have "bet B E C \<and> seg_eq B E E C" using midpoint_f[OF `axioms` `midpoint B E C`] .
 	have "bet B E C" using `bet B E C \<and> seg_eq B E E C` by blast
@@ -44,7 +44,7 @@ proof -
 	have "B \<noteq> P" using NCdistinct[OF `axioms` `\<not> col B C P`] by blast
 	have "\<not> col a b c" using triangle_f[OF `axioms` `triangle a b c`] .
 	have "b \<noteq> a" using NCdistinct[OF `axioms` `\<not> col a b c`] by blast
-	obtain A where "ray_on B P A \<and> seg_eq B A b a" using layoff[OF `axioms` `B \<noteq> P` `b \<noteq> a`] by blast
+	obtain A where "ray_on B P A \<and> seg_eq B A b a" using layoff[OF `axioms` `B \<noteq> P` `b \<noteq> a`]  by  blast
 	have "ray_on B P A" using `ray_on B P A \<and> seg_eq B A b a` by blast
 	have "seg_eq B A b a" using `ray_on B P A \<and> seg_eq B A b a` by blast
 	have "ang_eq a b c A B C" using equalangleshelper[OF `axioms` `ang_eq a b c P B H` `ray_on B P A` `ray_on B H C`] .
@@ -98,7 +98,7 @@ proof -
 	have "e = e" using equalityreflexiveE[OF `axioms`] .
 	have "col a e e" using collinear_b `axioms` `e = e` by blast
 	have "oppo_side b a e c" using oppositeside_b[OF `axioms` `bet b e c` `col a e e` `\<not> col a e b`] .
-	have "qua_eq_area A B E C a b e c" sorry
+	have "qua_eq_area A B E C a b e c" using paste3E `axioms` `tri_eq_area A E B a e b` `tri_eq_area A E C a e c` `bet B E C \<and> seg_eq B E E C` `E = E` `bet b e c \<and> seg_eq b e e c` `e = e` by blast
 	have "qua_eq_area a b e c A B E C" using EFsymmetricE[OF `axioms` `qua_eq_area A B E C a b e c`] .
 	obtain F G where "parallelogram F E C G \<and> qua_eq_area A B E C F E C G \<and> ang_eq C E F J D K \<and> col F G A" using Prop42[OF `axioms` `triangle A B C` `\<not> col J D K` `midpoint B E C`]  by  blast
 	have "parallelogram F E C G" using `parallelogram F E C G \<and> qua_eq_area A B E C F E C G \<and> ang_eq C E F J D K \<and> col F G A` by blast
@@ -122,20 +122,22 @@ proof -
 	have "parallel E C F G" using parallelsymmetric[OF `axioms` `parallel F G E C`] .
 	have "parallel E C G F" using parallelflip[OF `axioms` `parallel E C F G`] by blast
 	consider "A = F"|"A \<noteq> F" by blast
-	hence same_side R F E C
+	hence "same_side R F E C"
 	proof (cases)
-		case 1
+		assume "A = F"
 		have "same_side R A E C" using samesideflip[OF `axioms` `same_side R A C E`] .
 		have "same_side R F E C" using `same_side R A E C` `A = F` by blast
+		thus ?thesis by blast
 	next
-		case 2
+		assume "A \<noteq> F"
 		have "parallel E C A F" using collinearparallel[OF `axioms` `parallel E C G F` `col G F A` `A \<noteq> F`] .
 		have "parallel E C F A" using parallelflip[OF `axioms` `parallel E C A F`] by blast
 		have "tarski_parallel E C F A" using paralleldef2B[OF `axioms` `parallel E C F A`] .
 		have "same_side F A E C" using tarski_parallel_f[OF `axioms` `tarski_parallel E C F A`] by blast
 		have "same_side F R E C" using samesidetransitive[OF `axioms` `same_side F A E C` `same_side A R E C`] .
 		have "same_side R F E C" using samesidesymmetric[OF `axioms` `same_side F R E C`] by blast
-	next
+		thus ?thesis by blast
+	qed
 	have "parallelogram F E C G \<and> qua_eq_area a b e c F E C G \<and> ang_eq C E F J D K \<and> same_side R F E C" using `parallelogram F E C G \<and> qua_eq_area A B E C F E C G \<and> ang_eq C E F J D K \<and> col F G A` `qua_eq_area a b e c F E C G` `parallelogram F E C G \<and> qua_eq_area A B E C F E C G \<and> ang_eq C E F J D K \<and> col F G A` `same_side R F E C` by blast
 	thus ?thesis by blast
 qed

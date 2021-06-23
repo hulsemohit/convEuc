@@ -30,6 +30,8 @@ namespace prover {
         for(char c: parse::get_vars(stmt))
             if(vars.find(c) == string::npos)
                 new_vars += c;
+        if(stmt == "cases" || stmt == "case" || stmt == "qedcase")
+            new_vars = "";
 
         vars += new_vars; utils::unique(vars);
 
@@ -39,10 +41,7 @@ namespace prover {
             out << string(indent_level, '\t');
             out << "have ";
             string nstmt;
-            if(stmt.substr(0, 2) == "NO")
-                nstmt = stmt.substr(2);
-            else
-                nstmt  = "NO" + stmt;
+            nstmt  = "NO" + stmt;
             out << "\"" << parse::translate(nstmt) << "\"\n";
             out << string(indent_level, '\t');
             out << "proof (rule ccontr)\n";
@@ -98,29 +97,36 @@ namespace prover {
             out << " by blast\n";
 
             out << string(indent_level, '\t');
-            out << "hence " << parse::translate(stmt) << '\n';
+            out << "hence \"" << parse::translate(stmt) << "\"\n";
             out << string(indent_level, '\t');
             out << "proof (cases)\n";
             for(string c: cases) {
                 indent_level++;
                 fact_set new_facts{facts};
                 new_facts.add_fact(c);
+                out << string(indent_level, '\t');
+                out << "assume \"" << parse::translate(c) << "\"\n";
                 by_cases(in, out, new_facts, vars);
+                if(c != cases.back())
+                    out << string(indent_level, '\t') + "next\n";
+                out << std::flush;
             }
-            facts.add_fact(stmt);
             out << std::flush;
             return;
         } else if(stmt == "case") {
-            out << string(indent_level, '\t') + "case " + type + "\n";
+            // out << string(indent_level, '\t') + "case " + type + "\n";
             out << std::flush;
             return;
         } else if(stmt == "qedcase") {
+            out << string(indent_level, '\t');
+            out << "thus ?thesis by blast\n";
             indent_level--;
-            out << string(indent_level, '\t') + "next\n";
-            out << std::flush;
             return;
         } else if(reason == "cases") {
+            out << string(indent_level, '\t');
+            out << "qed\n";
             out << std::flush;
+            facts.add_fact(stmt);
             return;
         }
 
@@ -163,7 +169,13 @@ namespace prover {
             fact_set facts, string vars, string assm) {
         const int cur_level{indent_level};
         out << string(indent_level, '\t');
-        out << "assume \"" << parse::translate(assm) << "\"\n"; 
+        if(assm.substr(0, 2) == "EQ") {
+            out << "assume \""
+                << parse::translate("NO" + parse::canonical("NO" + assm)) << "\"\n";
+            out << string(indent_level, '\t');
+        } else
+            out << "assume \"" << parse::translate("NONO" + assm) << "\"\n"; 
+        out << "hence \"" << parse::translate(assm) << "\" by blast\n";
         out << std::flush;
         facts.add_fact(assm);
         while(indent_level >= cur_level)
@@ -175,12 +187,15 @@ namespace prover {
         const string name{utils::fix_name(fname.substr(0, fname.size() - 4))};
         std::ofstream out("../thyfiles/" + name + ".thy");
         out << "theory " << name << '\n';
-#warning "Figure out imports"
-        out << '\t' << "imports Axioms Definitions Theorems" << '\n';
+        out << "\timports";
+        for(string s: theorem::theorems[name].get_depends())
+            out << " " << utils::fix_name(s);
+        out << '\n';
+
         out << "begin" << "\n\n";
 
         out << "theorem " << name << ":\n";
-        out << "\tassumes: `axioms`";
+        out << "\tassumes \"axioms\"";
         out << std::flush;
 
         fact_set facts;
@@ -191,7 +206,7 @@ namespace prover {
             vars += parse::get_vars(assm);
         }
 
-        out << "\n\tshows: \"";
+        out << "\n\tshows \"";
         string e{theorem::theorems[name].get_exists()};
 
         if(!e.empty()) {

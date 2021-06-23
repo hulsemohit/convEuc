@@ -1,11 +1,11 @@
 theory squareflip
-	imports Axioms Definitions Theorems
+	imports n8_2 Geometry congruenceflip
 begin
 
 theorem squareflip:
-	assumes: `axioms`
+	assumes "axioms"
 		"square A B C D"
-	shows: "square B A D C"
+	shows "square B A D C"
 proof -
 	have "seg_eq A B C D \<and> seg_eq A B B C \<and> seg_eq A B D A \<and> ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A" using square_f[OF `axioms` `square A B C D`] .
 	have "seg_eq A B C D" using `seg_eq A B C D \<and> seg_eq A B B C \<and> seg_eq A B D A \<and> ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A` by blast

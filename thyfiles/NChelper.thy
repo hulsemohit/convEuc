@@ -1,18 +1,19 @@
 theory NChelper
-	imports Axioms Definitions Theorems
+	imports Geometry collinear4 collinear5 collinearorder inequalitysymmetric
 begin
 
 theorem NChelper:
-	assumes: `axioms`
+	assumes "axioms"
 		"\<not> col A B C"
 		"col A B P"
 		"col A B Q"
 		"P \<noteq> Q"
-	shows: "\<not> col P Q C"
+	shows "\<not> col P Q C"
 proof -
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
@@ -26,7 +27,8 @@ proof -
 	have "col P Q B" using collinearorder[OF `axioms` `col B P Q`] by blast
 	have "\<not> (col P Q C)"
 	proof (rule ccontr)
-		assume "col P Q C"
+		assume "\<not> (\<not> (col P Q C))"
+hence "col P Q C" by blast
 		have "col A B C" using collinear5[OF `axioms` `P \<noteq> Q` `col P Q A` `col P Q B` `col P Q C`] .
 		have "\<not> col A B C" using `\<not> col A B C` .
 		show "False" using `\<not> col A B C` `col A B C` by blast

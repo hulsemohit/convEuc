@@ -1,14 +1,14 @@
 theory lessthanbetween
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal layoffunique ray4 ray5
 begin
 
 theorem lessthanbetween:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_lt A B A C"
 		"ray_on A B C"
-	shows: "bet A B C"
+	shows "bet A B C"
 proof -
-	obtain M where "bet A M C \<and> seg_eq A M A B" using lessthan_f[OF `axioms` `seg_lt A B A C`] by blast
+	obtain M where "bet A M C \<and> seg_eq A M A B" using lessthan_f[OF `axioms` `seg_lt A B A C`]  by  blast
 	have "bet A M C" using `bet A M C \<and> seg_eq A M A B` by blast
 	have "seg_eq A M A B" using `bet A M C \<and> seg_eq A M A B` by blast
 	have "A \<noteq> M" using betweennotequal[OF `axioms` `bet A M C`] by blast

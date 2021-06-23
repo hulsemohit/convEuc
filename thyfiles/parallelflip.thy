@@ -1,13 +1,13 @@
 theory parallelflip
-	imports Axioms Definitions Theorems
+	imports Geometry collinearorder inequalitysymmetric
 begin
 
 theorem parallelflip:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B C D"
-	shows: "parallel B A C D \<and> parallel A B D C \<and> parallel B A D C"
+	shows "parallel B A C D \<and> parallel A B D C \<and> parallel B A D C"
 proof -
-	obtain M a b c d where "A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a M d \<and> bet c M b" using parallel_f[OF `axioms` `parallel A B C D`] by blast
+	obtain M a b c d where "A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a M d \<and> bet c M b" using parallel_f[OF `axioms` `parallel A B C D`]  by  blast
 	have "A \<noteq> B" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a M d \<and> bet c M b` by blast
 	have "C \<noteq> D" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a M d \<and> bet c M b` by blast
 	have "col A B a" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B a \<and> col A B b \<and> a \<noteq> b \<and> col C D c \<and> col C D d \<and> c \<noteq> d \<and> \<not> (meets A B C D) \<and> bet a M d \<and> bet c M b` by blast
@@ -31,8 +31,9 @@ proof -
 	have "b \<noteq> a" using inequalitysymmetric[OF `axioms` `a \<noteq> b`] .
 	have "\<not> (meets A B D C)"
 	proof (rule ccontr)
-		assume "meets A B D C"
-		obtain P where "A \<noteq> B \<and> D \<noteq> C \<and> col A B P \<and> col D C P" using meet_f[OF `axioms` `meets A B D C`] by blast
+		assume "\<not> (\<not> (meets A B D C))"
+hence "meets A B D C" by blast
+		obtain P where "A \<noteq> B \<and> D \<noteq> C \<and> col A B P \<and> col D C P" using meet_f[OF `axioms` `meets A B D C`]  by  blast
 		have "col A B P" using `A \<noteq> B \<and> D \<noteq> C \<and> col A B P \<and> col D C P` by blast
 		have "col D C P" using `A \<noteq> B \<and> D \<noteq> C \<and> col A B P \<and> col D C P` by blast
 		have "col C D P" using collinearorder[OF `axioms` `col D C P`] by blast
@@ -43,8 +44,9 @@ proof -
 	hence "\<not> (meets A B D C)" by blast
 	have "\<not> (meets B A C D)"
 	proof (rule ccontr)
-		assume "meets B A C D"
-		obtain P where "B \<noteq> A \<and> C \<noteq> D \<and> col B A P \<and> col C D P" using meet_f[OF `axioms` `meets B A C D`] by blast
+		assume "\<not> (\<not> (meets B A C D))"
+hence "meets B A C D" by blast
+		obtain P where "B \<noteq> A \<and> C \<noteq> D \<and> col B A P \<and> col C D P" using meet_f[OF `axioms` `meets B A C D`]  by  blast
 		have "col B A P" using `B \<noteq> A \<and> C \<noteq> D \<and> col B A P \<and> col C D P` by blast
 		have "col C D P" using `B \<noteq> A \<and> C \<noteq> D \<and> col B A P \<and> col C D P` by blast
 		have "col A B P" using collinearorder[OF `axioms` `col B A P`] by blast
@@ -55,8 +57,9 @@ proof -
 	hence "\<not> (meets B A C D)" by blast
 	have "\<not> (meets B A D C)"
 	proof (rule ccontr)
-		assume "meets B A D C"
-		obtain P where "B \<noteq> A \<and> D \<noteq> C \<and> col B A P \<and> col D C P" using meet_f[OF `axioms` `meets B A D C`] by blast
+		assume "\<not> (\<not> (meets B A D C))"
+hence "meets B A D C" by blast
+		obtain P where "B \<noteq> A \<and> D \<noteq> C \<and> col B A P \<and> col D C P" using meet_f[OF `axioms` `meets B A D C`]  by  blast
 		have "col B A P" using `B \<noteq> A \<and> D \<noteq> C \<and> col B A P \<and> col D C P` by blast
 		have "col D C P" using `B \<noteq> A \<and> D \<noteq> C \<and> col B A P \<and> col D C P` by blast
 		have "col A B P" using collinearorder[OF `axioms` `col B A P`] by blast

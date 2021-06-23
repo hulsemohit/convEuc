@@ -1,14 +1,14 @@
 theory angleorderrespectscongruence2
-	imports Axioms Definitions Theorems
+	imports Geometry equalanglestransitive
 begin
 
 theorem angleorderrespectscongruence2:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_lt A B C D E F"
 		"ang_eq a b c A B C"
-	shows: "ang_lt a b c D E F"
+	shows "ang_lt a b c D E F"
 proof -
-	obtain P Q R where "bet P Q R \<and> ray_on E D P \<and> ray_on E F R \<and> ang_eq A B C D E Q" using anglelessthan_f[OF `axioms` `ang_lt A B C D E F`] by blast
+	obtain P Q R where "bet P Q R \<and> ray_on E D P \<and> ray_on E F R \<and> ang_eq A B C D E Q" using anglelessthan_f[OF `axioms` `ang_lt A B C D E F`]  by  blast
 	have "bet P Q R" using `bet P Q R \<and> ray_on E D P \<and> ray_on E F R \<and> ang_eq A B C D E Q` by blast
 	have "ray_on E D P" using `bet P Q R \<and> ray_on E D P \<and> ray_on E F R \<and> ang_eq A B C D E Q` by blast
 	have "ray_on E F R" using `bet P Q R \<and> ray_on E D P \<and> ray_on E F R \<and> ang_eq A B C D E Q` by blast

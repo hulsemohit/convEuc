@@ -10,11 +10,17 @@ using std::string, std::set, std::vector;
 void fact_set::add_fact(const string& fact) {
     facts.insert(fact);
     last = fact;
+    vars += parse::get_vars(fact);
+    utils::unique(vars);
 }
 
 // Check if a literal fact exists.
 bool fact_set::has_fact(const string& fact) const {
     return facts.find(fact) != facts.end();
+}
+
+bool fact_set::has_var(char v) const {
+    return vars.find(string(1, v)) != string::npos;
 }
 
 // Check if the pattern matches the fact.
@@ -44,8 +50,9 @@ string fact_set::trace_logical(string fact, bool reverse) const {
         if(s.substr(0, 2) == "AN") {
             vector<string> v = utils::split_at(s.substr(2), "+");
             for(string f: v)
-                if(reverse ? matches(fact, f) : matches(f, fact))
+                if(reverse ? matches(fact, f) : matches(f, fact)) {
                     return t;
+                }
         }
     } 
 

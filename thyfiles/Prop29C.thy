@@ -1,24 +1,25 @@
 theory Prop29C
-	imports Axioms Definitions Theorems
+	imports Geometry NCorder Prop29 betweennotequal collinear4 collinearorder collinearparallel inequalitysymmetric oppositesidesymmetric parallelNC parallelflip parallelsymmetric planeseparation samesidesymmetric
 begin
 
 theorem Prop29C:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel G B H D"
 		"same_side B D G H"
 		"bet E G H"
-	shows: "ang_eq E G B G H D \<and> ang_suppl B G H G H D"
+	shows "ang_eq E G B G H D \<and> ang_sum_right B G H G H D"
 proof -
 	have "\<not> col G B H" using parallelNC[OF `axioms` `parallel G B H D`] by blast
 	have "\<not> (G = B)"
 	proof (rule ccontr)
-		assume "G = B"
+		assume "\<not> (G \<noteq> B)"
+		hence "G = B" by blast
 		have "col G B H" using collinear_b `axioms` `G = B` by blast
 		show "False" using `col G B H` `\<not> col G B H` by blast
 	qed
 	hence "G \<noteq> B" by blast
 	have "B \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> B`] .
-	obtain A where "bet B G A \<and> seg_eq G A B G" using extensionE[OF `axioms` `B \<noteq> G` `B \<noteq> G`] by blast
+	obtain A where "bet B G A \<and> seg_eq G A B G" using extensionE[OF `axioms` `B \<noteq> G` `B \<noteq> G`]  by  blast
 	have "bet B G A" using `bet B G A \<and> seg_eq G A B G` by blast
 	have "bet A G B" using betweennesssymmetryE[OF `axioms` `bet B G A`] .
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A G B`] by blast
@@ -32,7 +33,7 @@ proof -
 	have "parallel H D G A" using collinearparallel[OF `axioms` `parallel H D B A` `col B A G` `G \<noteq> A`] .
 	have "parallel H D A G" using parallelflip[OF `axioms` `parallel H D G A`] by blast
 	have "parallel A G H D" using parallelsymmetric[OF `axioms` `parallel H D A G`] .
-	obtain a d g h m where "A \<noteq> G \<and> H \<noteq> D \<and> col A G a \<and> col A G g \<and> a \<noteq> g \<and> col H D h \<and> col H D d \<and> h \<noteq> d \<and> \<not> (meets A G H D) \<and> bet a m d \<and> bet h m g" using parallel_f[OF `axioms` `parallel A G H D`] by blast
+	obtain a d g h m where "A \<noteq> G \<and> H \<noteq> D \<and> col A G a \<and> col A G g \<and> a \<noteq> g \<and> col H D h \<and> col H D d \<and> h \<noteq> d \<and> \<not> (meets A G H D) \<and> bet a m d \<and> bet h m g" using parallel_f[OF `axioms` `parallel A G H D`]  by  blast
 	have "A \<noteq> G" using `A \<noteq> G \<and> H \<noteq> D \<and> col A G a \<and> col A G g \<and> a \<noteq> g \<and> col H D h \<and> col H D d \<and> h \<noteq> d \<and> \<not> (meets A G H D) \<and> bet a m d \<and> bet h m g` by blast
 	have "H \<noteq> D" using `A \<noteq> G \<and> H \<noteq> D \<and> col A G a \<and> col A G g \<and> a \<noteq> g \<and> col H D h \<and> col H D d \<and> h \<noteq> d \<and> \<not> (meets A G H D) \<and> bet a m d \<and> bet h m g` by blast
 	have "D \<noteq> H" using inequalitysymmetric[OF `axioms` `H \<noteq> D`] .
@@ -42,7 +43,7 @@ proof -
 	have "h \<noteq> d" using `A \<noteq> G \<and> H \<noteq> D \<and> col A G a \<and> col A G g \<and> a \<noteq> g \<and> col H D h \<and> col H D d \<and> h \<noteq> d \<and> \<not> (meets A G H D) \<and> bet a m d \<and> bet h m g` by blast
 	have "bet a m d" using `A \<noteq> G \<and> H \<noteq> D \<and> col A G a \<and> col A G g \<and> a \<noteq> g \<and> col H D h \<and> col H D d \<and> h \<noteq> d \<and> \<not> (meets A G H D) \<and> bet a m d \<and> bet h m g` by blast
 	have "bet h m g" using `A \<noteq> G \<and> H \<noteq> D \<and> col A G a \<and> col A G g \<and> a \<noteq> g \<and> col H D h \<and> col H D d \<and> h \<noteq> d \<and> \<not> (meets A G H D) \<and> bet a m d \<and> bet h m g` by blast
-	obtain C where "bet D H C \<and> seg_eq H C D H" using extensionE[OF `axioms` `D \<noteq> H` `D \<noteq> H`] by blast
+	obtain C where "bet D H C \<and> seg_eq H C D H" using extensionE[OF `axioms` `D \<noteq> H` `D \<noteq> H`]  by  blast
 	have "bet A G B" using `bet A G B` .
 	have "bet D H C" using `bet D H C \<and> seg_eq H C D H` by blast
 	have "bet H G E" using betweennesssymmetryE[OF `axioms` `bet E G H`] .
@@ -71,8 +72,9 @@ proof -
 	have "col C D d" using `col C D d` .
 	have "\<not> (meets A B C D)"
 	proof (rule ccontr)
-		assume "meets A B C D"
-		obtain M where "A \<noteq> B \<and> C \<noteq> D \<and> col A B M \<and> col C D M" using meet_f[OF `axioms` `meets A B C D`] by blast
+		assume "\<not> (\<not> (meets A B C D))"
+hence "meets A B C D" by blast
+		obtain M where "A \<noteq> B \<and> C \<noteq> D \<and> col A B M \<and> col C D M" using meet_f[OF `axioms` `meets A B C D`]  by  blast
 		have "col A B M" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B M \<and> col C D M` by blast
 		have "col C D M" using `A \<noteq> B \<and> C \<noteq> D \<and> col A B M \<and> col C D M` by blast
 		have "col B A G" using collinearorder[OF `axioms` `col A B G`] by blast
@@ -99,10 +101,10 @@ proof -
 	have "oppo_side B G H A" using oppositeside_b[OF `axioms` `bet B G A` `col G H G` `\<not> col G H B`] .
 	have "oppo_side D G H A" using planeseparation[OF `axioms` `same_side D B G H` `oppo_side B G H A`] .
 	have "oppo_side A G H D" using oppositesidesymmetric[OF `axioms` `oppo_side D G H A`] .
-	have "ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_suppl B G H G H D" using Prop29[OF `axioms` `parallel A B C D` `bet A G B` `bet C H D` `bet E G H` `oppo_side A G H D`] .
-	have "ang_eq E G B G H D" using `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_suppl B G H G H D` by blast
-	have "ang_suppl B G H G H D" using `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_suppl B G H G H D` by blast
-	have "ang_eq E G B G H D \<and> ang_suppl B G H G H D" using `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_suppl B G H G H D` `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_suppl B G H G H D` by blast
+	have "ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_sum_right B G H G H D" using Prop29[OF `axioms` `parallel A B C D` `bet A G B` `bet C H D` `bet E G H` `oppo_side A G H D`] .
+	have "ang_eq E G B G H D" using `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_sum_right B G H G H D` by blast
+	have "ang_sum_right B G H G H D" using `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_sum_right B G H G H D` by blast
+	have "ang_eq E G B G H D \<and> ang_sum_right B G H G H D" using `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_sum_right B G H G H D` `ang_eq A G H G H D \<and> ang_eq E G B G H D \<and> ang_sum_right B G H G H D` by blast
 	thus ?thesis by blast
 qed
 

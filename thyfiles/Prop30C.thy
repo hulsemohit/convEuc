@@ -1,9 +1,9 @@
 theory Prop30C
-	imports Axioms Definitions Theorems
+	imports n3_5b n3_6a n3_7a Geometry NChelper NCorder Prop28A Prop29 betweennotequal collinear4 collinearorder equalanglesflip equalangleshelper equalanglessymmetric equalanglestransitive inequalitysymmetric parallelflip parallelsymmetric ray4 ray5 samesidesymmetric
 begin
 
 theorem Prop30C:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B E F"
 		"parallel C D E F"
 		"\<not> col A B C"
@@ -16,15 +16,15 @@ theorem Prop30C:
 		"C \<noteq> K"
 		"oppo_side A G H F"
 		"oppo_side C K H F"
-	shows: "parallel A B C D"
+	shows "parallel A B C D"
 proof -
 	have "parallel E F C D" using parallelsymmetric[OF `axioms` `parallel C D E F`] .
 	have "G \<noteq> H" using betweennotequal[OF `axioms` `bet G K H`] by blast
 	have "H \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> H`] .
 	have "K \<noteq> H" using betweennotequal[OF `axioms` `bet G K H`] by blast
 	have "H \<noteq> K" using inequalitysymmetric[OF `axioms` `K \<noteq> H`] .
-	obtain P where "bet H G P \<and> seg_eq G P G H" using extensionE[OF `axioms` `H \<noteq> G` `G \<noteq> H`] by blast
-	obtain Q where "bet K H Q \<and> seg_eq H Q K H" using extensionE[OF `axioms` `K \<noteq> H` `K \<noteq> H`] by blast
+	obtain P where "bet H G P \<and> seg_eq G P G H" using extensionE[OF `axioms` `H \<noteq> G` `G \<noteq> H`]  by  blast
+	obtain Q where "bet K H Q \<and> seg_eq H Q K H" using extensionE[OF `axioms` `K \<noteq> H` `K \<noteq> H`]  by  blast
 	have "bet H G P" using `bet H G P \<and> seg_eq G P G H` by blast
 	have "bet K H Q" using `bet K H Q \<and> seg_eq H Q K H` by blast
 	have "bet G H Q" using n3_7a[OF `axioms` `bet G K H` `bet K H Q`] .
@@ -43,7 +43,7 @@ proof -
 	have "ang_eq C K H A G H" using equalanglestransitive[OF `axioms` `ang_eq C K H K H F` `ang_eq K H F A G H`] .
 	have "G \<noteq> H" using betweennotequal[OF `axioms` `bet G H Q`] by blast
 	have "ray_on G H K" using ray4 `axioms` `bet G K H` `G \<noteq> H` by blast
-	have "A \<noteq> G" sorry
+	have "A \<noteq> G" using `A \<noteq> G` .
 	have "G \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> G`] .
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
 	have "ray_on G A A" using ray4 `axioms` `A = A` `G \<noteq> A` by blast
@@ -51,8 +51,8 @@ proof -
 	have "ang_eq H K C K G A" using equalanglesflip[OF `axioms` `ang_eq C K H A G K`] .
 	have "oppo_side A G H F" using `oppo_side A G H F` .
 	have "oppo_side C K H F" using `oppo_side C K H F` .
-	obtain M where "bet A M F \<and> col G H M \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H F`] by blast
-	obtain m where "bet C m F \<and> col K H m \<and> \<not> col K H C" using oppositeside_f[OF `axioms` `oppo_side C K H F`] by blast
+	obtain M where "bet A M F \<and> col G H M \<and> \<not> col G H A" using oppositeside_f[OF `axioms` `oppo_side A G H F`]  by  blast
+	obtain m where "bet C m F \<and> col K H m \<and> \<not> col K H C" using oppositeside_f[OF `axioms` `oppo_side C K H F`]  by  blast
 	have "bet A M F" using `bet A M F \<and> col G H M \<and> \<not> col G H A` by blast
 	have "col G H M" using `bet A M F \<and> col G H M \<and> \<not> col G H A` by blast
 	have "\<not> col G H A" using `bet A M F \<and> col G H M \<and> \<not> col G H A` by blast

@@ -1,16 +1,16 @@
 theory Prop47A
-	imports Axioms Definitions Theorems
+	imports n8_2 n8_3 n8_7 Geometry NCdistinct NCorder Playfair Prop12 Prop29C Prop34 altitudeofrighttriangle betweennesspreserved betweennotequal collinear4 collinearorder collinearparallel collinearright equaltorightisright erectedperpendicularunique inequalitysymmetric nullsegment3 parallelNC paralleldef2B parallelflip parallelsymmetric planeseparation ray4 ray5 rayimpliescollinear rightangleNC sameside2 samesideflip samesidesymmetric squareparallelogram twoperpsparallel
 begin
 
 theorem Prop47A:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"ang_right B A C"
 		"square B C E D"
 		"oppo_side D C B A"
-	shows: "\<exists> L M. parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A"
+	shows "\<exists> L M. parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A"
 proof -
-	obtain N where "bet D N A \<and> col C B N \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`] by blast
+	obtain N where "bet D N A \<and> col C B N \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`]  by  blast
 	have "bet D N A" using `bet D N A \<and> col C B N \<and> \<not> col C B D` by blast
 	have "col C B N" using `bet D N A \<and> col C B N \<and> \<not> col C B D` by blast
 	have "ang_right C A B" using n8_2[OF `axioms` `ang_right B A C`] .
@@ -22,16 +22,17 @@ proof -
 	have "E \<noteq> D" using nullsegment3[OF `axioms` `B \<noteq> C` `seg_eq B C E D`] .
 	have "D \<noteq> E" using inequalitysymmetric[OF `axioms` `E \<noteq> D`] .
 	have "oppo_side D C B A" using `oppo_side D C B A` .
-	obtain q where "bet D q A \<and> col C B q \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`] by blast
+	obtain q where "bet D q A \<and> col C B q \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`]  by  blast
 	have "bet D q A" using `bet D q A \<and> col C B q \<and> \<not> col C B D` by blast
 	have "col C B q" using `bet D q A \<and> col C B q \<and> \<not> col C B D` by blast
 	have "\<not> col C B D" using `bet D N A \<and> col C B N \<and> \<not> col C B D` by blast
 	have "parallelogram B C E D" using squareparallelogram[OF `axioms` `square B C E D`] .
 	have "parallel B C E D" using parallelogram_f[OF `axioms` `parallelogram B C E D`] by blast
-	have "\<not> (meets B C E D)" using parallel_f[OF `axioms` `parallel B C E D`] by blast
+	have "\<not> (meets B C E D)" using parallel_f[OF `axioms` `parallel B C E D`] by fastforce
 	have "\<not> (A = E)"
 	proof (rule ccontr)
-		assume "A = E"
+		assume "\<not> (A \<noteq> E)"
+		hence "A = E" by blast
 		have "bet D q E" using `bet D q A` `A = E` by blast
 		have "col D q E" using collinear_b `axioms` `bet D q E` by blast
 		have "col E D q" using collinearorder[OF `axioms` `col D q E`] by blast
@@ -42,7 +43,8 @@ proof -
 	hence "A \<noteq> E" by blast
 	have "\<not> (col D E A)"
 	proof (rule ccontr)
-		assume "col D E A"
+		assume "\<not> (\<not> (col D E A))"
+hence "col D E A" by blast
 		have "col D A E" using collinearorder[OF `axioms` `col D E A`] by blast
 		have "col D q A" using collinear_b `axioms` `bet D q A \<and> col C B q \<and> \<not> col C B D` by blast
 		have "col D A q" using collinearorder[OF `axioms` `col D q A`] by blast
@@ -59,15 +61,16 @@ proof -
 		show "False" using `meets B C E D` `\<not> (meets B C E D)` by blast
 	qed
 	hence "\<not> col D E A" by blast
-	obtain L where "perp_at A L D E L" using Prop12[OF `axioms` `D \<noteq> E` `\<not> col D E A`] by blast
-	obtain p where "col A L L \<and> col D E L \<and> col D E p \<and> ang_right p L A" using perpat_f[OF `axioms` `perp_at A L D E L`] by blast
+	obtain L where "perp_at A L D E L" using Prop12[OF `axioms` `D \<noteq> E` `\<not> col D E A`]  by  blast
+	obtain p where "col A L L \<and> col D E L \<and> col D E p \<and> ang_right p L A" using perpat_f[OF `axioms` `perp_at A L D E L`]  by  blast
 	have "col D E L" using `col A L L \<and> col D E L \<and> col D E p \<and> ang_right p L A` by blast
 	have "col D E p" using `col A L L \<and> col D E L \<and> col D E p \<and> ang_right p L A` by blast
 	have "ang_right p L A" using `col A L L \<and> col D E L \<and> col D E p \<and> ang_right p L A` by blast
 	have "ang_right A L p" using n8_2[OF `axioms` `ang_right p L A`] .
 	have "\<not> (B = N)"
 	proof (rule ccontr)
-		assume "B = N"
+		assume "\<not> (B \<noteq> N)"
+		hence "B = N" by blast
 		have "bet D B A" using `bet D N A` `B = N` by blast
 		have "col D B A" using collinear_b `axioms` `bet D B A` by blast
 		have "ang_right D B C" using square_f[OF `axioms` `square B C E D`] by blast
@@ -96,7 +99,8 @@ proof -
 	have "same_side A B E D" using samesidesymmetric[OF `axioms` `same_side B A D E`] by blast
 	have "\<not> (D = L)"
 	proof (rule ccontr)
-		assume "D = L"
+		assume "\<not> (D \<noteq> L)"
+		hence "D = L" by blast
 		have "ang_right A D p" using `ang_right A L p` `D = L` by blast
 		have "ang_right p D A" using n8_2[OF `axioms` `ang_right A D p`] .
 		have "col p D E" using collinearorder[OF `axioms` `col D E p`] by blast
@@ -129,7 +133,7 @@ proof -
 	have "col B C N" using collinearorder[OF `axioms` `col C B N`] by blast
 	have "oppo_side D B C A" using oppositeside_b[OF `axioms` `bet D N A` `col B C N` `\<not> col B C D`] .
 	have "oppo_side L B C A" using planeseparation[OF `axioms` `same_side L D B C` `oppo_side D B C A`] .
-	obtain M where "bet L M A \<and> col B C M \<and> \<not> col B C L" using oppositeside_f[OF `axioms` `oppo_side L B C A`] by blast
+	obtain M where "bet L M A \<and> col B C M \<and> \<not> col B C L" using oppositeside_f[OF `axioms` `oppo_side L B C A`]  by  blast
 	have "bet L M A" using `bet L M A \<and> col B C M \<and> \<not> col B C L` by blast
 	have "col B C M" using `bet L M A \<and> col B C M \<and> \<not> col B C L` by blast
 	have "D \<noteq> E" using NCdistinct[OF `axioms` `\<not> col D E A`] by blast
@@ -148,7 +152,8 @@ proof -
 	have "ang_right D L M" using n8_3[OF `axioms` `ang_right D L A` `ray_on L A M`] .
 	have "\<not> (B = M)"
 	proof (rule ccontr)
-		assume "B = M"
+		assume "\<not> (B \<noteq> M)"
+		hence "B = M" by blast
 		have "ang_right D L B" using `ang_right D L M` `B = M` by blast
 		have "ang_right L D B" using collinearright[OF `axioms` `ang_right E D B` `col E D L` `L \<noteq> D`] .
 		have "ang_right B D L" using n8_2[OF `axioms` `ang_right L D B`] .
@@ -185,7 +190,8 @@ proof -
 	have "bet B M C" using altitudeofrighttriangle[OF `axioms` `ang_right B A C` `ang_right A M B` `col B C B` `col B C M`] .
 	have "\<not> (M = C)"
 	proof (rule ccontr)
-		assume "M = C"
+		assume "\<not> (M \<noteq> C)"
+		hence "M = C" by blast
 		have "ang_right A M B" using `ang_right A M B` .
 		have "ang_right A C B" using `ang_right A M B` `M = C` by blast
 		have "\<not> (ang_right B A C)" using n8_7[OF `axioms` `ang_right A C B`] .
@@ -194,7 +200,8 @@ proof -
 	hence "M \<noteq> C" by blast
 	have "\<not> (L = E)"
 	proof (rule ccontr)
-		assume "L = E"
+		assume "\<not> (L \<noteq> E)"
+		hence "L = E" by blast
 		have "parallelogram B C E D" using `parallelogram B C E D` .
 		have "parallel B D C E" using parallelogram_f[OF `axioms` `parallelogram B C E D`] by blast
 		have "parallel C E B D" using parallelsymmetric[OF `axioms` `parallel B D C E`] .

@@ -1,13 +1,13 @@
 theory samesideflip
-	imports Axioms Definitions Theorems
+	imports Geometry NCorder collinearorder
 begin
 
 theorem samesideflip:
-	assumes: `axioms`
+	assumes "axioms"
 		"same_side P Q A B"
-	shows: "same_side P Q B A"
+	shows "same_side P Q B A"
 proof -
-	obtain p q r where "col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q" using sameside_f[OF `axioms` `same_side P Q A B`] by blast
+	obtain p q r where "col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q" using sameside_f[OF `axioms` `same_side P Q A B`]  by  blast
 	have "col A B p" using `col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q` by blast
 	have "col A B q" using `col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q` by blast
 	have "bet P p r" using `col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q` by blast

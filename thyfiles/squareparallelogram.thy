@@ -1,11 +1,11 @@
 theory squareparallelogram
-	imports Axioms Definitions Theorems
+	imports n8_2 Euclid4 Geometry NCdistinct NChelper NCorder Prop04 Prop46 betweennesspreserved betweennotequal collinear4 collinearorder collinearright congruenceflip congruencesymmetric congruencetransitive diagonalsbisect equalangleshelper equalanglessymmetric layoffunique oppositesideflip ray4 rightangleNC righttogether
 begin
 
 theorem squareparallelogram:
-	assumes: `axioms`
+	assumes "axioms"
 		"square A B C D"
-	shows: "parallelogram A B C D"
+	shows "parallelogram A B C D"
 proof -
 	have "seg_eq A B C D \<and> seg_eq A B B C \<and> seg_eq A B D A \<and> ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A" using square_f[OF `axioms` `square A B C D`] .
 	have "seg_eq A B D A" using `seg_eq A B C D \<and> seg_eq A B B C \<and> seg_eq A B D A \<and> ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A` by blast
@@ -13,7 +13,7 @@ proof -
 	have "ang_right C D A" using `seg_eq A B C D \<and> seg_eq A B B C \<and> seg_eq A B D A \<and> ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A` by blast
 	have "\<not> col D A B" using rightangleNC[OF `axioms` `ang_right D A B`] .
 	have "D \<noteq> A" using NCdistinct[OF `axioms` `\<not> col D A B`] by blast
-	obtain R where "bet D A R \<and> seg_eq A R D A" using extensionE[OF `axioms` `D \<noteq> A` `D \<noteq> A`] by blast
+	obtain R where "bet D A R \<and> seg_eq A R D A" using extensionE[OF `axioms` `D \<noteq> A` `D \<noteq> A`]  by  blast
 	have "bet D A R" using `bet D A R \<and> seg_eq A R D A` by blast
 	have "bet R A D" using betweennesssymmetryE[OF `axioms` `bet D A R`] .
 	have "A \<noteq> B" using NCdistinct[OF `axioms` `\<not> col D A B`] by blast
@@ -63,7 +63,7 @@ proof -
 	have "ang_eq B c D B C D" using Euclid4[OF `axioms` `ang_right B c D` `ang_right B C D`] .
 	have "seg_eq B D B D \<and> ang_eq c B D C B D \<and> ang_eq c D B C D B" using Prop04[OF `axioms` `seg_eq c B C B` `seg_eq c D C D` `ang_eq B c D B C D`] .
 	have "ang_eq c D B C D B" using `seg_eq B D B D \<and> ang_eq c B D C B D \<and> ang_eq c D B C D B` by blast
-	obtain m where "midpoint A m c \<and> midpoint B m D" using diagonalsbisect[OF `axioms` `parallelogram A B c D`] by blast
+	obtain m where "midpoint A m c \<and> midpoint B m D" using diagonalsbisect[OF `axioms` `parallelogram A B c D`]  by  blast
 	have "midpoint A m c" using `midpoint A m c \<and> midpoint B m D` by blast
 	have "midpoint B m D" using `midpoint A m c \<and> midpoint B m D` by blast
 	have "bet A m c \<and> seg_eq A m m c" using midpoint_f[OF `axioms` `midpoint A m c`] .
@@ -72,7 +72,7 @@ proof -
 	have "bet B m D" using `bet B m D \<and> seg_eq B m m D` by blast
 	have "seg_eq c D C D" using `seg_eq c D C D` .
 	have "ang_eq C D B c D B" using equalanglessymmetric[OF `axioms` `ang_eq c D B C D B`] .
-	have "seg_eq D m D m" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq D m D m" using congruencereflexiveE[OF `axioms`] .
 	have "seg_eq D c D C" using congruenceflip[OF `axioms` `seg_eq c D C D`] by blast
 	have "\<not> col C D A" using rightangleNC[OF `axioms` `ang_right C D A`] .
 	have "ang_right c D A" using `ang_right c E A` `E = D` by blast
@@ -87,7 +87,8 @@ proof -
 	have "\<not> col c D m" using NCorder[OF `axioms` `\<not> col m c D`] by blast
 	have "\<not> (col C D m)"
 	proof (rule ccontr)
-		assume "col C D m"
+		assume "\<not> (\<not> (col C D m))"
+hence "col C D m" by blast
 		have "col B m D" using collinear_b `axioms` `bet B m D \<and> seg_eq B m m D` by blast
 		have "col m D B" using collinearorder[OF `axioms` `col B m D`] by blast
 		have "col m D C" using collinearorder[OF `axioms` `col C D m`] by blast
@@ -115,8 +116,8 @@ proof -
 	have "ang_eq c D m C D m" using equalanglessymmetric[OF `axioms` `ang_eq C D m c D m`] .
 	have "seg_eq c m C m" using Prop04[OF `axioms` `seg_eq D c D C` `seg_eq D m D m` `ang_eq c D m C D m`] by blast
 	have "seg_eq m c m C" using congruenceflip[OF `axioms` `seg_eq c m C m`] by blast
-	have "seg_eq A m A m" using congruencereflexiveE[OF `axioms`] by blast
-	have "seg_eq D A D A" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq A m A m" using congruencereflexiveE[OF `axioms`] .
+	have "seg_eq D A D A" using congruencereflexiveE[OF `axioms`] .
 	have "ang_right c D A" using `ang_right c D A` by blast
 	have "ang_right A D c" using n8_2[OF `axioms` `ang_right c D A`] .
 	have "ang_right A D C" using n8_2[OF `axioms` `ang_right C D A`] .

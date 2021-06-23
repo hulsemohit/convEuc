@@ -1,18 +1,18 @@
 theory n10_12
-	imports Axioms Definitions Theorems
+	imports n8_2 Geometry Prop10 congruenceflip congruencesymmetric congruencetransitive doublereverse extensionunique inequalitysymmetric interior5 linereflectionisometry rightreverse
 begin
 
 theorem n10_12:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_right A B C"
 		"ang_right A B H"
 		"seg_eq B C B H"
-	shows: "seg_eq A C A H"
+	shows "seg_eq A C A H"
 proof -
-	obtain D where "bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`] by blast
+	obtain D where "bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`]  by  blast
 	have "bet A B D" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "seg_eq A B D B" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
-	obtain F where "bet A B F \<and> seg_eq A B F B \<and> seg_eq A H F H \<and> B \<noteq> H" using rightangle_f[OF `axioms` `ang_right A B H`] by blast
+	obtain F where "bet A B F \<and> seg_eq A B F B \<and> seg_eq A H F H \<and> B \<noteq> H" using rightangle_f[OF `axioms` `ang_right A B H`]  by  blast
 	have "bet A B F" using `bet A B F \<and> seg_eq A B F B \<and> seg_eq A H F H \<and> B \<noteq> H` by blast
 	have "seg_eq A B F B" using `bet A B F \<and> seg_eq A B F B \<and> seg_eq A H F H \<and> B \<noteq> H` by blast
 	have "seg_eq A H F H" using `bet A B F \<and> seg_eq A B F B \<and> seg_eq A H F H \<and> B \<noteq> H` by blast
@@ -22,21 +22,22 @@ proof -
 	have "F = D" using extensionunique[OF `axioms` `bet A B F` `bet A B D` `seg_eq B F B D`] .
 	have "seg_eq A H D H" using `seg_eq A H F H` `F = D` by blast
 	consider "C = H"|"C \<noteq> H" by blast
-	hence seg_eq A C A H
+	hence "seg_eq A C A H"
 	proof (cases)
-		case 1
-		have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] by blast
+		assume "C = H"
+		have "seg_eq A C A C" using congruencereflexiveE[OF `axioms`] .
 		have "seg_eq A C A H" using `seg_eq A C A C` `C = H` by blast
+		thus ?thesis by blast
 	next
-		case 2
-		obtain M where "bet C M H \<and> seg_eq M C M H" using Prop10[OF `axioms` `C \<noteq> H`] by blast
+		assume "C \<noteq> H"
+		obtain M where "bet C M H \<and> seg_eq M C M H" using Prop10[OF `axioms` `C \<noteq> H`]  by  blast
 		have "bet C M H" using `bet C M H \<and> seg_eq M C M H` by blast
 		have "seg_eq M C M H" using `bet C M H \<and> seg_eq M C M H` by blast
 		have "seg_eq C B H B" using doublereverse[OF `axioms` `seg_eq B C B H`] by blast
 		consider "B = M"|"B \<noteq> M" by blast
-		hence seg_eq A C A H
+		hence "seg_eq A C A H"
 		proof (cases)
-			case 1
+			assume "B = M"
 			have "ang_right A B C" using `ang_right A B C` .
 			have "ang_right C B A" using n8_2[OF `axioms` `ang_right A B C`] .
 			have "bet C B H" using `bet C M H` `B = M` by blast
@@ -45,8 +46,9 @@ proof -
 			have "seg_eq C B B H" using congruenceflip[OF `axioms` `seg_eq B C B H`] by blast
 			have "seg_eq C A H A" using rightreverse[OF `axioms` `ang_right C B A` `bet C B H` `seg_eq C B B H`] .
 			have "seg_eq A C A H" using congruenceflip[OF `axioms` `seg_eq C A H A`] by blast
+			thus ?thesis by blast
 		next
-			case 2
+			assume "B \<noteq> M"
 			have "M \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> M`] .
 			have "bet C M H" using `bet C M H` .
 			have "seg_eq C M H M" using congruenceflip[OF `axioms` `seg_eq M C M H`] by blast
@@ -58,8 +60,8 @@ proof -
 			have "bet C M H" using `bet C M H` .
 			have "seg_eq C A C D" using congruenceflip[OF `axioms` `seg_eq A C D C`] by blast
 			have "seg_eq H A H D" using congruenceflip[OF `axioms` `seg_eq A H D H`] by blast
-			have "seg_eq C M C M" using congruencereflexiveE[OF `axioms`] by blast
-			have "seg_eq M H M H" using congruencereflexiveE[OF `axioms`] by blast
+			have "seg_eq C M C M" using congruencereflexiveE[OF `axioms`] .
+			have "seg_eq M H M H" using congruencereflexiveE[OF `axioms`] .
 			have "seg_eq M A M D" using interior5[OF `axioms` `bet C M H` `bet C M H` `seg_eq C M C M` `seg_eq M H M H` `seg_eq C A C D` `seg_eq H A H D`] .
 			have "seg_eq A M D M" using congruenceflip[OF `axioms` `seg_eq M A M D`] by blast
 			have "B \<noteq> M" using inequalitysymmetric[OF `axioms` `M \<noteq> B`] .
@@ -84,8 +86,10 @@ proof -
 			have "seg_eq H D H A" using congruenceflip[OF `axioms` `seg_eq D H A H`] by blast
 			have "seg_eq C A H A" using congruencetransitive[OF `axioms` `seg_eq C A H D` `seg_eq H D H A`] .
 			have "seg_eq A C A H" using congruenceflip[OF `axioms` `seg_eq C A H A`] by blast
-		next
-	next
+			thus ?thesis by blast
+		qed
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

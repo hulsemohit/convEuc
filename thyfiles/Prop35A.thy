@@ -1,14 +1,14 @@
 theory Prop35A
-	imports Axioms Definitions Theorems
+	imports n3_6a n3_6b n35helper EFreflexive ETreflexive Geometry NChelper NCorder PGflip PGrotate PGsymmetric Prop04 Prop29C Prop34 betweennotequal collinear4 collinear5 collinearbetween collinearorder congruenceflip congruencesymmetric congruencetransitive diagonalsmeet differenceofparts equalanglesNC equalangleshelper equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric layoffunique lessthancongruence lessthancongruence2 parallelNC paralleldef2B parallelflip parallelsymmetric ray4 samesidesymmetric sumofparts trapezoiddiagonals
 begin
 
 theorem Prop35A:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram A B C D"
 		"parallelogram E B C F"
 		"bet A D F"
 		"col A E F"
-	shows: "qua_eq_area A B C D E B C F"
+	shows "qua_eq_area A B C D E B C F"
 proof -
 	have "parallel A B C D \<and> parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] .
 	have "parallel A B C D" using `parallel A B C D \<and> parallel A D B C` by blast
@@ -18,14 +18,14 @@ proof -
 	have "seg_eq E F B C" using Prop34[OF `axioms` `parallelogram E B C F`] by blast
 	have "seg_eq B C E F" using congruencesymmetric[OF `axioms` `seg_eq E F B C`] .
 	have "seg_eq A D E F" using congruencetransitive[OF `axioms` `seg_eq A D B C` `seg_eq B C E F`] .
-	have "seg_eq E F F E" using equalityreverseE[OF `axioms`] by blast
+	have "seg_eq E F F E" using equalityreverseE[OF `axioms`] .
 	have "seg_eq A D F E" using congruencetransitive[OF `axioms` `seg_eq A D E F` `seg_eq E F F E`] .
-	have "seg_eq A D A D" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq A D A D" using congruencereflexiveE[OF `axioms`] .
 	have "seg_lt A D A F" using lessthan_b[OF `axioms` `bet A D F` `seg_eq A D A D`] .
 	have "seg_lt F E A F" using lessthancongruence2[OF `axioms` `seg_lt A D A F` `seg_eq A D F E`] .
-	have "seg_eq A F F A" using equalityreverseE[OF `axioms`] by blast
+	have "seg_eq A F F A" using equalityreverseE[OF `axioms`] .
 	have "seg_lt F E F A" using lessthancongruence[OF `axioms` `seg_lt F E A F` `seg_eq A F F A`] .
-	obtain e where "bet F e A \<and> seg_eq F e F E" using lessthan_f[OF `axioms` `seg_lt F E F A`] by blast
+	obtain e where "bet F e A \<and> seg_eq F e F E" using lessthan_f[OF `axioms` `seg_lt F E F A`]  by  blast
 	have "bet F e A" using `bet F e A \<and> seg_eq F e F E` by blast
 	have "seg_eq F e F E" using `bet F e A \<and> seg_eq F e F E` by blast
 	have "F \<noteq> A" using betweennotequal[OF `axioms` `bet F e A`] by blast
@@ -49,7 +49,8 @@ proof -
 	have "\<not> col A D C" using parallelNC[OF `axioms` `parallel A B D C`] by blast
 	have "\<not> (A = D)"
 	proof (rule ccontr)
-		assume "A = D"
+		assume "\<not> (A \<noteq> D)"
+		hence "A = D" by blast
 		have "col A D C" using collinear_b `axioms` `A = D` by blast
 		show "False" using `col A D C` `\<not> col A D C` by blast
 	qed
@@ -58,15 +59,17 @@ proof -
 	have "\<not> col A B C" using parallelNC[OF `axioms` `parallel A B C D`] by blast
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "A \<noteq> B" by blast
 	have "ray_on A B B" using ray4 `axioms` `B = B` `A \<noteq> B` by blast
-	have "bet A D E \<or> bet A E D \<or> D = E"
+	have "\<not> (\<not> (bet A D E \<or> bet A E D \<or> D = E))"
 	proof (rule ccontr)
-		assume "\<not> (bet A D E \<or> bet A E D \<or> D = E)"
+		assume "\<not> (\<not> (\<not> (bet A D E \<or> bet A E D \<or> D = E)))"
+hence "\<not> (bet A D E \<or> bet A E D \<or> D = E)" by blast
 		have "\<not> (bet A D E) \<and> \<not> (bet A E D) \<and> D \<noteq> E" using `\<not> (bet A D E \<or> bet A E D \<or> D = E)` by blast
 		have "\<not> (bet A D E)" using `\<not> (bet A D E) \<and> \<not> (bet A E D) \<and> D \<noteq> E` by blast
 		have "\<not> (bet A E D)" using `\<not> (bet A D E) \<and> \<not> (bet A E D) \<and> D \<noteq> E` by blast
@@ -77,49 +80,55 @@ proof -
 		show "False" using `D = E` `\<not> (bet A D E) \<and> \<not> (bet A E D) \<and> D \<noteq> E` by blast
 	qed
 	hence "bet A D E \<or> bet A E D \<or> D = E" by blast
-	consider "bet A D E"|"bet A E D"|"D = E" using `bet A D E \<or> bet A E D \<or> D = E`  by blast
-	hence ray_on A D E
+	consider "bet A D E"|"bet A E D"|"D = E" using `\<not> (\<not> (bet A D E \<or> bet A E D \<or> D = E))`  by blast
+	hence "ray_on A D E"
 	proof (cases)
-		case 1
+		assume "bet A D E"
 		have "ray_on A D E" using ray4 `axioms` `bet A D E` `A \<noteq> D` by blast
+		thus ?thesis by blast
 	next
-		case 2
+		assume "bet A E D"
 		have "ray_on A D E" using ray4 `axioms` `bet A E D` `A \<noteq> D` by blast
+		thus ?thesis by blast
 	next
-		case 3
+		assume "D = E"
 		have "A \<noteq> D" using `A \<noteq> D` .
 		have "ray_on A D D" using ray4 `axioms` `D = D` `A \<noteq> D` by blast
 		have "ray_on A D E" using `ray_on A D D` `D = E` by blast
-	next
+		thus ?thesis by blast
+	qed
 	have "\<not> col A D B" using parallelNC[OF `axioms` `parallel A D B C`] by blast
 	have "\<not> col D A B" using NCorder[OF `axioms` `\<not> col A D B`] by blast
 	have "ang_eq D A B D A B" using equalanglesreflexive[OF `axioms` `\<not> col D A B`] .
 	have "ang_eq D A B E A B" using equalangleshelper[OF `axioms` `ang_eq D A B D A B` `ray_on A D E` `ray_on A B B`] .
 	have "ang_eq F D C E A B" using equalanglestransitive[OF `axioms` `ang_eq F D C D A B` `ang_eq D A B E A B`] .
 	have "seg_eq A B D C" using Prop34[OF `axioms` `parallelogram A B C D`] by blast
-	have "seg_eq D E E D" using equalityreverseE[OF `axioms`] by blast
-	consider "bet A D E"|"bet A E D"|"D = E" using `bet A D E \<or> bet A E D \<or> D = E`  by blast
-	hence seg_eq A E D F
+	have "seg_eq D E E D" using equalityreverseE[OF `axioms`] .
+	consider "bet A D E"|"bet A E D"|"D = E" using `\<not> (\<not> (bet A D E \<or> bet A E D \<or> D = E))`  by blast
+	hence "seg_eq A E D F"
 	proof (cases)
-		case 1
+		assume "bet A D E"
 		have "bet D E F" using n3_6a[OF `axioms` `bet A D E` `bet A E F`] .
 		have "bet F E D" using betweennesssymmetryE[OF `axioms` `bet D E F`] .
 		have "seg_eq A E F D" using sumofparts[OF `axioms` `seg_eq A D F E` `seg_eq D E E D` `bet A D E` `bet F E D`] .
 		have "seg_eq A E D F" using congruenceflip[OF `axioms` `seg_eq A E F D`] by blast
+		thus ?thesis by blast
 	next
-		case 2
+		assume "bet A E D"
 		have "bet D E A" using betweennesssymmetryE[OF `axioms` `bet A E D`] .
 		have "bet E D F" using n3_6a[OF `axioms` `bet A E D` `bet A D F`] .
 		have "seg_eq A D F E" using `seg_eq A D F E` .
 		have "seg_eq D A E F" using congruenceflip[OF `axioms` `seg_eq A D E F`] by blast
 		have "seg_eq E A D F" using differenceofparts[OF `axioms` `seg_eq D E E D` `seg_eq D A E F` `bet D E A` `bet E D F`] .
 		have "seg_eq A E D F" using congruenceflip[OF `axioms` `seg_eq E A D F`] by blast
+		thus ?thesis by blast
 	next
-		case 3
+		assume "D = E"
 		have "seg_eq A D E F" using `seg_eq A D E F` .
 		have "seg_eq A E E F" using `seg_eq A D E F` `D = E` by blast
 		have "seg_eq A E D F" using `seg_eq A D E F` `D = E` `D = E` by blast
-	next
+		thus ?thesis by blast
+	qed
 	have "seg_eq D F A E" using congruencesymmetric[OF `axioms` `seg_eq A E D F`] .
 	have "seg_eq D C A B" using congruencesymmetric[OF `axioms` `seg_eq A B D C`] .
 	have "seg_eq F C E B \<and> ang_eq D F C A E B \<and> ang_eq D C F A B E" using Prop04[OF `axioms` `seg_eq D F A E` `seg_eq D C A B` `ang_eq F D C E A B`] .
@@ -133,12 +142,12 @@ proof -
 	have "seg_eq F D E A \<and> seg_eq D C A B \<and> seg_eq F C E B \<and> triangle F D C" using `seg_eq F D E A` `seg_eq D C A B` `seg_eq F C E B \<and> ang_eq D F C A E B \<and> ang_eq D C F A B E` `triangle F D C` by blast
 	have "tri_cong F D C E A B" using trianglecongruence_b[OF `axioms` `seg_eq F D E A` `seg_eq D C A B` `seg_eq F C E B` `triangle F D C`] .
 	have "tri_eq_area F D C E A B" using congruentequalE[OF `axioms` `tri_cong F D C E A B`] .
-	consider "bet A D E"|"bet A E D"|"D = E" using `bet A D E \<or> bet A E D \<or> D = E`  by blast
-	hence qua_eq_area A B C D E B C F
+	consider "bet A D E"|"bet A E D"|"D = E" using `\<not> (\<not> (bet A D E \<or> bet A E D \<or> D = E))`  by blast
+	hence "qua_eq_area A B C D E B C F"
 	proof (cases)
-		case 1
+		assume "bet A D E"
 		have "parallelogram A B C D" using `parallelogram A B C D` .
-		obtain M where "bet A M C \<and> bet B M D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`] by blast
+		obtain M where "bet A M C \<and> bet B M D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`]  by  blast
 		have "bet B M D" using `bet A M C \<and> bet B M D` by blast
 		have "bet D M B" using betweennesssymmetryE[OF `axioms` `bet B M D`] .
 		have "\<not> col A D B" using parallelNC[OF `axioms` `parallel A D B C`] by blast
@@ -148,7 +157,7 @@ proof -
 		have "\<not> col A E B" using NChelper[OF `axioms` `\<not> col A D B` `col A D A` `col A D E` `A \<noteq> E`] .
 		have "bet B M D" using betweennesssymmetryE[OF `axioms` `bet D M B`] .
 		have "bet A M C" using `bet A M C \<and> bet B M D` by blast
-		obtain H where "bet B H E \<and> bet A M H" using Pasch-outerE[OF `axioms` `bet B M D` `bet A D E` `\<not> col A E B`] by blast
+		obtain H where "bet B H E \<and> bet A M H" using Pasch_outerE[OF `axioms` `bet B M D` `bet A D E` `\<not> col A E B`]  by  blast
 		have "bet B H E" using `bet B H E \<and> bet A M H` by blast
 		have "bet A M H" using `bet B H E \<and> bet A M H` by blast
 		have "col A M H" using collinear_b `axioms` `bet B H E \<and> bet A M H` by blast
@@ -162,16 +171,18 @@ proof -
 		have "E \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> E`] .
 		have "\<not> (B = C)"
 		proof (rule ccontr)
-			assume "B = C"
+			assume "\<not> (B \<noteq> C)"
+			hence "B = C" by blast
 			have "col A B C" using collinear_b `axioms` `B = C` by blast
 			show "False" using `col A B C` `\<not> col A B C` by blast
 		qed
 		hence "B \<noteq> C" by blast
-		have "\<not> (meets A D B C)" using parallel_f[OF `axioms` `parallel A D B C`] by blast
+		have "\<not> (meets A D B C)" using parallel_f[OF `axioms` `parallel A D B C`] by fastforce
 		have "\<not> (meets E A C B)"
 		proof (rule ccontr)
-			assume "meets E A C B"
-			obtain q where "E \<noteq> A \<and> C \<noteq> B \<and> col E A q \<and> col C B q" using meet_f[OF `axioms` `meets E A C B`] by blast
+			assume "\<not> (\<not> (meets E A C B))"
+hence "meets E A C B" by blast
+			obtain q where "E \<noteq> A \<and> C \<noteq> B \<and> col E A q \<and> col C B q" using meet_f[OF `axioms` `meets E A C B`]  by  blast
 			have "E \<noteq> A" using `E \<noteq> A` .
 			have "C \<noteq> B" using `E \<noteq> A \<and> C \<noteq> B \<and> col E A q \<and> col C B q` by blast
 			have "B \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> B`] .
@@ -205,7 +216,7 @@ proof -
 		have "col A D E" using collinear_b `axioms` `bet A D E` by blast
 		have "\<not> col A E C" using NChelper[OF `axioms` `\<not> col A D C` `col A D A` `col A D E` `A \<noteq> E`] .
 		have "\<not> col C A E" using NCorder[OF `axioms` `\<not> col A E C`] by blast
-		obtain G where "bet C G D \<and> bet E G H" using Pasch-innerE[OF `axioms` `bet C H A` `bet E D A` `\<not> col C A E`] by blast
+		obtain G where "bet C G D \<and> bet E G H" using Pasch_innerE[OF `axioms` `bet C H A` `bet E D A` `\<not> col C A E`]  by  blast
 		have "bet E G H" using `bet C G D \<and> bet E G H` by blast
 		have "bet E H B" using `bet E H B` .
 		have "bet E G B" using n3_6b[OF `axioms` `bet E G H` `bet E H B`] .
@@ -215,7 +226,8 @@ proof -
 		have "col E G B" using collinear_b `axioms` `bet E G B` by blast
 		have "\<not> (col D E G)"
 		proof (rule ccontr)
-			assume "col D E G"
+			assume "\<not> (\<not> (col D E G))"
+hence "col D E G" by blast
 			have "col G E D" using collinearorder[OF `axioms` `col D E G`] by blast
 			have "col G E B" using collinearorder[OF `axioms` `col E G B`] by blast
 			have "E \<noteq> G" using betweennotequal[OF `axioms` `bet E G B`] by blast
@@ -269,13 +281,13 @@ proof -
 		have "parallelogram B C D A" using PGrotate[OF `axioms` `parallelogram A B C D`] .
 		have "parallelogram D A B C" using PGsymmetric[OF `axioms` `parallelogram B C D A`] .
 		have "parallelogram A D C B" using PGflip[OF `axioms` `parallelogram D A B C`] .
-		obtain q where "bet A q C \<and> bet D q B" using diagonalsmeet[OF `axioms` `parallelogram A D C B`] by blast
+		obtain q where "bet A q C \<and> bet D q B" using diagonalsmeet[OF `axioms` `parallelogram A D C B`]  by  blast
 		have "bet A q C" using `bet A q C \<and> bet D q B` by blast
 		have "bet D q B" using `bet A q C \<and> bet D q B` by blast
 		have "parallelogram B C F E" using PGrotate[OF `axioms` `parallelogram E B C F`] .
 		have "parallelogram C F E B" using PGrotate[OF `axioms` `parallelogram B C F E`] .
 		have "parallelogram F E B C" using PGrotate[OF `axioms` `parallelogram C F E B`] .
-		obtain m where "bet F m B \<and> bet E m C" using diagonalsmeet[OF `axioms` `parallelogram F E B C`] by blast
+		obtain m where "bet F m B \<and> bet E m C" using diagonalsmeet[OF `axioms` `parallelogram F E B C`]  by  blast
 		have "bet F m B" using `bet F m B \<and> bet E m C` by blast
 		have "bet E m C" using `bet F m B \<and> bet E m C` by blast
 		have "qua_eq_area A D C B F E B C" using paste2E[OF `axioms` `bet D G C` `bet E G B` `tri_eq_area G C B G B C` `qua_eq_area A D G B F E G C` `bet A M C` `bet D M B` `bet F m B` `bet E m C`] .
@@ -283,18 +295,20 @@ proof -
 		have "qua_eq_area E B C F A D C B" using EFsymmetricE[OF `axioms` `qua_eq_area A D C B E B C F`] .
 		have "qua_eq_area E B C F A B C D" using EFpermutationE[OF `axioms` `qua_eq_area E B C F A D C B`] by blast
 		have "qua_eq_area A B C D E B C F" using EFsymmetricE[OF `axioms` `qua_eq_area E B C F A B C D`] .
+		thus ?thesis by blast
 	next
-		case 2
+		assume "bet A E D"
 		have "tri_eq_area F D C E A B" using `tri_eq_area F D C E A B` .
 		have "tri_eq_area E A B F D C" using ETsymmetricE[OF `axioms` `tri_eq_area F D C E A B`] .
 		have "tri_eq_area E A B D F C" using ETpermutationE[OF `axioms` `tri_eq_area E A B F D C`] by blast
-		obtain H where "bet B H D \<and> bet C H E" using trapezoiddiagonals[OF `axioms` `parallelogram A B C D` `bet A E D`] by blast
+		obtain H where "bet B H D \<and> bet C H E" using trapezoiddiagonals[OF `axioms` `parallelogram A B C D` `bet A E D`]  by  blast
 		have "bet B H D" using `bet B H D \<and> bet C H E` by blast
 		have "bet C H E" using `bet B H D \<and> bet C H E` by blast
 		have "bet E H C" using betweennesssymmetryE[OF `axioms` `bet C H E`] .
 		have "\<not> (col B E D)"
 		proof (rule ccontr)
-			assume "col B E D"
+			assume "\<not> (\<not> (col B E D))"
+hence "col B E D" by blast
 			have "col A E D" using collinear_b `axioms` `bet A E D` by blast
 			have "col E D A" using collinearorder[OF `axioms` `col A E D`] by blast
 			have "col E D B" using collinearorder[OF `axioms` `col B E D`] by blast
@@ -303,10 +317,10 @@ proof -
 			have "col A D B" using collinearorder[OF `axioms` `col D A B`] by blast
 			have "B = B" using equalityreflexiveE[OF `axioms`] .
 			have "col B C B" using collinear_b `axioms` `B = B` by blast
-			have "A \<noteq> D" using parallel_f[OF `axioms` `parallel A B C D`] by blast
-			have "B \<noteq> C" using parallel_f[OF `axioms` `parallel A B C D`] by blast
+			have "A \<noteq> D" using parallel_f[OF `axioms` `parallel A D B C`] by fastforce
+			have "B \<noteq> C" using parallel_f[OF `axioms` `parallel A D B C`] by fastforce
 			have "meets A D B C" using meet_b[OF `axioms` `A \<noteq> D` `B \<noteq> C` `col A D B` `col B C B`] .
-			have "\<not> (meets A D B C)" using parallel_f[OF `axioms` `parallel A D B C`] by blast
+			have "\<not> (meets A D B C)" using parallel_f[OF `axioms` `parallel A D B C`] by fastforce
 			show "False" using `\<not> (meets A D B C)` `meets A D B C` by blast
 		qed
 		hence "\<not> col B E D" by blast
@@ -316,11 +330,11 @@ proof -
 		have "bet D E A" using betweennesssymmetryE[OF `axioms` `bet A E D`] .
 		have "bet E D F" using n3_6a[OF `axioms` `bet A E D` `bet A D F`] .
 		have "parallelogram C D A B" using PGsymmetric[OF `axioms` `parallelogram A B C D`] .
-		obtain p where "bet C p A \<and> bet D p B" using diagonalsmeet[OF `axioms` `parallelogram C D A B`] by blast
+		obtain p where "bet C p A \<and> bet D p B" using diagonalsmeet[OF `axioms` `parallelogram C D A B`]  by  blast
 		have "bet C p A" using `bet C p A \<and> bet D p B` by blast
 		have "bet D p B" using `bet C p A \<and> bet D p B` by blast
 		have "parallelogram B E F C" using PGflip[OF `axioms` `parallelogram E B C F`] .
-		obtain m where "bet B m F \<and> bet E m C" using diagonalsmeet[OF `axioms` `parallelogram B E F C`] by blast
+		obtain m where "bet B m F \<and> bet E m C" using diagonalsmeet[OF `axioms` `parallelogram B E F C`]  by  blast
 		have "bet B m F" using `bet B m F \<and> bet E m C` by blast
 		have "bet E m C" using `bet B m F \<and> bet E m C` by blast
 		have "qua_eq_area C D A B B E F C" using paste2E[OF `axioms` `bet D E A` `bet E D F` `tri_eq_area E A B D F C` `qua_eq_area C D E B B E D C` `bet C p A` `bet D p B` `bet B m F` `bet E m C`] .
@@ -328,8 +342,9 @@ proof -
 		have "qua_eq_area E B C F C D A B" using EFsymmetricE[OF `axioms` `qua_eq_area C D A B E B C F`] .
 		have "qua_eq_area E B C F A B C D" using EFpermutationE[OF `axioms` `qua_eq_area E B C F C D A B`] by blast
 		have "qua_eq_area A B C D E B C F" using EFsymmetricE[OF `axioms` `qua_eq_area E B C F A B C D`] .
+		thus ?thesis by blast
 	next
-		case 3
+		assume "D = E"
 		have "tri_eq_area F D C E A B" using `tri_eq_area F D C E A B` .
 		have "tri_eq_area F D C B E A" using ETpermutationE[OF `axioms` `tri_eq_area F D C E A B`] by blast
 		have "tri_eq_area B E A F D C" using ETsymmetricE[OF `axioms` `tri_eq_area F D C B E A`] .
@@ -342,7 +357,7 @@ proof -
 		have "tri_eq_area B E C C E B" using ETpermutationE[OF `axioms` `tri_eq_area B E C B E C`] by blast
 		have "tri_eq_area B E C C D B" using `tri_eq_area B E C C E B` `D = E` by blast
 		have "parallelogram A B C E" using `parallelogram A B C D` `D = E` by blast
-		obtain M where "bet A M C \<and> bet B M E" using diagonalsmeet[OF `axioms` `parallelogram A B C E`] by blast
+		obtain M where "bet A M C \<and> bet B M E" using diagonalsmeet[OF `axioms` `parallelogram A B C E`]  by  blast
 		have "bet A M C" using `bet A M C \<and> bet B M E` by blast
 		have "bet B M E" using `bet A M C \<and> bet B M E` by blast
 		have "bet E M B" using betweennesssymmetryE[OF `axioms` `bet B M E`] .
@@ -354,31 +369,32 @@ proof -
 		have "oppo_side A B E C" using oppositeside_b[OF `axioms` `bet A M C` `col B E M` `\<not> col B E A`] .
 		have "parallelogram D B C F" using `parallelogram E B C F` `D = E` by blast
 		have "\<not> col C D F" using NCorder[OF `axioms` `\<not> col D C F`] by blast
-		obtain m where "bet D m C \<and> bet B m F" using diagonalsmeet[OF `axioms` `parallelogram D B C F`] by blast
+		obtain m where "bet D m C \<and> bet B m F" using diagonalsmeet[OF `axioms` `parallelogram D B C F`]  by  blast
 		have "bet D m C" using `bet D m C \<and> bet B m F` by blast
 		have "bet B m F" using `bet D m C \<and> bet B m F` by blast
 		have "bet F m B" using betweennesssymmetryE[OF `axioms` `bet B m F`] .
 		have "col D m C" using collinear_b `axioms` `bet D m C \<and> bet B m F` by blast
 		have "col C D m" using collinearorder[OF `axioms` `col D m C`] by blast
 		have "oppo_side F C D B" using oppositeside_b[OF `axioms` `bet F m B` `col C D m` `\<not> col C D F`] .
-		obtain J where "bet A J C \<and> bet B J D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`] by blast
+		obtain J where "bet A J C \<and> bet B J D" using diagonalsmeet[OF `axioms` `parallelogram A B C D`]  by  blast
 		have "bet A J C" using `bet A J C \<and> bet B J D` by blast
 		have "bet B J D" using `bet A J C \<and> bet B J D` by blast
 		have "bet B J E" using `bet B J D` `D = E` by blast
-		obtain j where "bet E j C \<and> bet B j F" using diagonalsmeet[OF `axioms` `parallelogram E B C F`] by blast
+		obtain j where "bet E j C \<and> bet B j F" using diagonalsmeet[OF `axioms` `parallelogram E B C F`]  by  blast
 		have "bet E j C" using `bet E j C \<and> bet B j F` by blast
 		have "bet D j C" using `bet E j C` `D = E` by blast
 		have "bet C j D" using betweennesssymmetryE[OF `axioms` `bet D j C`] .
 		have "bet B j F" using `bet E j C \<and> bet B j F` by blast
 		have "bet F j B" using betweennesssymmetryE[OF `axioms` `bet B j F`] .
-		have "qua_eq_area B A E C C F D B" sorry
+		have "qua_eq_area B A E C C F D B" using paste3E `axioms` `tri_eq_area B E A C D F` `tri_eq_area B E C C D B` `bet A J C \<and> bet B J D` `bet B J E` `bet F j B` `bet C j D` by blast
 		have "qua_eq_area B A E C D B C F" using EFpermutationE[OF `axioms` `qua_eq_area B A E C C F D B`] by blast
 		have "qua_eq_area B A E C E B C F" using `qua_eq_area B A E C D B C F` `D = E` by blast
 		have "qua_eq_area E B C F B A E C" using EFsymmetricE[OF `axioms` `qua_eq_area B A E C E B C F`] .
 		have "qua_eq_area E B C F A B C E" using EFpermutationE[OF `axioms` `qua_eq_area E B C F B A E C`] by blast
 		have "qua_eq_area E B C F A B C D" using `qua_eq_area E B C F A B C E` `D = E` by blast
 		have "qua_eq_area A B C D E B C F" using EFsymmetricE[OF `axioms` `qua_eq_area E B C F A B C D`] .
-	next
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

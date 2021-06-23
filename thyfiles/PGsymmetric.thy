@@ -1,11 +1,11 @@
 theory PGsymmetric
-	imports Axioms Definitions Theorems
+	imports Geometry parallelflip parallelsymmetric
 begin
 
 theorem PGsymmetric:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram A B C D"
-	shows: "parallelogram C D A B"
+	shows "parallelogram C D A B"
 proof -
 	have "parallel A B C D \<and> parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] .
 	have "parallel A B C D" using `parallel A B C D \<and> parallel A D B C` by blast

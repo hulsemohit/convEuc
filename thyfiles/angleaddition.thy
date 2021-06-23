@@ -1,17 +1,17 @@
 theory angleaddition
-	imports Axioms Definitions Theorems
+	imports n9_5 Geometry NCdistinct NChelper NCorder Prop04 Prop14 betweennotequal collinearorder congruencesymmetric equalanglesNC equalanglesflip equalangleshelper equalanglessymmetric equalanglestransitive inequalitysymmetric layoff oppositesidesymmetric ray2 ray4 ray5 rayimpliescollinear raystrict sumofparts
 begin
 
 theorem angleaddition:
-	assumes: `axioms`
+	assumes "axioms"
 		"area_sum_eq A B C D E F P Q R"
 		"ang_eq A B C a b c"
 		"ang_eq D E F d e f"
 		"area_sum_eq a b c d e f p q r"
-	shows: "ang_eq P Q R p q r"
+	shows "ang_eq P Q R p q r"
 proof -
-	obtain S where "ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R" using anglesum_f[OF `axioms` `area_sum_eq A B C D E F P Q R`] by blast
-	obtain s where "ang_eq a b c p q s \<and> ang_eq d e f s q r \<and> bet p s r" using anglesum_f[OF `axioms` `area_sum_eq a b c d e f p q r`] by blast
+	obtain S where "ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R" using anglesum_f[OF `axioms` `area_sum_eq A B C D E F P Q R`]  by  blast
+	obtain s where "ang_eq a b c p q s \<and> ang_eq d e f s q r \<and> bet p s r" using anglesum_f[OF `axioms` `area_sum_eq a b c d e f p q r`]  by  blast
 	have "ang_eq A B C P Q S" using `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
 	have "ang_eq D E F S Q R" using `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
 	have "bet P S R" using `ang_eq A B C P Q S \<and> ang_eq D E F S Q R \<and> bet P S R` by blast
@@ -27,11 +27,11 @@ proof -
 	have "q \<noteq> p" using NCdistinct[OF `axioms` `\<not> col p q s`] by blast
 	have "q \<noteq> r" using NCdistinct[OF `axioms` `\<not> col s q r`] by blast
 	have "q \<noteq> s" using NCdistinct[OF `axioms` `\<not> col p q s`] by blast
-	obtain G where "ray_on q p G \<and> seg_eq q G Q P" using layoff[OF `axioms` `q \<noteq> p` `Q \<noteq> P`] by blast
+	obtain G where "ray_on q p G \<and> seg_eq q G Q P" using layoff[OF `axioms` `q \<noteq> p` `Q \<noteq> P`]  by  blast
 	have "ray_on q p G" using `ray_on q p G \<and> seg_eq q G Q P` by blast
-	obtain H where "ray_on q s H \<and> seg_eq q H Q S" using layoff[OF `axioms` `q \<noteq> s` `Q \<noteq> S`] by blast
+	obtain H where "ray_on q s H \<and> seg_eq q H Q S" using layoff[OF `axioms` `q \<noteq> s` `Q \<noteq> S`]  by  blast
 	have "ray_on q s H" using `ray_on q s H \<and> seg_eq q H Q S` by blast
-	obtain K where "ray_on q r K \<and> seg_eq q K Q R" using layoff[OF `axioms` `q \<noteq> r` `Q \<noteq> R`] by blast
+	obtain K where "ray_on q r K \<and> seg_eq q K Q R" using layoff[OF `axioms` `q \<noteq> r` `Q \<noteq> R`]  by  blast
 	have "ray_on q r K" using `ray_on q r K \<and> seg_eq q K Q R` by blast
 	have "seg_eq q K Q R" using `ray_on q r K \<and> seg_eq q K Q R` by blast
 	have "ang_eq P Q S A B C" using equalanglessymmetric[OF `axioms` `ang_eq A B C P Q S`] .
@@ -57,8 +57,8 @@ proof -
 	have "Q = Q" using equalityreflexiveE[OF `axioms`] .
 	have "S \<noteq> Q" using NCdistinct[OF `axioms` `\<not> col P Q S`] by blast
 	have "ray_on S Q Q" using ray4 `axioms` `Q = Q` `S \<noteq> Q` by blast
-	have "linear_pair P S Q Q R" using supplement_b[OF `axioms` `ray_on S Q Q` `bet P S R`] .
-	have "ang_suppl G H q q H K" using tworightangles_b[OF `axioms` `linear_pair P S Q Q R` `ang_eq G H q P S Q` `ang_eq q H K Q S R`] .
+	have "supplement P S Q Q R" using supplement_b[OF `axioms` `ray_on S Q Q` `bet P S R`] .
+	have "ang_sum_right G H q q H K" using tworightangles_b[OF `axioms` `supplement P S Q Q R` `ang_eq G H q P S Q` `ang_eq q H K Q S R`] .
 	have "bet p s r" using `ang_eq a b c p q s \<and> ang_eq d e f s q r \<and> bet p s r` by blast
 	have "col q s H" using rayimpliescollinear[OF `axioms` `ray_on q s H`] .
 	have "col q H s" using collinearorder[OF `axioms` `col q s H`] by blast
@@ -83,7 +83,7 @@ proof -
 	have "q \<noteq> H" using raystrict[OF `axioms` `ray_on q s H`] .
 	have "H \<noteq> q" using inequalitysymmetric[OF `axioms` `q \<noteq> H`] .
 	have "ray_on H q q" using ray4 `axioms` `q = q` `H \<noteq> q` by blast
-	have "bet G H K" using Prop14[OF `axioms` `ang_suppl G H q q H K` `ray_on H q q` `oppo_side K q H G`] by blast
+	have "bet G H K" using Prop14[OF `axioms` `ang_sum_right G H q q H K` `ray_on H q q` `oppo_side K q H G`] by blast
 	have "seg_eq G K P R" using sumofparts[OF `axioms` `seg_eq G H P S` `seg_eq H K S R` `bet G H K` `bet P S R`] .
 	have "seg_eq q G Q P" using `seg_eq q G Q P` .
 	have "seg_eq q K Q R" using `seg_eq q K Q R` .

@@ -1,9 +1,9 @@
 theory Prop40
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct NChelper NCorder Prop31short Prop38 Prop39 betweennotequal collinear4 collinearorder collinearparallel congruencesymmetric inequalitysymmetric
 begin
 
 theorem Prop40:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_eq B C H E"
 		"tri_eq_area A B C D H E"
 		"triangle A B C"
@@ -12,12 +12,12 @@ theorem Prop40:
 		"col B C E"
 		"same_side A D B C"
 		"A \<noteq> D"
-	shows: "parallel A D B C"
+	shows "parallel A D B C"
 proof -
 	have "\<not> col D H E" using triangle_f[OF `axioms` `triangle D H E`] .
 	have "H \<noteq> E" using NCdistinct[OF `axioms` `\<not> col D H E`] by blast
 	have "E \<noteq> H" using inequalitysymmetric[OF `axioms` `H \<noteq> E`] .
-	obtain R where "bet E H R \<and> seg_eq H R E H" using extensionE[OF `axioms` `E \<noteq> H` `E \<noteq> H`] by blast
+	obtain R where "bet E H R \<and> seg_eq H R E H" using extensionE[OF `axioms` `E \<noteq> H` `E \<noteq> H`]  by  blast
 	have "bet E H R" using `bet E H R \<and> seg_eq H R E H` by blast
 	have "bet R H E" using betweennesssymmetryE[OF `axioms` `bet E H R`] .
 	have "\<not> col H E D" using NCorder[OF `axioms` `\<not> col D H E`] by blast
@@ -27,7 +27,7 @@ proof -
 	have "col H E E" using collinear_b `axioms` `E = E` by blast
 	have "R \<noteq> E" using betweennotequal[OF `axioms` `bet R H E`] by blast
 	have "\<not> col R E D" using NChelper[OF `axioms` `\<not> col H E D` `col H E R` `col H E E` `R \<noteq> E`] .
-	obtain M P Q where "bet P D Q \<and> ang_eq P D H D H E \<and> parallel P Q R E \<and> bet P M E \<and> bet D M H" using Prop31short[OF `axioms` `bet R H E` `\<not> col R E D`] by blast
+	obtain M P Q where "bet P D Q \<and> ang_eq P D H D H E \<and> parallel P Q R E \<and> bet P M E \<and> bet D M H" using Prop31short[OF `axioms` `bet R H E` `\<not> col R E D`]  by  blast
 	have "bet P D Q" using `bet P D Q \<and> ang_eq P D H D H E \<and> parallel P Q R E \<and> bet P M E \<and> bet D M H` by blast
 	have "parallel P Q R E" using `bet P D Q \<and> ang_eq P D H D H E \<and> parallel P Q R E \<and> bet P M E \<and> bet D M H` by blast
 	have "col R E H" using collinearorder[OF `axioms` `col H E R`] by blast

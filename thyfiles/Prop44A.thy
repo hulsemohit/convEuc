@@ -1,13 +1,13 @@
 theory Prop44A
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry NCdistinct NChelper NCorder PGflip PGrotate Playfair Prop15 Prop30 Prop31 Prop33B Prop34 Prop43 Prop43B betweennotequal collinearbetween collinearorder collinearparallel collinearparallel2 congruenceflip congruencetransitive diagonalsbisect diagonalsmeet equalanglestransitive inequalitysymmetric parallelNC parallelbetween paralleldef2B parallelflip parallelsymmetric samesidecollinear samesideflip samesidetransitive triangletoparallelogram
 begin
 
 theorem Prop44A:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram B E F G"
 		"ang_eq E B G J D N"
 		"bet A B E"
-	shows: "\<exists> L M. parallelogram A B M L \<and> ang_eq A B M J D N \<and> qua_eq_area B E F G L M B A \<and> bet G B M"
+	shows "\<exists> L M. parallelogram A B M L \<and> ang_eq A B M J D N \<and> qua_eq_area B E F G L M B A \<and> bet G B M"
 proof -
 	have "parallelogram E F G B" using PGrotate[OF `axioms` `parallelogram B E F G`] .
 	have "parallelogram F G B E" using PGrotate[OF `axioms` `parallelogram E F G B`] .
@@ -15,7 +15,7 @@ proof -
 	have "parallel G F B E" using parallelogram_f[OF `axioms` `parallelogram G B E F`] by blast
 	have "\<not> col G B E" using parallelNC[OF `axioms` `parallel G F B E`] by blast
 	have "G \<noteq> B" using NCdistinct[OF `axioms` `\<not> col G B E`] by blast
-	obtain q where "bet G B q \<and> seg_eq B q G B" using extensionE[OF `axioms` `G \<noteq> B` `G \<noteq> B`] by blast
+	obtain q where "bet G B q \<and> seg_eq B q G B" using extensionE[OF `axioms` `G \<noteq> B` `G \<noteq> B`]  by  blast
 	have "bet G B q" using `bet G B q \<and> seg_eq B q G B` by blast
 	have "seg_eq B q G B" using `bet G B q \<and> seg_eq B q G B` by blast
 	have "\<not> col E B G" using NCorder[OF `axioms` `\<not> col G B E`] by blast
@@ -33,7 +33,7 @@ proof -
 	have "col G B G" using collinear_b `axioms` `G = G` by blast
 	have "\<not> col q G A" using NChelper[OF `axioms` `\<not> col G B A` `col G B q` `col G B G` `q \<noteq> G`] .
 	have "\<not> col G q A" using NCorder[OF `axioms` `\<not> col q G A`] by blast
-	obtain H T h where "bet H A h \<and> ang_eq h A B A B G \<and> ang_eq h A B G B A \<and> ang_eq B A h G B A \<and> ang_eq H A B A B q \<and> ang_eq H A B q B A \<and> ang_eq B A H q B A \<and> parallel H h G q \<and> seg_eq H A B q \<and> seg_eq A h G B \<and> seg_eq A T T B \<and> seg_eq H T T q \<and> seg_eq G T T h \<and> bet H T q \<and> bet G T h \<and> bet A T B" using Prop31[OF `axioms` `bet G B q` `\<not> col G q A`] by blast
+	obtain H T h where "bet H A h \<and> ang_eq h A B A B G \<and> ang_eq h A B G B A \<and> ang_eq B A h G B A \<and> ang_eq H A B A B q \<and> ang_eq H A B q B A \<and> ang_eq B A H q B A \<and> parallel H h G q \<and> seg_eq H A B q \<and> seg_eq A h G B \<and> seg_eq A T T B \<and> seg_eq H T T q \<and> seg_eq G T T h \<and> bet H T q \<and> bet G T h \<and> bet A T B" using Prop31[OF `axioms` `bet G B q` `\<not> col G q A`]  by  blast
 	have "bet H A h" using `bet H A h \<and> ang_eq h A B A B G \<and> ang_eq h A B G B A \<and> ang_eq B A h G B A \<and> ang_eq H A B A B q \<and> ang_eq H A B q B A \<and> ang_eq B A H q B A \<and> parallel H h G q \<and> seg_eq H A B q \<and> seg_eq A h G B \<and> seg_eq A T T B \<and> seg_eq H T T q \<and> seg_eq G T T h \<and> bet H T q \<and> bet G T h \<and> bet A T B` by blast
 	have "parallel H h G q" using `bet H A h \<and> ang_eq h A B A B G \<and> ang_eq h A B G B A \<and> ang_eq B A h G B A \<and> ang_eq H A B A B q \<and> ang_eq H A B q B A \<and> ang_eq B A H q B A \<and> parallel H h G q \<and> seg_eq H A B q \<and> seg_eq A h G B \<and> seg_eq A T T B \<and> seg_eq H T T q \<and> seg_eq G T T h \<and> bet H T q \<and> bet G T h \<and> bet A T B` by blast
 	have "bet H T q" using `bet H A h \<and> ang_eq h A B A B G \<and> ang_eq h A B G B A \<and> ang_eq B A h G B A \<and> ang_eq H A B A B q \<and> ang_eq H A B q B A \<and> ang_eq B A H q B A \<and> parallel H h G q \<and> seg_eq H A B q \<and> seg_eq A h G B \<and> seg_eq A T T B \<and> seg_eq H T T q \<and> seg_eq G T T h \<and> bet H T q \<and> bet G T h \<and> bet A T B` by blast
@@ -83,11 +83,11 @@ proof -
 	have "parallel G B F E" using parallelflip[OF `axioms` `parallel G B E F`] by blast
 	have "parallel F E G B" using parallelsymmetric[OF `axioms` `parallel G B F E`] .
 	have "parallelogram H A B G" using parallelogram_b[OF `axioms` `parallel H A B G` `parallel H G A B`] .
-	obtain j where "bet H j B \<and> bet A j G" using diagonalsmeet[OF `axioms` `parallelogram H A B G`] by blast
+	obtain j where "bet H j B \<and> bet A j G" using diagonalsmeet[OF `axioms` `parallelogram H A B G`]  by  blast
 	have "bet H j B" using `bet H j B \<and> bet A j G` by blast
 	have "bet A j G" using `bet H j B \<and> bet A j G` by blast
 	have "parallelogram G B E F" using `parallelogram G B E F` .
-	obtain k where "bet G k E \<and> bet B k F" using diagonalsmeet[OF `axioms` `parallelogram G B E F`] by blast
+	obtain k where "bet G k E \<and> bet B k F" using diagonalsmeet[OF `axioms` `parallelogram G B E F`]  by  blast
 	have "bet G k E" using `bet G k E \<and> bet B k F` by blast
 	have "bet B k F" using `bet G k E \<and> bet B k F` by blast
 	have "parallel H A G B" using `parallel H A G B` .
@@ -133,7 +133,7 @@ proof -
 	have "parallelogram H A E F" using parallelogram_b[OF `axioms` `parallel H A E F` `parallel H F A E`] .
 	have "\<not> col H F E" using parallelNC[OF `axioms` `parallel H A F E`] by blast
 	have "\<not> col E F H" using NCorder[OF `axioms` `\<not> col H F E`] by blast
-	obtain t where "midpoint H t E \<and> midpoint A t F" using diagonalsbisect[OF `axioms` `parallelogram H A E F`] by blast
+	obtain t where "midpoint H t E \<and> midpoint A t F" using diagonalsbisect[OF `axioms` `parallelogram H A E F`]  by  blast
 	have "midpoint H t E" using `midpoint H t E \<and> midpoint A t F` by blast
 	have "midpoint A t F" using `midpoint H t E \<and> midpoint A t F` by blast
 	have "bet H t E \<and> seg_eq H t t E" using midpoint_f[OF `axioms` `midpoint H t E`] .
@@ -159,7 +159,7 @@ proof -
 	have "parallel F K A H" using parallelflip[OF `axioms` `parallel F K H A`] by blast
 	have "H = H" using equalityreflexiveE[OF `axioms`] .
 	have "col A H H" using collinear_b `axioms` `H = H` by blast
-	obtain L where "parallelogram H L K F \<and> col A H L" using triangletoparallelogram[OF `axioms` `parallel F K A H` `col A H H`] by blast
+	obtain L where "parallelogram H L K F \<and> col A H L" using triangletoparallelogram[OF `axioms` `parallel F K A H` `col A H H`]  by  blast
 	have "parallelogram H L K F" using `parallelogram H L K F \<and> col A H L` by blast
 	have "col A H L" using `parallelogram H L K F \<and> col A H L` by blast
 	have "parallel H L K F" using parallelogram_f[OF `axioms` `parallelogram H L K F`] by blast
@@ -175,7 +175,7 @@ proof -
 	have "parallel G B E K" using collinearparallel2[OF `axioms` `parallel G B F E` `col F E E` `col F E K` `E \<noteq> K`] .
 	have "parallel E K G B" using parallelsymmetric[OF `axioms` `parallel G B E K`] .
 	have "col G B B" using collinear_b `axioms` `B = B` by blast
-	obtain M where "parallelogram B M K E \<and> col G B M" using triangletoparallelogram[OF `axioms` `parallel E K G B` `col G B B`] by blast
+	obtain M where "parallelogram B M K E \<and> col G B M" using triangletoparallelogram[OF `axioms` `parallel E K G B` `col G B B`]  by  blast
 	have "parallelogram H L K F" using `parallelogram H L K F` .
 	have "parallelogram L K F H" using PGrotate[OF `axioms` `parallelogram H L K F`] .
 	have "parallelogram K L H F" using PGflip[OF `axioms` `parallelogram L K F H`] .
@@ -285,7 +285,7 @@ proof -
 	have "H \<noteq> G" using betweennotequal[OF `axioms` `bet H G F`] by blast
 	have "M \<noteq> K" using betweennotequal[OF `axioms` `bet L M K`] by blast
 	have "parallel H F L K" using parallelogram_f[OF `axioms` `parallelogram H L K F`] by blast
-	have "\<not> (meets H F L K)" using parallel_f[OF `axioms` `parallel H F L K`] by blast
+	have "\<not> (meets H F L K)" using parallel_f[OF `axioms` `parallel H F L K`] by fastforce
 	have "bet H B K" using `bet H B K` .
 	have "col G M B" using collinearorder[OF `axioms` `col G B M`] by blast
 	have "bet G B M" using collinearbetween[OF `axioms` `col H G F` `col L M K` `H \<noteq> F` `L \<noteq> K` `H \<noteq> G` `M \<noteq> K` `\<not> (meets H F L K)` `bet H B K` `col G M B`] .

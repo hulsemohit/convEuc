@@ -1,14 +1,14 @@
 theory planeseparation
-	imports Axioms Definitions Theorems
+	imports n3_6b n3_7a n3_7b n9_5a n9_5b Geometry betweennotequal collinear4 collinear5 collinearorder equalitysymmetric inequalitysymmetric outerconnectivity twolines2
 begin
 
 theorem planeseparation:
-	assumes: `axioms`
+	assumes "axioms"
 		"same_side C D A B"
 		"oppo_side D A B E"
-	shows: "oppo_side C A B E"
+	shows "oppo_side C A B E"
 proof -
-	obtain G H Q where "col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D" using sameside_f[OF `axioms` `same_side C D A B`] by blast
+	obtain G H Q where "col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D" using sameside_f[OF `axioms` `same_side C D A B`]  by  blast
 	have "col A B G" using `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	have "col A B H" using `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	have "bet C G Q" using `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
@@ -16,28 +16,31 @@ proof -
 	have "\<not> col A B C" using `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	have "\<not> (A = B)"
 	proof (rule ccontr)
-		assume "A = B"
+		assume "\<not> (A \<noteq> B)"
+		hence "A = B" by blast
 		have "col A B C" using collinear_b `axioms` `A = B` by blast
 		show "False" using `col A B C` `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 	qed
 	hence "A \<noteq> B" by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-	obtain W where "bet D W E \<and> col A B W \<and> \<not> col A B D" using oppositeside_f[OF `axioms` `oppo_side D A B E`] by blast
+	obtain W where "bet D W E \<and> col A B W \<and> \<not> col A B D" using oppositeside_f[OF `axioms` `oppo_side D A B E`]  by  blast
 	have "bet D W E" using `bet D W E \<and> col A B W \<and> \<not> col A B D` by blast
 	have "C \<noteq> G" using betweennotequal[OF `axioms` `bet C G Q`] by blast
 	have "G \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> G`] .
 	have "G \<noteq> Q" using betweennotequal[OF `axioms` `bet C G Q`] by blast
 	consider "col C Q D"|"\<not> col C Q D" by blast
-	hence oppo_side C A B E
+	hence "oppo_side C A B E"
 	proof (cases)
-		case 1
-		have "oppo_side C A B E"
+		assume "col C Q D"
+		have "\<not> (\<not> (oppo_side C A B E))"
 		proof (rule ccontr)
-			assume "\<not> (oppo_side C A B E)"
+			assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 			have "col Q C D" using collinearorder[OF `axioms` `col C Q D`] by blast
 			have "\<not> (G \<noteq> H)"
 			proof (rule ccontr)
-				assume "G \<noteq> H"
+				assume "\<not> (\<not> (G \<noteq> H))"
+hence "G \<noteq> H" by blast
 				have "col A B G" using `col A B G` .
 				have "col A B H" using `col A B H` .
 				have "col C G Q" using collinear_b `axioms` `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
@@ -50,7 +53,8 @@ proof -
 				have "col D Q C" using collinearorder[OF `axioms` `col C Q D`] by blast
 				have "\<not> (col C A B)"
 				proof (rule ccontr)
-					assume "col C A B"
+					assume "\<not> (\<not> (col C A B))"
+hence "col C A B" by blast
 					have "col A B C" using collinearorder[OF `axioms` `col C A B`] by blast
 					show "False" using `col A B C` `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 				qed
@@ -58,7 +62,8 @@ proof -
 				have "\<not> col C A B \<or> \<not> col D A B" using `\<not> col C A B` by blast
 				have "\<not> (col C A B \<and> col D A B)"
 				proof (rule ccontr)
-					assume "col C A B \<and> col D A B"
+					assume "\<not> (\<not> (col C A B \<and> col D A B))"
+hence "col C A B \<and> col D A B" by blast
 					have "\<not> col C A B \<or> \<not> col D A B" using `\<not> col C A B \<or> \<not> col D A B` .
 					show "False" using `\<not> col C A B \<or> \<not> col D A B` `col C A B \<and> col D A B` by blast
 				qed
@@ -74,7 +79,8 @@ proof -
 				have "col H C D" using collinearorder[OF `axioms` `col D C H`] by blast
 				have "\<not> (C = D)"
 				proof (rule ccontr)
-					assume "C = D"
+					assume "\<not> (C \<noteq> D)"
+					hence "C = D" by blast
 					have "oppo_side D A B E" using `oppo_side D A B E` .
 					have "oppo_side C A B E" using `oppo_side D A B E` `C = D` by blast
 					show "False" using `oppo_side C A B E` `\<not> (oppo_side C A B E)` by blast
@@ -90,13 +96,16 @@ proof -
 			have "bet Q G D" using `bet Q H D` `G = H` by blast
 			have "\<not> (\<not> col E D G)"
 			proof (rule ccontr)
-				assume "\<not> col E D G"
+				assume "\<not> (\<not> (\<not> col E D G))"
+hence "\<not> col E D G" by blast
 				have "\<not> (\<not> col E C G)"
 				proof (rule ccontr)
-					assume "\<not> col E C G"
+					assume "\<not> (\<not> (\<not> col E C G))"
+hence "\<not> col E C G" by blast
 					have "\<not> (bet G C D)"
 					proof (rule ccontr)
-						assume "bet G C D"
+						assume "\<not> (\<not> (bet G C D))"
+hence "bet G C D" by blast
 						have "oppo_side D A B E" using `oppo_side D A B E` .
 						have "oppo_side C A B E" using n9_5b[OF `axioms` `oppo_side D A B E` `bet G C D` `\<not> col E D G` `col A B G`] .
 						show "False" using `oppo_side C A B E` `\<not> (oppo_side C A B E)` by blast
@@ -104,10 +113,12 @@ proof -
 					hence "\<not> (bet G C D)" by blast
 					have "\<not> (bet G D C)"
 					proof (rule ccontr)
-						assume "bet G D C"
+						assume "\<not> (\<not> (bet G D C))"
+hence "bet G D C" by blast
 						have "\<not> (col G C E)"
 						proof (rule ccontr)
-							assume "col G C E"
+							assume "\<not> (\<not> (col G C E))"
+hence "col G C E" by blast
 							have "col E C G" using collinearorder[OF `axioms` `col G C E`] by blast
 							show "False" using `col E C G` `\<not> col E C G` by blast
 						qed
@@ -153,13 +164,15 @@ proof -
 			have "col W G A" using collinearorder[OF `axioms` `col A W G`] by blast
 			have "\<not> (W \<noteq> G)"
 			proof (rule ccontr)
-				assume "W \<noteq> G"
+				assume "\<not> (\<not> (W \<noteq> G))"
+hence "W \<noteq> G" by blast
 				have "col G D B" using collinear4[OF `axioms` `col W G D` `col W G B` `W \<noteq> G`] .
 				have "col G B D" using collinearorder[OF `axioms` `col G D B`] by blast
 				have "col G B A" using collinearorder[OF `axioms` `col A B G`] by blast
 				have "\<not> (G \<noteq> B)"
 				proof (rule ccontr)
-					assume "G \<noteq> B"
+					assume "\<not> (\<not> (G \<noteq> B))"
+hence "G \<noteq> B" by blast
 					have "col B D A" using collinear4[OF `axioms` `col G B D` `col G B A` `G \<noteq> B`] .
 					have "col A B D" using collinearorder[OF `axioms` `col B D A`] by blast
 					have "\<not> col A B D" using `bet D W E \<and> col A B W \<and> \<not> col A B D` by blast
@@ -171,7 +184,8 @@ proof -
 				have "col G A B" using collinearorder[OF `axioms` `col A B G`] by blast
 				have "\<not> (G \<noteq> A)"
 				proof (rule ccontr)
-					assume "G \<noteq> A"
+					assume "\<not> (\<not> (G \<noteq> A))"
+hence "G \<noteq> A" by blast
 					have "col A D B" using collinear4[OF `axioms` `col G A D` `col G A B` `G \<noteq> A`] .
 					have "col A B D" using collinearorder[OF `axioms` `col A D B`] by blast
 					have "\<not> col A B D" using `bet D W E \<and> col A B W \<and> \<not> col A B D` by blast
@@ -190,7 +204,8 @@ proof -
 			have "bet E G D" using betweennesssymmetryE[OF `axioms` `bet D G E`] .
 			have "\<not> (bet G D C)"
 			proof (rule ccontr)
-				assume "bet G D C"
+				assume "\<not> (\<not> (bet G D C))"
+hence "bet G D C" by blast
 				have "bet E G C" using n3_7b[OF `axioms` `bet E G D` `bet G D C`] .
 				have "bet C G E" using betweennesssymmetryE[OF `axioms` `bet E G C`] .
 				have "oppo_side C A B E" using oppositeside_b[OF `axioms` `bet C G E` `col A B G` `\<not> col A B C`] .
@@ -199,7 +214,8 @@ proof -
 			hence "\<not> (bet G D C)" by blast
 			have "\<not> (bet G C D)"
 			proof (rule ccontr)
-				assume "bet G C D"
+				assume "\<not> (\<not> (bet G C D))"
+hence "bet G C D" by blast
 				have "bet E G C" using innertransitivityE[OF `axioms` `bet E G D` `bet G C D`] .
 				have "bet C G E" using betweennesssymmetryE[OF `axioms` `bet E G C`] .
 				have "oppo_side C A B E" using oppositeside_b[OF `axioms` `bet C G E` `col A B G` `\<not> col A B C`] .
@@ -208,13 +224,15 @@ proof -
 			hence "\<not> (bet G C D)" by blast
 			have "\<not> (bet C G D)"
 			proof (rule ccontr)
-				assume "bet C G D"
+				assume "\<not> (\<not> (bet C G D))"
+hence "bet C G D" by blast
 				have "bet D G Q" using `bet D H Q` `G = H` by blast
 				have "bet C G Q" using `bet C G Q` .
 				have "bet D G C" using betweennesssymmetryE[OF `axioms` `bet C G D`] .
 				have "\<not> (bet G D C)"
 				proof (rule ccontr)
-					assume "bet G D C"
+					assume "\<not> (\<not> (bet G D C))"
+hence "bet G D C" by blast
 					have "bet C D G" using betweennesssymmetryE[OF `axioms` `bet G D C`] .
 					have "bet D G C" using `bet D G C` .
 					have "bet C G C" using n3_7a[OF `axioms` `bet C D G` `bet D G C`] .
@@ -225,7 +243,8 @@ proof -
 				hence "\<not> (bet G D C)" by blast
 				have "\<not> (bet G C D)"
 				proof (rule ccontr)
-					assume "bet G C D"
+					assume "\<not> (\<not> (bet G C D))"
+hence "bet G C D" by blast
 					have "bet C G C" using innertransitivityE[OF `axioms` `bet C G D` `bet G C D`] .
 					have "C \<noteq> C" using betweennotequal[OF `axioms` `bet C G C`] by blast
 					have "C = C" using equalityreflexiveE[OF `axioms`] .
@@ -247,93 +266,110 @@ proof -
 			have "col G C D" using collinearorder[OF `axioms` `col C D G`] by blast
 			have "G = C \<or> G = D \<or> C = D \<or> bet C G D \<or> bet G C D \<or> bet G D C" using collinear_f[OF `axioms` `col G C D`] .
 			consider "G = C"|"G = D"|"C = D"|"bet C G D"|"bet G C D"|"bet G D C" using `G = C \<or> G = D \<or> C = D \<or> bet C G D \<or> bet G C D \<or> bet G D C`  by blast
-			hence oppo_side C A B E
+			hence "oppo_side C A B E"
 			proof (cases)
-				case 1
-				have "oppo_side C A B E"
+				assume "G = C"
+				have "\<not> (\<not> (oppo_side C A B E))"
 				proof (rule ccontr)
-					assume "\<not> (oppo_side C A B E)"
+					assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 					have "col A B G" using `col A B G` .
 					have "col A B C" using `col A B G` `G = C` by blast
 					have "\<not> col A B C" using `\<not> col A B C` .
 					show "False" using `\<not> col A B C` `col A B C` by blast
 				qed
 				hence "oppo_side C A B E" by blast
+				thus ?thesis by blast
 			next
-				case 2
-				have "oppo_side C A B E"
+				assume "G = D"
+				have "\<not> (\<not> (oppo_side C A B E))"
 				proof (rule ccontr)
-					assume "\<not> (oppo_side C A B E)"
+					assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 					have "col A B G" using `col A B G` .
 					have "col A B D" using `col A B G` `G = D` by blast
 					have "\<not> col A B D" using `bet D W E \<and> col A B W \<and> \<not> col A B D` by blast
 					show "False" using `\<not> col A B D` `col A B D` by blast
 				qed
 				hence "oppo_side C A B E" by blast
+				thus ?thesis by blast
 			next
-				case 3
-				have "oppo_side C A B E"
+				assume "C = D"
+				have "\<not> (\<not> (oppo_side C A B E))"
 				proof (rule ccontr)
-					assume "\<not> (oppo_side C A B E)"
+					assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 					have "oppo_side D A B E" using `oppo_side D A B E` .
 					have "oppo_side C A B E" using `oppo_side D A B E` `C = D` by blast
 					show "False" using `oppo_side C A B E` `\<not> (oppo_side C A B E)` by blast
 				qed
 				hence "oppo_side C A B E" by blast
+				thus ?thesis by blast
 			next
-				case 4
-				have "oppo_side C A B E"
+				assume "bet C G D"
+				have "\<not> (\<not> (oppo_side C A B E))"
 				proof (rule ccontr)
-					assume "\<not> (oppo_side C A B E)"
+					assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 					have "\<not> (bet C G D)" using `\<not> (bet C G D)` .
 					show "False" using `\<not> (bet C G D)` `bet C G D` by blast
 				qed
 				hence "oppo_side C A B E" by blast
+				thus ?thesis by blast
 			next
-				case 5
-				have "oppo_side C A B E"
+				assume "bet G C D"
+				have "\<not> (\<not> (oppo_side C A B E))"
 				proof (rule ccontr)
-					assume "\<not> (oppo_side C A B E)"
+					assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 					have "\<not> (bet G C D)" using `\<not> (bet G C D)` .
 					show "False" using `\<not> (bet G C D)` `bet G C D` by blast
 				qed
 				hence "oppo_side C A B E" by blast
+				thus ?thesis by blast
 			next
-				case 6
-				have "oppo_side C A B E"
+				assume "bet G D C"
+				have "\<not> (\<not> (oppo_side C A B E))"
 				proof (rule ccontr)
-					assume "\<not> (oppo_side C A B E)"
+					assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 					have "\<not> (bet G D C)" using `\<not> (bet G D C)` .
 					show "False" using `\<not> (bet G D C)` `bet G D C` by blast
 				qed
 				hence "oppo_side C A B E" by blast
-			next
+				thus ?thesis by blast
+			qed
 			show "False" using `oppo_side C A B E` `\<not> (oppo_side C A B E)` by blast
 		qed
 		hence "oppo_side C A B E" by blast
+		thus ?thesis by blast
 	next
-		case 2
-		have "oppo_side C A B E"
+		assume "\<not> col C Q D"
+		have "\<not> (\<not> (oppo_side C A B E))"
 		proof (rule ccontr)
-			assume "\<not> (oppo_side C A B E)"
+			assume "\<not> (\<not> (\<not> (oppo_side C A B E)))"
+hence "\<not> (oppo_side C A B E)" by blast
 			have "\<not> (col Q C D)"
 			proof (rule ccontr)
-				assume "col Q C D"
+				assume "\<not> (\<not> (col Q C D))"
+hence "col Q C D" by blast
 				have "col C Q D" using collinearorder[OF `axioms` `col Q C D`] by blast
 				show "False" using `col C Q D` `\<not> col C Q D` by blast
 			qed
 			hence "\<not> col Q C D" by blast
-			obtain F where "bet C F H \<and> bet D F G" using Pasch-innerE[OF `axioms` `bet C G Q` `bet D H Q` `\<not> col C Q D`] by blast
+			obtain F where "bet C F H \<and> bet D F G" using Pasch_innerE[OF `axioms` `bet C G Q` `bet D H Q` `\<not> col C Q D`]  by  blast
 			have "bet C F H" using `bet C F H \<and> bet D F G` by blast
 			have "bet D F G" using `bet C F H \<and> bet D F G` by blast
 			have "bet H F C" using betweennesssymmetryE[OF `axioms` `bet C F H`] .
 			have "bet G F D" using betweennesssymmetryE[OF `axioms` `bet D F G`] .
 			have "\<not> (col E D G)"
 			proof (rule ccontr)
-				assume "col E D G"
+				assume "\<not> (\<not> (col E D G))"
+hence "col E D G" by blast
 				have "\<not> (W \<noteq> G)"
 				proof (rule ccontr)
-					assume "W \<noteq> G"
+					assume "\<not> (\<not> (W \<noteq> G))"
+hence "W \<noteq> G" by blast
 					have "col D E G" using collinearorder[OF `axioms` `col E D G`] by blast
 					have "col D W E" using collinear_b `axioms` `bet D W E \<and> col A B W \<and> \<not> col A B D` by blast
 					have "col E D G" using collinearorder[OF `axioms` `col D E G`] by blast
@@ -372,7 +408,8 @@ proof -
 				have "bet H F C" using `bet H F C` .
 				have "\<not> (col H C E)"
 				proof (rule ccontr)
-					assume "col H C E"
+					assume "\<not> (\<not> (col H C E))"
+hence "col H C E" by blast
 					have "col H E C" using collinearorder[OF `axioms` `col H C E`] by blast
 					have "col E H C" using collinearorder[OF `axioms` `col H C E`] by blast
 					have "col C F H" using collinear_b `axioms` `bet C F H \<and> bet D F G` by blast
@@ -407,7 +444,7 @@ proof -
 					show "False" using `\<not> col Q C D` `col Q C D` by blast
 				qed
 				hence "\<not> col H C E" by blast
-				obtain M where "bet E M C \<and> bet H G M" using Pasch-outerE[OF `axioms` `bet E G F` `bet H F C` `\<not> col H C E`] by blast
+				obtain M where "bet E M C \<and> bet H G M" using Pasch_outerE[OF `axioms` `bet E G F` `bet H F C` `\<not> col H C E`]  by  blast
 				have "bet E M C" using `bet E M C \<and> bet H G M` by blast
 				have "bet H G M" using `bet E M C \<and> bet H G M` by blast
 				have "col H G M" using collinear_b `axioms` `bet E M C \<and> bet H G M` by blast
@@ -420,9 +457,9 @@ proof -
 				have "col G B M" using collinearorder[OF `axioms` `col G M B`] by blast
 				have "col G B A" using collinearorder[OF `axioms` `col A B G`] by blast
 				consider "B = G"|"B \<noteq> G" by blast
-				hence col A B M
+				hence "col A B M"
 				proof (cases)
-					case 1
+					assume "B = G"
 					have "col B A H" using collinearorder[OF `axioms` `col A B H`] by blast
 					have "col B A G" using collinearorder[OF `axioms` `col A B G`] by blast
 					have "col A H G" using collinear4[OF `axioms` `col B A H` `col B A G` `B \<noteq> A`] .
@@ -431,12 +468,14 @@ proof -
 					have "col G A M" using collinear4[OF `axioms` `col H G A` `col H G M` `H \<noteq> G`] .
 					have "col B A M" using `col G A M` `B = G` by blast
 					have "col A B M" using collinearorder[OF `axioms` `col B A M`] by blast
+					thus ?thesis by blast
 				next
-					case 2
+					assume "B \<noteq> G"
 					have "G \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> G`] .
 					have "col B M A" using collinear4[OF `axioms` `col G B M` `col G B A` `G \<noteq> B`] .
 					have "col A B M" using collinearorder[OF `axioms` `col B M A`] by blast
-				next
+					thus ?thesis by blast
+				qed
 				have "bet C M E" using betweennesssymmetryE[OF `axioms` `bet E M C`] .
 				have "bet C M E \<and> col A B M \<and> \<not> col A B C" using `bet C M E` `col A B M` `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 				have "oppo_side C A B E" using oppositeside_b[OF `axioms` `bet C M E` `col A B M` `\<not> col A B C`] .
@@ -447,7 +486,8 @@ proof -
 			have "oppo_side F A B E" using n9_5b[OF `axioms` `oppo_side D A B E` `bet G F D` `\<not> col E D G` `col A B G`] .
 			have "\<not> (G = H)"
 			proof (rule ccontr)
-				assume "G = H"
+				assume "\<not> (G \<noteq> H)"
+				hence "G = H" by blast
 				have "col D H Q" using collinear_b `axioms` `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 				have "col C G Q" using collinear_b `axioms` `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
 				have "col Q H D" using collinearorder[OF `axioms` `col D H Q`] by blast
@@ -467,10 +507,11 @@ proof -
 			hence "G \<noteq> H" by blast
 			have "\<not> (col H C E)"
 			proof (rule ccontr)
-				assume "col H C E"
+				assume "\<not> (\<not> (col H C E))"
+hence "col H C E" by blast
 				have "bet E W D" using betweennesssymmetryE[OF `axioms` `bet D W E`] .
 				have "bet G F D" using betweennesssymmetryE[OF `axioms` `bet D F G`] .
-				obtain J where "bet E J F \<and> bet G J W" using Pasch-innerE[OF `axioms` `bet E W D` `bet G F D` `\<not> col E D G`] by blast
+				obtain J where "bet E J F \<and> bet G J W" using Pasch_innerE[OF `axioms` `bet E W D` `bet G F D` `\<not> col E D G`]  by  blast
 				have "bet E J F" using `bet E J F \<and> bet G J W` by blast
 				have "bet G J W" using `bet E J F \<and> bet G J W` by blast
 				have "col G J W" using collinear_b `axioms` `bet E J F \<and> bet G J W` by blast
@@ -495,7 +536,8 @@ proof -
 				have "col G W H" using collinearorder[OF `axioms` `col G H W`] by blast
 				have "\<not> (G = W)"
 				proof (rule ccontr)
-					assume "G = W"
+					assume "\<not> (G \<noteq> W)"
+					hence "G = W" by blast
 					have "col D W E" using collinear_b `axioms` `bet D W E \<and> col A B W \<and> \<not> col A B D` by blast
 					have "col D G E" using `col D W E` `G = W` by blast
 					have "col E D G" using collinearorder[OF `axioms` `col D G E`] by blast
@@ -509,7 +551,8 @@ proof -
 				have "col J H W" using collinearorder[OF `axioms` `col W J H`] by blast
 				have "\<not> (H = W)"
 				proof (rule ccontr)
-					assume "H = W"
+					assume "\<not> (H \<noteq> W)"
+					hence "H = W" by blast
 					have "col D W E" using collinear_b `axioms` `bet D W E \<and> col A B W \<and> \<not> col A B D` by blast
 					have "col D H E" using `col D W E` `H = W` by blast
 					have "col D H Q" using collinear_b `axioms` `col A B G \<and> col A B H \<and> bet C G Q \<and> bet D H Q \<and> \<not> col A B C \<and> \<not> col A B D` by blast
@@ -523,7 +566,8 @@ proof -
 					have "col E C H" using collinearorder[OF `axioms` `col C H E`] by blast
 					have "\<not> (E \<noteq> C)"
 					proof (rule ccontr)
-						assume "E \<noteq> C"
+						assume "\<not> (\<not> (E \<noteq> C))"
+hence "E \<noteq> C" by blast
 						have "col C Q H" using collinear4[OF `axioms` `col E C Q` `col E C H` `E \<noteq> C`] .
 						have "col H Q C" using collinearorder[OF `axioms` `col C Q H`] by blast
 						have "col H Q D" using collinearorder[OF `axioms` `col D H Q`] by blast
@@ -551,7 +595,8 @@ proof -
 				hence "H \<noteq> W" by blast
 				have "\<not> (J \<noteq> H)"
 				proof (rule ccontr)
-					assume "J \<noteq> H"
+					assume "\<not> (\<not> (J \<noteq> H))"
+hence "J \<noteq> H" by blast
 					have "col H E W" using collinear4[OF `axioms` `col J H E` `col J H W` `J \<noteq> H`] .
 					have "col H W E" using collinearorder[OF `axioms` `col H E W`] by blast
 					have "col H W G" using collinearorder[OF `axioms` `col G H W`] by blast
@@ -581,7 +626,8 @@ proof -
 			show "False" using `\<not> (oppo_side C A B E)` `oppo_side C A B E` by blast
 		qed
 		hence "oppo_side C A B E" by blast
-	next
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

@@ -1,20 +1,20 @@
 theory TGsymmetric
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal congruenceflip doublereverse lessthancongruence nullsegment3 sumofparts
 begin
 
 theorem TGsymmetric:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_sum_gt A a B b C c"
-	shows: "seg_sum_gt B b A a C c"
+	shows "seg_sum_gt B b A a C c"
 proof -
-	obtain H where "bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H" using togethergreater_f[OF `axioms` `seg_sum_gt A a B b C c`] by blast
+	obtain H where "bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H" using togethergreater_f[OF `axioms` `seg_sum_gt A a B b C c`]  by  blast
 	have "bet A a H" using `bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H` by blast
 	have "seg_eq a H B b" using `bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H` by blast
 	have "seg_lt C c A H" using `bet A a H \<and> seg_eq a H B b \<and> seg_lt C c A H` by blast
 	have "a \<noteq> H" using betweennotequal[OF `axioms` `bet A a H`] by blast
 	have "B \<noteq> b" using nullsegment3[OF `axioms` `a \<noteq> H` `seg_eq a H B b`] .
 	have "A \<noteq> a" using betweennotequal[OF `axioms` `bet A a H`] by blast
-	obtain F where "bet B b F \<and> seg_eq b F A a" using extensionE[OF `axioms` `B \<noteq> b` `A \<noteq> a`] by blast
+	obtain F where "bet B b F \<and> seg_eq b F A a" using extensionE[OF `axioms` `B \<noteq> b` `A \<noteq> a`]  by  blast
 	have "bet B b F" using `bet B b F \<and> seg_eq b F A a` by blast
 	have "seg_eq b F A a" using `bet B b F \<and> seg_eq b F A a` by blast
 	have "seg_eq a A F b" using doublereverse[OF `axioms` `seg_eq b F A a`] by blast

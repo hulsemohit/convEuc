@@ -1,19 +1,20 @@
 theory Prop19
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry NCorder Prop05 Prop18 angledistinct angleorderrespectscongruence angleorderrespectscongruence2 angletrichotomy congruencesymmetric equalanglesreflexive equalanglessymmetric equalanglestransitive trichotomy1
 begin
 
 theorem Prop19:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"ang_lt B C A A B C"
-	shows: "seg_lt A B A C"
+	shows "seg_lt A B A C"
 proof -
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "\<not> col B C A" using NCorder[OF `axioms` `\<not> col A B C`] by blast
 	have "\<not> col A C B" using NCorder[OF `axioms` `\<not> col A B C`] by blast
 	have "\<not> (seg_eq A C A B)"
 	proof (rule ccontr)
-		assume "seg_eq A C A B"
+		assume "\<not> (\<not> (seg_eq A C A B))"
+hence "seg_eq A C A B" by blast
 		have "seg_eq A B A C" using congruencesymmetric[OF `axioms` `seg_eq A C A B`] .
 		have "tri_isos A B C" using isosceles_b[OF `axioms` `triangle A B C` `seg_eq A B A C`] .
 		have "ang_eq A B C A C B" using Prop05[OF `axioms` `tri_isos A B C`] .
@@ -28,7 +29,8 @@ proof -
 	hence "\<not> (seg_eq A C A B)" by blast
 	have "\<not> (seg_lt A C A B)"
 	proof (rule ccontr)
-		assume "seg_lt A C A B"
+		assume "\<not> (\<not> (seg_lt A C A B))"
+hence "seg_lt A C A B" by blast
 		have "triangle A C B" using triangle_b[OF `axioms` `\<not> col A C B`] .
 		have "ang_lt C B A A C B" using Prop18[OF `axioms` `triangle A C B` `seg_lt A C A B`] .
 		have "ang_eq A B C C B A" using ABCequalsCBA[OF `axioms` `\<not> col A B C`] .
@@ -43,9 +45,10 @@ proof -
 	have "ang_eq A B C A B C" using equalanglesreflexive[OF `axioms` `\<not> col A B C`] .
 	have "A \<noteq> B" using angledistinct[OF `axioms` `ang_eq A B C A B C`] by blast
 	have "A \<noteq> C" using angledistinct[OF `axioms` `ang_eq A B C A B C`] by blast
-	have "seg_lt A B A C"
+	have "\<not> (\<not> (seg_lt A B A C))"
 	proof (rule ccontr)
-		assume "\<not> (seg_lt A B A C)"
+		assume "\<not> (\<not> (\<not> (seg_lt A B A C)))"
+hence "\<not> (seg_lt A B A C)" by blast
 		have "seg_eq A B A C" using trichotomy1[OF `axioms` `\<not> (seg_lt A B A C)` `\<not> (seg_lt A C A B)` `A \<noteq> B` `A \<noteq> C`] .
 		have "seg_eq A C A B" using congruencesymmetric[OF `axioms` `seg_eq A B A C`] .
 		show "False" using `seg_eq A C A B` `\<not> (seg_eq A C A B)` by blast

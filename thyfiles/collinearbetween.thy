@@ -1,9 +1,9 @@
 theory collinearbetween
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal collinear4 collinearorder inequalitysymmetric
 begin
 
 theorem collinearbetween:
-	assumes: `axioms`
+	assumes "axioms"
 		"col A E B"
 		"col C F D"
 		"A \<noteq> B"
@@ -13,11 +13,12 @@ theorem collinearbetween:
 		"\<not> (meets A B C D)"
 		"bet A H D"
 		"col E F H"
-	shows: "bet E H F"
+	shows "bet E H F"
 proof -
 	have "\<not> (H = E)"
 	proof (rule ccontr)
-		assume "H = E"
+		assume "\<not> (H \<noteq> E)"
+		hence "H = E" by blast
 		have "col A E B" using `col A E B` .
 		have "col A H B" using `col A E B` `H = E` by blast
 		have "col H A B" using collinearorder[OF `axioms` `col A H B`] by blast
@@ -34,7 +35,8 @@ proof -
 	hence "H \<noteq> E" by blast
 	have "\<not> (H = F)"
 	proof (rule ccontr)
-		assume "H = F"
+		assume "\<not> (H \<noteq> F)"
+		hence "H = F" by blast
 		have "col A H D" using collinear_b `axioms` `bet A H D` by blast
 		have "col A F D" using `col A H D` `H = F` by blast
 		have "col F D A" using collinearorder[OF `axioms` `col A F D`] by blast
@@ -49,11 +51,13 @@ proof -
 	hence "H \<noteq> F" by blast
 	have "\<not> (bet E F H)"
 	proof (rule ccontr)
-		assume "bet E F H"
+		assume "\<not> (\<not> (bet E F H))"
+hence "bet E F H" by blast
 		have "bet D H A" using betweennesssymmetryE[OF `axioms` `bet A H D`] .
 		have "\<not> (col D A E)"
 		proof (rule ccontr)
-			assume "col D A E"
+			assume "\<not> (\<not> (col D A E))"
+hence "col D A E" by blast
 			have "col E A B" using collinearorder[OF `axioms` `col A E B`] by blast
 			have "col E A D" using collinearorder[OF `axioms` `col D A E`] by blast
 			have "E \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> E`] .
@@ -65,7 +69,7 @@ proof -
 			show "False" using `meets A B C D` `\<not> (meets A B C D)` by blast
 		qed
 		hence "\<not> col D A E" by blast
-		obtain Q where "bet E Q A \<and> bet D F Q" using Pasch-outerE[OF `axioms` `bet E F H` `bet D H A` `\<not> col D A E`] by blast
+		obtain Q where "bet E Q A \<and> bet D F Q" using Pasch_outerE[OF `axioms` `bet E F H` `bet D H A` `\<not> col D A E`]  by  blast
 		have "bet E Q A" using `bet E Q A \<and> bet D F Q` by blast
 		have "bet D F Q" using `bet E Q A \<and> bet D F Q` by blast
 		have "col E Q A" using collinear_b `axioms` `bet E Q A \<and> bet D F Q` by blast
@@ -85,11 +89,13 @@ proof -
 	hence "\<not> (bet E F H)" by blast
 	have "\<not> (bet F E H)"
 	proof (rule ccontr)
-		assume "bet F E H"
+		assume "\<not> (\<not> (bet F E H))"
+hence "bet F E H" by blast
 		have "bet A H D" using `bet A H D` .
 		have "\<not> (col A D F)"
 		proof (rule ccontr)
-			assume "col A D F"
+			assume "\<not> (\<not> (col A D F))"
+hence "col A D F" by blast
 			have "col F D C" using collinearorder[OF `axioms` `col C F D`] by blast
 			have "col F D A" using collinearorder[OF `axioms` `col A D F`] by blast
 			have "col D C A" using collinear4[OF `axioms` `col F D C` `col F D A` `F \<noteq> D`] .
@@ -101,7 +107,7 @@ proof -
 			show "False" using `meets A B C D` `\<not> (meets A B C D)` by blast
 		qed
 		hence "\<not> col A D F" by blast
-		obtain R where "bet F R D \<and> bet A E R" using Pasch-outerE[OF `axioms` `bet F E H` `bet A H D` `\<not> col A D F`] by blast
+		obtain R where "bet F R D \<and> bet A E R" using Pasch_outerE[OF `axioms` `bet F E H` `bet A H D` `\<not> col A D F`]  by  blast
 		have "bet F R D" using `bet F R D \<and> bet A E R` by blast
 		have "bet A E R" using `bet F R D \<and> bet A E R` by blast
 		have "col F R D" using collinear_b `axioms` `bet F R D \<and> bet A E R` by blast
@@ -122,7 +128,8 @@ proof -
 	hence "\<not> (bet F E H)" by blast
 	have "\<not> (E = F)"
 	proof (rule ccontr)
-		assume "E = F"
+		assume "\<not> (E \<noteq> F)"
+		hence "E = F" by blast
 		have "col C D F" using collinearorder[OF `axioms` `col C F D`] by blast
 		have "col A B E" using collinearorder[OF `axioms` `col A E B`] by blast
 		have "col A B F" using `col A B E` `E = F` by blast
@@ -133,55 +140,66 @@ proof -
 	have "col E F H" using `col E F H` .
 	have "E = F \<or> E = H \<or> F = H \<or> bet F E H \<or> bet E F H \<or> bet E H F" using collinear_f[OF `axioms` `col E F H`] .
 	consider "E = F"|"E = H"|"F = H"|"bet F E H"|"bet E F H"|"bet E H F" using `E = F \<or> E = H \<or> F = H \<or> bet F E H \<or> bet E F H \<or> bet E H F`  by blast
-	hence bet E H F
+	hence "bet E H F"
 	proof (cases)
-		case 1
-		have "bet E H F"
+		assume "E = F"
+		have "\<not> (\<not> (bet E H F))"
 		proof (rule ccontr)
-			assume "\<not> (bet E H F)"
+			assume "\<not> (\<not> (\<not> (bet E H F)))"
+hence "\<not> (bet E H F)" by blast
 			have "E \<noteq> F" using `E \<noteq> F` .
 			show "False" using `E \<noteq> F` `E = F` by blast
 		qed
 		hence "bet E H F" by blast
+		thus ?thesis by blast
 	next
-		case 2
-		have "bet E H F"
+		assume "E = H"
+		have "\<not> (\<not> (bet E H F))"
 		proof (rule ccontr)
-			assume "\<not> (bet E H F)"
+			assume "\<not> (\<not> (\<not> (bet E H F)))"
+hence "\<not> (bet E H F)" by blast
 			have "E \<noteq> H" using inequalitysymmetric[OF `axioms` `H \<noteq> E`] .
 			show "False" using `E \<noteq> H` `E = H` by blast
 		qed
 		hence "bet E H F" by blast
+		thus ?thesis by blast
 	next
-		case 3
-		have "bet E H F"
+		assume "F = H"
+		have "\<not> (\<not> (bet E H F))"
 		proof (rule ccontr)
-			assume "\<not> (bet E H F)"
+			assume "\<not> (\<not> (\<not> (bet E H F)))"
+hence "\<not> (bet E H F)" by blast
 			have "F \<noteq> H" using inequalitysymmetric[OF `axioms` `H \<noteq> F`] .
 			show "False" using `F \<noteq> H` `F = H` by blast
 		qed
 		hence "bet E H F" by blast
+		thus ?thesis by blast
 	next
-		case 4
-		have "bet E H F"
+		assume "bet F E H"
+		have "\<not> (\<not> (bet E H F))"
 		proof (rule ccontr)
-			assume "\<not> (bet E H F)"
+			assume "\<not> (\<not> (\<not> (bet E H F)))"
+hence "\<not> (bet E H F)" by blast
 			have "\<not> (bet F E H)" using `\<not> (bet F E H)` .
 			show "False" using `\<not> (bet F E H)` `bet F E H` by blast
 		qed
 		hence "bet E H F" by blast
+		thus ?thesis by blast
 	next
-		case 5
-		have "bet E H F"
+		assume "bet E F H"
+		have "\<not> (\<not> (bet E H F))"
 		proof (rule ccontr)
-			assume "\<not> (bet E H F)"
+			assume "\<not> (\<not> (\<not> (bet E H F)))"
+hence "\<not> (bet E H F)" by blast
 			have "\<not> (bet E F H)" using `\<not> (bet E F H)` .
 			show "False" using `\<not> (bet E F H)` `bet E F H` by blast
 		qed
 		hence "bet E H F" by blast
+		thus ?thesis by blast
 	next
-		case 6
-	next
+		assume "bet E H F"
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

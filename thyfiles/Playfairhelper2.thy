@@ -1,18 +1,19 @@
 theory Playfairhelper2
-	imports Axioms Definitions Theorems
+	imports n3_6b Geometry NChelper NCorder Playfairhelper betweennotequal collinear4 collinearbetween collinearorder collinearparallel crisscross inequalitysymmetric parallelNC parallelflip parallelsymmetric
 begin
 
 theorem Playfairhelper2:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel A B C D"
 		"parallel A B C E"
 		"cross A D B C"
-	shows: "col C D E"
+	shows "col C D E"
 proof -
-	have "A \<noteq> B" using parallel_f[OF `axioms` `parallel A B C D`] by blast
-	have "cross A E B C \<or> cross A C E B"
+	have "A \<noteq> B" using parallel_f[OF `axioms` `parallel A B C D`] by fastforce
+	have "\<not> (\<not> (cross A E B C \<or> cross A C E B))"
 	proof (rule ccontr)
-		assume "\<not> (cross A E B C \<or> cross A C E B)"
+		assume "\<not> (\<not> (\<not> (cross A E B C \<or> cross A C E B)))"
+hence "\<not> (cross A E B C \<or> cross A C E B)" by blast
 		have "\<not> (cross A E B C) \<and> \<not> (cross A C E B)" using `\<not> (cross A E B C \<or> cross A C E B)` by blast
 		have "\<not> (cross A E B C)" using `\<not> (cross A E B C) \<and> \<not> (cross A C E B)` by blast
 		have "\<not> (cross A C E B)" using `\<not> (cross A E B C) \<and> \<not> (cross A C E B)` by blast
@@ -21,21 +22,22 @@ proof -
 		show "False" using `cross A C E B` `\<not> (cross A E B C) \<and> \<not> (cross A C E B)` by blast
 	qed
 	hence "cross A E B C \<or> cross A C E B" by blast
-	obtain M where "bet A M D \<and> bet B M C" using cross_f[OF `axioms` `cross A D B C`] by blast
+	obtain M where "bet A M D \<and> bet B M C" using cross_f[OF `axioms` `cross A D B C`]  by  blast
 	have "bet B M C" using `bet A M D \<and> bet B M C` by blast
-	consider "cross A E B C"|"cross A C E B" using `cross A E B C \<or> cross A C E B`  by blast
-	hence col C D E
+	consider "cross A E B C"|"cross A C E B" using `\<not> (\<not> (cross A E B C \<or> cross A C E B))`  by blast
+	hence "col C D E"
 	proof (cases)
-		case 1
+		assume "cross A E B C"
 		have "col C D E" using Playfairhelper[OF `axioms` `parallel A B C D` `parallel A B C E` `cross A D B C` `cross A E B C`] .
+		thus ?thesis by blast
 	next
-		case 2
-		obtain m where "bet A m C \<and> bet E m B" using cross_f[OF `axioms` `cross A C E B`] by blast
+		assume "cross A C E B"
+		obtain m where "bet A m C \<and> bet E m B" using cross_f[OF `axioms` `cross A C E B`]  by  blast
 		have "bet A m C" using `bet A m C \<and> bet E m B` by blast
 		have "bet E m B" using `bet A m C \<and> bet E m B` by blast
-		have "C \<noteq> E" using parallel_f[OF `axioms` `parallel A B C D`] by blast
+		have "C \<noteq> E" using parallel_f[OF `axioms` `parallel A B C E`] by fastforce
 		have "E \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> E`] .
-		have "bet E C e \<and> seg_eq C e E C" using extensionE[OF `axioms` `E \<noteq> C` `E \<noteq> C`] by blast
+		obtain e where "bet E C e \<and> seg_eq C e E C" using extensionE[OF `axioms` `E \<noteq> C` `E \<noteq> C`]  by  blast
 		have "bet E C e" using `bet E C e \<and> seg_eq C e E C` by blast
 		have "col E C e" using collinear_b `axioms` `bet E C e \<and> seg_eq C e E C` by blast
 		have "C \<noteq> e" using betweennotequal[OF `axioms` `bet E C e`] by blast
@@ -45,7 +47,7 @@ proof -
 		have "parallel A B C e" using parallelflip[OF `axioms` `parallel A B e C`] by blast
 		have "\<not> col A B C" using parallelNC[OF `axioms` `parallel A B C D`] by blast
 		have "\<not> col B C A" using NCorder[OF `axioms` `\<not> col A B C`] by blast
-		obtain H where "bet B H m \<and> bet A H M" using Pasch-innerE[OF `axioms` `bet B M C` `bet A m C` `\<not> col B C A`] by blast
+		obtain H where "bet B H m \<and> bet A H M" using Pasch_innerE[OF `axioms` `bet B M C` `bet A m C` `\<not> col B C A`]  by  blast
 		have "\<not> col A E C" using parallelNC[OF `axioms` `parallel A B E C`] by blast
 		have "col E C e" using collinear_b `axioms` `bet E C e \<and> seg_eq C e E C` by blast
 		have "col C E e" using collinearorder[OF `axioms` `col E C e`] by blast
@@ -56,7 +58,7 @@ proof -
 		have "\<not> col E e A" using NChelper[OF `axioms` `\<not> col C E A` `col C E E` `col C E e` `E \<noteq> e`] .
 		have "bet A m C" using `bet A m C` .
 		have "bet E C e" using `bet E C e` .
-		obtain F where "bet A F e \<and> bet E m F" using Pasch-outerE[OF `axioms` `bet A m C` `bet E C e` `\<not> col E e A`] by blast
+		obtain F where "bet A F e \<and> bet E m F" using Pasch_outerE[OF `axioms` `bet A m C` `bet E C e` `\<not> col E e A`]  by  blast
 		have "bet A F e" using `bet A F e \<and> bet E m F` by blast
 		have "bet E m F" using `bet A F e \<and> bet E m F` by blast
 		have "bet e F A" using betweennesssymmetryE[OF `axioms` `bet A F e`] .
@@ -83,7 +85,7 @@ proof -
 		have "parallel A B e E" using collinearparallel[OF `axioms` `parallel A B C E` `col C E e` `e \<noteq> E`] .
 		have "parallel e E A B" using parallelsymmetric[OF `axioms` `parallel A B e E`] .
 		have "parallel e E B A" using parallelflip[OF `axioms` `parallel e E A B`] by blast
-		have "\<not> (meets e E B A)" using parallel_f[OF `axioms` `parallel e E B A`] by blast
+		have "\<not> (meets e E B A)" using parallel_f[OF `axioms` `parallel e E B A`] by fastforce
 		have "bet E F B" using collinearbetween[OF `axioms` `col e E E` `col B B A` `e \<noteq> E` `B \<noteq> A` `e \<noteq> E` `B \<noteq> A` `\<not> (meets e E B A)` `bet e F A` `col E B F`] .
 		have "bet B F E" using betweennesssymmetryE[OF `axioms` `bet E F B`] .
 		have "bet e C E" using betweennesssymmetryE[OF `axioms` `bet E C e`] .
@@ -94,7 +96,7 @@ proof -
 		have "col E C E" using collinear_b `axioms` `E = E` by blast
 		have "\<not> col E e B" using NChelper[OF `axioms` `\<not> col E C B` `col E C E` `col E C e` `E \<noteq> e`] .
 		have "\<not> col B E e" using NCorder[OF `axioms` `\<not> col E e B`] by blast
-		obtain K where "bet B K C \<and> bet e K F" using Pasch-innerE[OF `axioms` `bet B F E` `bet e C E` `\<not> col B E e`] by blast
+		obtain K where "bet B K C \<and> bet e K F" using Pasch_innerE[OF `axioms` `bet B F E` `bet e C E` `\<not> col B E e`]  by  blast
 		have "bet B K C" using `bet B K C \<and> bet e K F` by blast
 		have "bet e K F" using `bet B K C \<and> bet e K F` by blast
 		have "bet e F A" using betweennesssymmetryE[OF `axioms` `bet A F e`] .
@@ -110,7 +112,8 @@ proof -
 		have "C \<noteq> e" using betweennotequal[OF `axioms` `bet E C e`] by blast
 		have "e \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> e`] .
 		have "col C D E" using collinear4[OF `axioms` `col e C D` `col e C E` `e \<noteq> C`] .
-	next
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

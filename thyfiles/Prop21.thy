@@ -1,13 +1,13 @@
 theory Prop21
-	imports Axioms Definitions Theorems
+	imports n21helper ABCequalsCBA Geometry NCdistinct NChelper NCorder Prop16 Prop20 TTflip TTflip2 TTorder TTtransitive angleorderrespectscongruence angleorderrespectscongruence2 angleordertransitive betweennotequal collinearorder equalangleshelper equalanglesreflexive inequalitysymmetric ray4 ray5
 begin
 
 theorem Prop21:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"bet A E C"
 		"bet B D E"
-	shows: "seg_sum_pair_gt B A A C B D D C \<and> ang_lt B A C B D C"
+	shows "seg_sum_pair_gt B A A C B D D C \<and> ang_lt B A C B D C"
 proof -
 	have "bet E D B" using betweennesssymmetryE[OF `axioms` `bet B D E`] .
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .

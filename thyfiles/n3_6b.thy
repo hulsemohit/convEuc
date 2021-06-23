@@ -1,12 +1,12 @@
 theory n3_6b
-	imports Axioms Definitions Theorems
+	imports n3_5b Geometry
 begin
 
 theorem n3_6b:
-	assumes: `axioms`
+	assumes "axioms"
 		"bet A B C"
 		"bet A C D"
-	shows: "bet A B D"
+	shows "bet A B D"
 proof -
 	have "bet C B A" using betweennesssymmetryE[OF `axioms` `bet A B C`] .
 	have "bet D C A" using betweennesssymmetryE[OF `axioms` `bet A C D`] .

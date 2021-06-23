@@ -1,12 +1,12 @@
 theory Prop28C
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct Prop28B collinearorder collinearparallel inequalitysymmetric parallelsymmetric
 begin
 
 theorem Prop28C:
-	assumes: `axioms`
-		"ang_suppl B G H G H D"
+	assumes "axioms"
+		"ang_sum_right B G H G H D"
 		"same_side B D G H"
-	shows: "parallel G B H D"
+	shows "parallel G B H D"
 proof -
 	have "\<not> col G H B" using sameside_f[OF `axioms` `same_side B D G H`] by blast
 	have "\<not> col G H D" using sameside_f[OF `axioms` `same_side B D G H`] by blast
@@ -14,13 +14,13 @@ proof -
 	have "D \<noteq> H" using inequalitysymmetric[OF `axioms` `H \<noteq> D`] .
 	have "G \<noteq> B" using NCdistinct[OF `axioms` `\<not> col G H B`] by blast
 	have "B \<noteq> G" using inequalitysymmetric[OF `axioms` `G \<noteq> B`] .
-	obtain A where "bet B G A \<and> seg_eq G A G B" using extensionE[OF `axioms` `B \<noteq> G` `G \<noteq> B`] by blast
+	obtain A where "bet B G A \<and> seg_eq G A G B" using extensionE[OF `axioms` `B \<noteq> G` `G \<noteq> B`]  by  blast
 	have "bet B G A" using `bet B G A \<and> seg_eq G A G B` by blast
 	have "bet A G B" using betweennesssymmetryE[OF `axioms` `bet B G A`] .
-	obtain C where "bet D H C \<and> seg_eq H C H D" using extensionE[OF `axioms` `D \<noteq> H` `H \<noteq> D`] by blast
+	obtain C where "bet D H C \<and> seg_eq H C H D" using extensionE[OF `axioms` `D \<noteq> H` `H \<noteq> D`]  by  blast
 	have "bet D H C" using `bet D H C \<and> seg_eq H C H D` by blast
 	have "bet C H D" using betweennesssymmetryE[OF `axioms` `bet D H C`] .
-	have "parallel A B C D" using Prop28B[OF `axioms` `bet A G B` `bet C H D` `ang_suppl B G H G H D` `same_side B D G H`] .
+	have "parallel A B C D" using Prop28B[OF `axioms` `bet A G B` `bet C H D` `ang_sum_right B G H G H D` `same_side B D G H`] .
 	have "col D H C" using collinear_b `axioms` `bet D H C \<and> seg_eq H C H D` by blast
 	have "col C D H" using collinearorder[OF `axioms` `col D H C`] by blast
 	have "H \<noteq> D" using NCdistinct[OF `axioms` `\<not> col G H D`] by blast

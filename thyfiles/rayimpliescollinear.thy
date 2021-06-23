@@ -1,13 +1,13 @@
 theory rayimpliescollinear
-	imports Axioms Definitions Theorems
+	imports Geometry betweennotequal collinear4
 begin
 
 theorem rayimpliescollinear:
-	assumes: `axioms`
+	assumes "axioms"
 		"ray_on A B C"
-	shows: "col A B C"
+	shows "col A B C"
 proof -
-	obtain J where "bet J A C \<and> bet J A B" using ray_f[OF `axioms` `ray_on A B C`] by blast
+	obtain J where "bet J A C \<and> bet J A B" using ray_f[OF `axioms` `ray_on A B C`]  by  blast
 	have "bet J A B" using `bet J A C \<and> bet J A B` by blast
 	have "bet J A C" using `bet J A C \<and> bet J A B` by blast
 	have "J \<noteq> A" using betweennotequal[OF `axioms` `bet J A B`] by blast

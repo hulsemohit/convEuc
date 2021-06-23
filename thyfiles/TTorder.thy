@@ -1,13 +1,13 @@
 theory TTorder
-	imports Axioms Definitions Theorems
+	imports Geometry TGsymmetric
 begin
 
 theorem TTorder:
-	assumes: `axioms`
+	assumes "axioms"
 		"seg_sum_pair_gt A B C D E F G H"
-	shows: "seg_sum_pair_gt C D A B E F G H"
+	shows "seg_sum_pair_gt C D A B E F G H"
 proof -
-	obtain J where "bet E F J \<and> seg_eq F J G H \<and> seg_sum_gt A B C D E J" using togetherfour_f[OF `axioms` `seg_sum_pair_gt A B C D E F G H`] by blast
+	obtain J where "bet E F J \<and> seg_eq F J G H \<and> seg_sum_gt A B C D E J" using togetherfour_f[OF `axioms` `seg_sum_pair_gt A B C D E F G H`]  by  blast
 	have "bet E F J" using `bet E F J \<and> seg_eq F J G H \<and> seg_sum_gt A B C D E J` by blast
 	have "seg_eq F J G H" using `bet E F J \<and> seg_eq F J G H \<and> seg_sum_gt A B C D E J` by blast
 	have "seg_sum_gt A B C D E J" using `bet E F J \<and> seg_eq F J G H \<and> seg_sum_gt A B C D E J` by blast

@@ -1,12 +1,12 @@
 theory Prop06a
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry Prop03 Prop04 angledistinct angleorderrespectscongruence2 angletrichotomy betweennotequal collinear4 collinearorder congruenceflip equalangleshelper equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric ray4
 begin
 
 theorem Prop06a:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"ang_eq A B C A C B"
-	shows: "\<not> (seg_lt A C A B)"
+	shows "\<not> (seg_lt A C A B)"
 proof -
 	have "A \<noteq> B" using angledistinct[OF `axioms` `ang_eq A B C A C B`] by blast
 	have "A \<noteq> C" using angledistinct[OF `axioms` `ang_eq A B C A C B`] by blast
@@ -16,9 +16,10 @@ proof -
 	have "C \<noteq> B" using inequalitysymmetric[OF `axioms` `B \<noteq> C`] .
 	have "\<not> (seg_lt A C A B)"
 	proof (rule ccontr)
-		assume "seg_lt A C A B"
-		have "seg_eq B A A B" using equalityreverseE[OF `axioms`] by blast
-		obtain D where "bet B D A \<and> seg_eq B D A C" using Prop03[OF `axioms` `seg_lt A C A B` `seg_eq B A A B`] by blast
+		assume "\<not> (\<not> (seg_lt A C A B))"
+hence "seg_lt A C A B" by blast
+		have "seg_eq B A A B" using equalityreverseE[OF `axioms`] .
+		obtain D where "bet B D A \<and> seg_eq B D A C" using Prop03[OF `axioms` `seg_lt A C A B` `seg_eq B A A B`]  by  blast
 		have "bet B D A" using `bet B D A \<and> seg_eq B D A C` by blast
 		have "seg_eq B D A C" using `bet B D A \<and> seg_eq B D A C` by blast
 		have "seg_eq D B A C" using congruenceflip[OF `axioms` `seg_eq B D A C`] by blast
@@ -31,12 +32,13 @@ proof -
 		have "ang_eq D B C A B C" using equalanglessymmetric[OF `axioms` `ang_eq A B C D B C`] .
 		have "ang_eq D B C A C B" using equalanglestransitive[OF `axioms` `ang_eq D B C A B C` `ang_eq A B C A C B`] .
 		have "seg_eq B D C A" using congruenceflip[OF `axioms` `seg_eq B D A C`] by blast
-		have "seg_eq B C C B" using equalityreverseE[OF `axioms`] by blast
+		have "seg_eq B C C B" using equalityreverseE[OF `axioms`] .
 		have "seg_eq D C A B \<and> ang_eq B D C C A B \<and> ang_eq B C D C B A" using Prop04[OF `axioms` `seg_eq B D C A` `seg_eq B C C B` `ang_eq D B C A C B`] .
 		have "ang_eq B C D C B A" using `seg_eq D C A B \<and> ang_eq B D C C A B \<and> ang_eq B C D C B A` by blast
 		have "\<not> (col C B A)"
 		proof (rule ccontr)
-			assume "col C B A"
+			assume "\<not> (\<not> (col C B A))"
+hence "col C B A" by blast
 			have "col A B C" using collinearorder[OF `axioms` `col C B A`] by blast
 			show "False" using `col A B C` `\<not> col A B C` by blast
 		qed
@@ -47,7 +49,8 @@ proof -
 		have "ang_eq B C D A C B" using equalanglestransitive[OF `axioms` `ang_eq B C D A B C` `ang_eq A B C A C B`] .
 		have "\<not> (col A C B)"
 		proof (rule ccontr)
-			assume "col A C B"
+			assume "\<not> (\<not> (col A C B))"
+hence "col A C B" by blast
 			have "col A B C" using collinearorder[OF `axioms` `col A C B`] by blast
 			show "False" using `col A B C` `\<not> col A B C` by blast
 		qed
@@ -62,7 +65,8 @@ proof -
 		have "bet B D A" using `bet B D A` .
 		have "\<not> (col B C D)"
 		proof (rule ccontr)
-			assume "col B C D"
+			assume "\<not> (\<not> (col B C D))"
+hence "col B C D" by blast
 			have "col B D A" using collinear_b `axioms` `bet B D A \<and> seg_eq B D A C` by blast
 			have "col D B A" using collinearorder[OF `axioms` `col B D A`] by blast
 			have "col D B C" using collinearorder[OF `axioms` `col B C D`] by blast

@@ -1,23 +1,25 @@
 theory Prop23
-	imports Axioms Definitions Theorems
+	imports Geometry Prop20 Prop22 TGflip TGsymmetric collinearorder congruenceflip ray4
 begin
 
 theorem Prop23:
-	assumes: `axioms`
+	assumes "axioms"
 		"A \<noteq> B"
 		"\<not> col D C E"
-	shows: "\<exists> F G. ray_on A B G \<and> ang_eq F A G D C E"
+	shows "\<exists> F G. ray_on A B G \<and> ang_eq F A G D C E"
 proof -
 	have "\<not> (col E C D)"
 	proof (rule ccontr)
-		assume "col E C D"
+		assume "\<not> (\<not> (col E C D))"
+hence "col E C D" by blast
 		have "col D C E" using collinearorder[OF `axioms` `col E C D`] by blast
 		show "False" using `col D C E` `\<not> col D C E` by blast
 	qed
 	hence "\<not> col E C D" by blast
 	have "\<not> (col C E D)"
 	proof (rule ccontr)
-		assume "col C E D"
+		assume "\<not> (\<not> (col C E D))"
+hence "col C E D" by blast
 		have "col D C E" using collinearorder[OF `axioms` `col C E D`] by blast
 		show "False" using `col D C E` `\<not> col D C E` by blast
 	qed
@@ -48,14 +50,16 @@ proof -
 	have "G = G" using equalityreflexiveE[OF `axioms`] .
 	have "\<not> (C = E)"
 	proof (rule ccontr)
-		assume "C = E"
+		assume "\<not> (C \<noteq> E)"
+		hence "C = E" by blast
 		have "col D C E" using collinear_b `axioms` `C = E` by blast
 		show "False" using `col D C E` `\<not> col D C E` by blast
 	qed
 	hence "C \<noteq> E" by blast
 	have "\<not> (C = D)"
 	proof (rule ccontr)
-		assume "C = D"
+		assume "\<not> (C \<noteq> D)"
+		hence "C = D" by blast
 		have "col C D E" using collinear_b `axioms` `C = D` by blast
 		have "col D C E" using collinearorder[OF `axioms` `col C D E`] by blast
 		show "False" using `col D C E` `\<not> col D C E` by blast
@@ -65,7 +69,8 @@ proof -
 	have "ray_on C D D" using ray4 `axioms` `D = D` `C \<noteq> D` by blast
 	have "\<not> (col F A G)"
 	proof (rule ccontr)
-		assume "col F A G"
+		assume "\<not> (\<not> (col F A G))"
+hence "col F A G" by blast
 		have "col A G F" using collinearorder[OF `axioms` `col F A G`] by blast
 		have "\<not> col A G F" using triangle_f[OF `axioms` `triangle A G F`] .
 		show "False" using `\<not> col A G F` `col A G F` by blast
@@ -73,7 +78,8 @@ proof -
 	hence "\<not> col F A G" by blast
 	have "\<not> (A = F)"
 	proof (rule ccontr)
-		assume "A = F"
+		assume "\<not> (A \<noteq> F)"
+		hence "A = F" by blast
 		have "col A F G" using collinear_b `axioms` `A = F` by blast
 		have "col F A G" using collinearorder[OF `axioms` `col A F G`] by blast
 		show "False" using `col F A G` `\<not> col F A G` by blast
@@ -82,7 +88,8 @@ proof -
 	have "ray_on A F F" using ray4 `axioms` `F = F` `A \<noteq> F` by blast
 	have "\<not> (A = G)"
 	proof (rule ccontr)
-		assume "A = G"
+		assume "\<not> (A \<noteq> G)"
+		hence "A = G" by blast
 		have "col A G F" using collinear_b `axioms` `A = G` by blast
 		have "col F A G" using collinearorder[OF `axioms` `col A G F`] by blast
 		show "False" using `col F A G` `\<not> col F A G` by blast

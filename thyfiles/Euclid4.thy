@@ -1,45 +1,47 @@
 theory Euclid4
-	imports Axioms Definitions Theorems
+	imports n10_12 n8_2 n8_3 Geometry Prop20 Prop22 TGflip TGsymmetric betweennotequal collinearorder congruenceflip congruencesymmetric congruencetransitive doublereverse equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric layoff layoffunique nullsegment3 ray4 rightangleNC
 begin
 
 theorem Euclid4:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_right A B C"
 		"ang_right a b c"
-	shows: "ang_eq A B C a b c"
+	shows "ang_eq A B C a b c"
 proof -
-	obtain D where "bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`] by blast
+	obtain D where "bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C" using rightangle_f[OF `axioms` `ang_right A B C`]  by  blast
 	have "bet A B D" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "seg_eq A B D B" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "B \<noteq> C" using `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
-	obtain d where "bet a b d \<and> seg_eq a b d b \<and> seg_eq a c d c \<and> b \<noteq> c" using rightangle_f[OF `axioms` `ang_right a b c`] by blast
+	obtain d where "bet a b d \<and> seg_eq a b d b \<and> seg_eq a c d c \<and> b \<noteq> c" using rightangle_f[OF `axioms` `ang_right a b c`]  by  blast
 	have "bet a b d" using `bet a b d \<and> seg_eq a b d b \<and> seg_eq a c d c \<and> b \<noteq> c` by blast
 	have "b \<noteq> c" using `bet a b d \<and> seg_eq a b d b \<and> seg_eq a c d c \<and> b \<noteq> c` by blast
 	have "a \<noteq> b" using betweennotequal[OF `axioms` `bet a b d`] by blast
 	have "b \<noteq> a" using inequalitysymmetric[OF `axioms` `a \<noteq> b`] .
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A B D`] by blast
 	have "B \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> B`] .
-	obtain p where "ray_on b a p \<and> seg_eq b p B A" using layoff[OF `axioms` `b \<noteq> a` `B \<noteq> A`] by blast
+	obtain p where "ray_on b a p \<and> seg_eq b p B A" using layoff[OF `axioms` `b \<noteq> a` `B \<noteq> A`]  by  blast
 	have "ray_on b a p" using `ray_on b a p \<and> seg_eq b p B A` by blast
-	obtain q where "ray_on b c q \<and> seg_eq b q B C" using layoff[OF `axioms` `b \<noteq> c` `B \<noteq> C`] by blast
+	obtain q where "ray_on b c q \<and> seg_eq b q B C" using layoff[OF `axioms` `b \<noteq> c` `B \<noteq> C`]  by  blast
 	have "ray_on b c q" using `ray_on b c q \<and> seg_eq b q B C` by blast
 	have "ang_right a b q" using n8_3[OF `axioms` `ang_right a b c` `ray_on b c q`] .
 	have "ang_right q b a" using n8_2[OF `axioms` `ang_right a b q`] .
 	have "ang_right q b p" using n8_3[OF `axioms` `ang_right q b a` `ray_on b a p`] .
 	have "ang_right p b q" using n8_2[OF `axioms` `ang_right q b p`] .
-	obtain r where "bet p b r \<and> seg_eq p b r b \<and> seg_eq p q r q \<and> b \<noteq> q" using rightangle_f[OF `axioms` `ang_right p b q`] by blast
+	obtain r where "bet p b r \<and> seg_eq p b r b \<and> seg_eq p q r q \<and> b \<noteq> q" using rightangle_f[OF `axioms` `ang_right p b q`]  by  blast
 	have "seg_eq p b r b" using `bet p b r \<and> seg_eq p b r b \<and> seg_eq p q r q \<and> b \<noteq> q` by blast
 	have "\<not> col p b q" using rightangleNC[OF `axioms` `ang_right p b q`] .
 	have "\<not> (col b q p)"
 	proof (rule ccontr)
-		assume "col b q p"
+		assume "\<not> (\<not> (col b q p))"
+hence "col b q p" by blast
 		have "col p b q" using collinearorder[OF `axioms` `col b q p`] by blast
 		show "False" using `col p b q` `\<not> col p b q` by blast
 	qed
 	hence "\<not> col b q p" by blast
 	have "\<not> (col q p b)"
 	proof (rule ccontr)
-		assume "col q p b"
+		assume "\<not> (\<not> (col q p b))"
+hence "col q p b" by blast
 		have "col p b q" using collinearorder[OF `axioms` `col q p b`] by blast
 		show "False" using `col p b q` `\<not> col p b q` by blast
 	qed
@@ -70,7 +72,8 @@ proof -
 	have "seg_eq A F p q" using `seg_eq E F p q` `E = A` by blast
 	have "\<not> (p = b)"
 	proof (rule ccontr)
-		assume "p = b"
+		assume "\<not> (p \<noteq> b)"
+		hence "p = b" by blast
 		have "col p b q" using collinear_b `axioms` `p = b` by blast
 		have "\<not> col p b q" using rightangleNC[OF `axioms` `ang_right p b q`] .
 		show "False" using `\<not> col p b q` `col p b q` by blast
@@ -89,7 +92,7 @@ proof -
 	have "seg_eq b r B D" using congruencetransitive[OF `axioms` `seg_eq b r A B` `seg_eq A B B D`] .
 	have "seg_eq b q B F" using congruencesymmetric[OF `axioms` `seg_eq B F b q`] .
 	have "seg_eq p q A F" using congruencesymmetric[OF `axioms` `seg_eq A F p q`] .
-	have "seg_eq q r F D" using 5-lineE[OF `axioms` `seg_eq b r B D` `seg_eq p q A F` `seg_eq b q B F` `bet p b r` `bet A B D` `seg_eq p b A B`] .
+	have "seg_eq q r F D" using n5_lineE[OF `axioms` `seg_eq b r B D` `seg_eq p q A F` `seg_eq b q B F` `bet p b r` `bet A B D` `seg_eq p b A B`] .
 	have "seg_eq A F p q" using `seg_eq A F p q` .
 	have "seg_eq p q r q" using `bet p b r \<and> seg_eq p b r b \<and> seg_eq p q r q \<and> b \<noteq> q` by blast
 	have "seg_eq A F r q" using congruencetransitive[OF `axioms` `seg_eq A F p q` `seg_eq p q r q`] .
@@ -113,7 +116,7 @@ proof -
 	have "ray_on B F F" using ray4 `axioms` `F = F` `B \<noteq> F` by blast
 	have "ray_on B C C" using ray4 `axioms` `C = C` `bet A B D \<and> seg_eq A B D B \<and> seg_eq A C D C \<and> B \<noteq> C` by blast
 	have "ray_on B A A" using ray4 `axioms` `A = A` `B \<noteq> A` by blast
-	have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq B A B A" using congruencereflexiveE[OF `axioms`] .
 	have "seg_eq B C B F" using `seg_eq B C B F` .
 	have "\<not> col A B C" using rightangleNC[OF `axioms` `ang_right A B C`] .
 	have "ang_eq A B C A B F" using equalangles_b[OF `axioms` `ray_on B A A` `ray_on B C C` `ray_on B A A` `ray_on B F F` `seg_eq B A B A` `seg_eq B C B F` `seg_eq A C A F` `\<not> col A B C`] .
@@ -135,9 +138,9 @@ proof -
 	have "\<not> col a b c" using rightangleNC[OF `axioms` `ang_right a b c`] .
 	have "ray_on b p p" using ray4 `axioms` `p = p` `b \<noteq> p` by blast
 	have "ray_on b q q" using ray4 `axioms` `q = q` `bet p b r \<and> seg_eq p b r b \<and> seg_eq p q r q \<and> b \<noteq> q` by blast
-	have "seg_eq b p b p" using congruencereflexiveE[OF `axioms`] by blast
-	have "seg_eq b q b q" using congruencereflexiveE[OF `axioms`] by blast
-	have "seg_eq p q p q" using congruencereflexiveE[OF `axioms`] by blast
+	have "seg_eq b p b p" using congruencereflexiveE[OF `axioms`] .
+	have "seg_eq b q b q" using congruencereflexiveE[OF `axioms`] .
+	have "seg_eq p q p q" using congruencereflexiveE[OF `axioms`] .
 	have "ang_eq a b c p b q" using equalangles_b[OF `axioms` `ray_on b a p` `ray_on b c q` `ray_on b p p` `ray_on b q q` `seg_eq b p b p` `seg_eq b q b q` `seg_eq p q p q` `\<not> col a b c`] .
 	have "ang_eq p b q a b c" using equalanglessymmetric[OF `axioms` `ang_eq a b c p b q`] .
 	have "ang_eq A B C a b c" using equalanglestransitive[OF `axioms` `ang_eq A B C p b q` `ang_eq p b q a b c`] .

@@ -1,11 +1,11 @@
 theory Prop05
-	imports Axioms Definitions Theorems
+	imports ABCequalsCBA Geometry Prop04 collinearorder congruencesymmetric
 begin
 
 theorem Prop05:
-	assumes: `axioms`
+	assumes "axioms"
 		"tri_isos A B C"
-	shows: "ang_eq A B C A C B"
+	shows "ang_eq A B C A C B"
 proof -
 	have "triangle A B C \<and> seg_eq A B A C" using isosceles_f[OF `axioms` `tri_isos A B C`] .
 	have "triangle A B C" using `triangle A B C \<and> seg_eq A B A C` by blast
@@ -14,7 +14,8 @@ proof -
 	have "\<not> col A B C" using triangle_f[OF `axioms` `triangle A B C`] .
 	have "\<not> (col C A B)"
 	proof (rule ccontr)
-		assume "col C A B"
+		assume "\<not> (\<not> (col C A B))"
+hence "col C A B" by blast
 		have "col A B C" using collinearorder[OF `axioms` `col C A B`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed

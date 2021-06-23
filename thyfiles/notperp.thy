@@ -1,30 +1,32 @@
 theory notperp
-	imports Axioms Definitions Theorems
+	imports n8_2 n8_7 Geometry Prop10 Prop12 betweennotequal collinear4 collinearorder collinearright congruenceflip doublereverse inequalitysymmetric ray4 sameside2 samesidereflexive samesidesymmetric
 begin
 
 theorem notperp:
-	assumes: `axioms`
+	assumes "axioms"
 		"bet A C B"
 		"\<not> col A B P"
-	shows: "\<exists> M. \<not> col A B M \<and> same_side M P A B \<and> \<not> (ang_right A C M)"
+	shows "\<exists> M. \<not> col A B M \<and> same_side M P A B \<and> \<not> (ang_right A C M)"
 proof -
 	have "C \<noteq> B" using betweennotequal[OF `axioms` `bet A C B`] by blast
 	have "B \<noteq> C" using inequalitysymmetric[OF `axioms` `C \<noteq> B`] .
 	have "\<not> (C = P)"
 	proof (rule ccontr)
-		assume "C = P"
+		assume "\<not> (C \<noteq> P)"
+		hence "C = P" by blast
 		have "\<not> col A B C" using `\<not> col A B P` `C = P` by blast
 		have "col A C B" using collinear_b `axioms` `bet A C B` by blast
 		have "col A B C" using collinearorder[OF `axioms` `col A C B`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "C \<noteq> P" by blast
-	obtain Q where "bet B C Q \<and> seg_eq C Q C P" using extensionE[OF `axioms` `B \<noteq> C` `C \<noteq> P`] by blast
+	obtain Q where "bet B C Q \<and> seg_eq C Q C P" using extensionE[OF `axioms` `B \<noteq> C` `C \<noteq> P`]  by  blast
 	have "bet B C Q" using `bet B C Q \<and> seg_eq C Q C P` by blast
 	have "seg_eq C Q C P" using `bet B C Q \<and> seg_eq C Q C P` by blast
 	have "\<not> (P = Q)"
 	proof (rule ccontr)
-		assume "P = Q"
+		assume "\<not> (P \<noteq> Q)"
+		hence "P = Q" by blast
 		have "col B C Q" using collinear_b `axioms` `bet B C Q \<and> seg_eq C Q C P` by blast
 		have "col B C P" using `col B C Q` `P = Q` by blast
 		have "col A C B" using collinear_b `axioms` `bet A C B` by blast
@@ -35,7 +37,7 @@ proof -
 		show "False" using `col A B P` `\<not> col A B P` by blast
 	qed
 	hence "P \<noteq> Q" by blast
-	obtain M where "bet P M Q \<and> seg_eq M P M Q" using Prop10[OF `axioms` `P \<noteq> Q`] by blast
+	obtain M where "bet P M Q \<and> seg_eq M P M Q" using Prop10[OF `axioms` `P \<noteq> Q`]  by  blast
 	have "bet P M Q" using `bet P M Q \<and> seg_eq M P M Q` by blast
 	have "seg_eq M P M Q" using `bet P M Q \<and> seg_eq M P M Q` by blast
 	have "col A C B" using collinear_b `axioms` `bet A C B` by blast
@@ -55,7 +57,8 @@ proof -
 	have "same_side M P A B" using samesidesymmetric[OF `axioms` `same_side P M A B`] by blast
 	have "\<not> (col A B M)"
 	proof (rule ccontr)
-		assume "col A B M"
+		assume "\<not> (\<not> (col A B M))"
+hence "col A B M" by blast
 		have "col A B Q" using `col A B Q` .
 		have "col B M Q" using collinear4[OF `axioms` `col A B M` `col A B Q` `A \<noteq> B`] .
 		have "col P M Q" using collinear_b `axioms` `bet P M Q \<and> seg_eq M P M Q` by blast
@@ -72,18 +75,20 @@ proof -
 		show "False" using `col A B P` `\<not> col A B P` by blast
 	qed
 	hence "\<not> col A B M" by blast
-	obtain R where "perp_at M R A B R" using Prop12[OF `axioms` `A \<noteq> B` `\<not> col A B M`] by blast
-	obtain E where "col M R R \<and> col A B R \<and> col A B E \<and> ang_right E R M" using perpat_f[OF `axioms` `perp_at M R A B R`] by blast
+	obtain R where "perp_at M R A B R" using Prop12[OF `axioms` `A \<noteq> B` `\<not> col A B M`]  by  blast
+	obtain E where "col M R R \<and> col A B R \<and> col A B E \<and> ang_right E R M" using perpat_f[OF `axioms` `perp_at M R A B R`]  by  blast
 	have "col A B R" using `col M R R \<and> col A B R \<and> col A B E \<and> ang_right E R M` by blast
 	have "ang_right E R M" using `col M R R \<and> col A B R \<and> col A B E \<and> ang_right E R M` by blast
 	have "ang_right M R E" using n8_2[OF `axioms` `ang_right E R M`] .
 	have "col A B C" using collinearorder[OF `axioms` `col A C B`] by blast
 	have "\<not> (ang_right A C M)"
 	proof (rule ccontr)
-		assume "ang_right A C M"
+		assume "\<not> (\<not> (ang_right A C M))"
+hence "ang_right A C M" by blast
 		have "\<not> (R \<noteq> C)"
 		proof (rule ccontr)
-			assume "R \<noteq> C"
+			assume "\<not> (\<not> (R \<noteq> C))"
+hence "R \<noteq> C" by blast
 			have "col B A C" using collinearorder[OF `axioms` `col A B C`] by blast
 			have "col A B R" using `col A B R` .
 			have "col B A R" using collinearorder[OF `axioms` `col A B R`] by blast
@@ -109,7 +114,8 @@ proof -
 		hence "R = C" by blast
 		have "\<not> (M = C)"
 		proof (rule ccontr)
-			assume "M = C"
+			assume "\<not> (M \<noteq> C)"
+			hence "M = C" by blast
 			have "col A B C" using `col A B C` .
 			have "col A B M" using `col A B C` `M = C` by blast
 			show "False" using `col A B M` `\<not> col A B M` by blast
@@ -130,7 +136,8 @@ proof -
 		have "col B E Q" using collinear4[OF `axioms` `col A B E` `col A B Q` `A \<noteq> B`] .
 		have "\<not> (B \<noteq> E)"
 		proof (rule ccontr)
-			assume "B \<noteq> E"
+			assume "\<not> (\<not> (B \<noteq> E))"
+hence "B \<noteq> E" by blast
 			have "col E R Q" using collinear4[OF `axioms` `col B E R` `col B E Q` `B \<noteq> E`] .
 			have "ang_right Q R M" using collinearright[OF `axioms` `ang_right E R M` `col E R Q` `Q \<noteq> R`] .
 			have "ang_right Q C M" using `ang_right Q R M` `R = C` by blast

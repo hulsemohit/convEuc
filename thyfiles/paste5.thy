@@ -1,9 +1,9 @@
 theory paste5
-	imports Axioms Definitions Theorems
+	imports Geometry Prop34 betweennotequal collinear4 collinearorder collinearparallel crisscross crossimpliesopposite diagonalsmeet inequalitysymmetric oppositesidesymmetric parallelNC paralleldef2B parallelflip parallelsymmetric ray4 rectangleparallelogram samenotopposite sameside2 samesidesymmetric
 begin
 
 theorem paste5:
-	assumes: `axioms`
+	assumes "axioms"
 		"qua_eq_area B M L D b m l d"
 		"qua_eq_area M C E L m c e l"
 		"bet B M C"
@@ -12,12 +12,12 @@ theorem paste5:
 		"bet e l d"
 		"rectangle M C E L"
 		"rectangle m c e l"
-	shows: "qua_eq_area B C E D b c e d"
+	shows "qua_eq_area B C E D b c e d"
 proof -
 	have "parallelogram M C E L" using rectangleparallelogram[OF `axioms` `rectangle M C E L`] .
 	have "parallelogram m c e l" using rectangleparallelogram[OF `axioms` `rectangle m c e l`] .
-	obtain P where "bet M P E \<and> bet C P L" using diagonalsmeet[OF `axioms` `parallelogram M C E L`] by blast
-	obtain p where "bet m p e \<and> bet c p l" using diagonalsmeet[OF `axioms` `parallelogram m c e l`] by blast
+	obtain P where "bet M P E \<and> bet C P L" using diagonalsmeet[OF `axioms` `parallelogram M C E L`]  by  blast
+	obtain p where "bet m p e \<and> bet c p l" using diagonalsmeet[OF `axioms` `parallelogram m c e l`]  by  blast
 	have "bet M P E" using `bet M P E \<and> bet C P L` by blast
 	have "bet C P L" using `bet M P E \<and> bet C P L` by blast
 	have "bet m p e" using `bet m p e \<and> bet c p l` by blast
@@ -74,21 +74,24 @@ proof -
 	have "M \<noteq> C" using betweennotequal[OF `axioms` `bet B M C`] by blast
 	have "\<not> (cross B D C L)"
 	proof (rule ccontr)
-		assume "cross B D C L"
+		assume "\<not> (\<not> (cross B D C L))"
+hence "cross B D C L" by blast
 		have "\<not> (col C L M)"
 		proof (rule ccontr)
-			assume "col C L M"
+			assume "\<not> (\<not> (col C L M))"
+hence "col C L M" by blast
 			have "col M C L" using collinearorder[OF `axioms` `col C L M`] by blast
 			have "L = L" using equalityreflexiveE[OF `axioms`] .
 			have "col E L L" using collinear_b `axioms` `L = L` by blast
 			have "meets E L M C" using meet_b[OF `axioms` `E \<noteq> L` `M \<noteq> C` `col E L L` `col M C L`] .
-			have "\<not> (meets E L M C)" using parallel_f[OF `axioms` `parallel E L M C`] by blast
+			have "\<not> (meets E L M C)" using parallel_f[OF `axioms` `parallel E L M C`] by fastforce
 			show "False" using `\<not> (meets E L M C)` `meets E L M C` by blast
 		qed
 		hence "\<not> col C L M" by blast
 		have "\<not> (col C L D)"
 		proof (rule ccontr)
-			assume "col C L D"
+			assume "\<not> (\<not> (col C L D))"
+hence "col C L D" by blast
 			have "col D L C" using collinearorder[OF `axioms` `col C L D`] by blast
 			have "col E L D" using collinear_b `axioms` `bet E L D` by blast
 			have "col D L E" using collinearorder[OF `axioms` `col E L D`] by blast
@@ -99,7 +102,7 @@ proof -
 			have "C = C" using equalityreflexiveE[OF `axioms`] .
 			have "col M C C" using collinear_b `axioms` `C = C` by blast
 			have "meets E L M C" using meet_b[OF `axioms` `E \<noteq> L` `M \<noteq> C` `col E L C` `col M C C`] .
-			have "\<not> (meets E L M C)" using parallel_f[OF `axioms` `parallel E L M C`] by blast
+			have "\<not> (meets E L M C)" using parallel_f[OF `axioms` `parallel E L M C`] by fastforce
 			show "False" using `\<not> (meets E L M C)` `meets E L M C` by blast
 		qed
 		hence "\<not> col C L D" by blast
@@ -119,7 +122,8 @@ proof -
 		have "\<not> (oppo_side B C L D)" using samenotopposite[OF `axioms` `same_side B D C L`] .
 		have "\<not> (col B C L)"
 		proof (rule ccontr)
-			assume "col B C L"
+			assume "\<not> (\<not> (col B C L))"
+hence "col B C L" by blast
 			have "col B M C" using collinear_b `axioms` `bet B M C` by blast
 			have "col B C M" using collinearorder[OF `axioms` `col B M C`] by blast
 			have "B \<noteq> C" using betweennotequal[OF `axioms` `bet B M C`] by blast
@@ -127,7 +131,7 @@ proof -
 			have "col M C L" using collinearorder[OF `axioms` `col C M L`] by blast
 			have "col E L L" using collinear_b `axioms` `L = L` by blast
 			have "meets E L M C" using meet_b[OF `axioms` `E \<noteq> L` `M \<noteq> C` `col E L L` `col M C L`] .
-			have "\<not> (meets E L M C)" using parallel_f[OF `axioms` `parallel E L M C`] by blast
+			have "\<not> (meets E L M C)" using parallel_f[OF `axioms` `parallel E L M C`] by fastforce
 			show "False" using `\<not> (meets E L M C)` `meets E L M C` by blast
 		qed
 		hence "\<not> col B C L" by blast
@@ -137,7 +141,7 @@ proof -
 	hence "\<not> (cross B D C L)" by blast
 	have "parallel B C D L" using `parallel B C D L` .
 	have "cross B L D C" using crisscross[OF `axioms` `parallel B C D L` `\<not> (cross B D C L)`] .
-	obtain R where "bet B R L \<and> bet D R C" using cross_f[OF `axioms` `cross B L D C`] by blast
+	obtain R where "bet B R L \<and> bet D R C" using cross_f[OF `axioms` `cross B L D C`]  by  blast
 	have "bet D R C" using `bet B R L \<and> bet D R C` by blast
 	have "bet B R L" using `bet B R L \<and> bet D R C` by blast
 	have "col b m c" using collinear_b `axioms` `bet b m c` by blast
@@ -154,21 +158,24 @@ proof -
 	have "m \<noteq> c" using betweennotequal[OF `axioms` `bet b m c`] by blast
 	have "\<not> (cross b d c l)"
 	proof (rule ccontr)
-		assume "cross b d c l"
+		assume "\<not> (\<not> (cross b d c l))"
+hence "cross b d c l" by blast
 		have "\<not> (col c l m)"
 		proof (rule ccontr)
-			assume "col c l m"
+			assume "\<not> (\<not> (col c l m))"
+hence "col c l m" by blast
 			have "col m c l" using collinearorder[OF `axioms` `col c l m`] by blast
 			have "l = l" using equalityreflexiveE[OF `axioms`] .
 			have "col e l l" using collinear_b `axioms` `l = l` by blast
 			have "meets e l m c" using meet_b[OF `axioms` `e \<noteq> l` `m \<noteq> c` `col e l l` `col m c l`] .
-			have "\<not> (meets e l m c)" using parallel_f[OF `axioms` `parallel e l m c`] by blast
+			have "\<not> (meets e l m c)" using parallel_f[OF `axioms` `parallel e l m c`] by fastforce
 			show "False" using `\<not> (meets e l m c)` `meets e l m c` by blast
 		qed
 		hence "\<not> col c l m" by blast
 		have "\<not> (col c l d)"
 		proof (rule ccontr)
-			assume "col c l d"
+			assume "\<not> (\<not> (col c l d))"
+hence "col c l d" by blast
 			have "col d l c" using collinearorder[OF `axioms` `col c l d`] by blast
 			have "col e l d" using collinear_b `axioms` `bet e l d` by blast
 			have "col d l e" using collinearorder[OF `axioms` `col e l d`] by blast
@@ -179,7 +186,7 @@ proof -
 			have "c = c" using equalityreflexiveE[OF `axioms`] .
 			have "col m c c" using collinear_b `axioms` `c = c` by blast
 			have "meets e l m c" using meet_b[OF `axioms` `e \<noteq> l` `m \<noteq> c` `col e l c` `col m c c`] .
-			have "\<not> (meets e l m c)" using parallel_f[OF `axioms` `parallel e l m c`] by blast
+			have "\<not> (meets e l m c)" using parallel_f[OF `axioms` `parallel e l m c`] by fastforce
 			show "False" using `\<not> (meets e l m c)` `meets e l m c` by blast
 		qed
 		hence "\<not> col c l d" by blast
@@ -199,7 +206,8 @@ proof -
 		have "\<not> (oppo_side b c l d)" using samenotopposite[OF `axioms` `same_side b d c l`] .
 		have "\<not> (col b c l)"
 		proof (rule ccontr)
-			assume "col b c l"
+			assume "\<not> (\<not> (col b c l))"
+hence "col b c l" by blast
 			have "col b m c" using collinear_b `axioms` `bet b m c` by blast
 			have "col b c m" using collinearorder[OF `axioms` `col b m c`] by blast
 			have "b \<noteq> c" using betweennotequal[OF `axioms` `bet b m c`] by blast
@@ -207,7 +215,7 @@ proof -
 			have "col m c l" using collinearorder[OF `axioms` `col c m l`] by blast
 			have "col e l l" using collinear_b `axioms` `l = l` by blast
 			have "meets e l m c" using meet_b[OF `axioms` `e \<noteq> l` `m \<noteq> c` `col e l l` `col m c l`] .
-			have "\<not> (meets e l m c)" using parallel_f[OF `axioms` `parallel e l m c`] by blast
+			have "\<not> (meets e l m c)" using parallel_f[OF `axioms` `parallel e l m c`] by fastforce
 			show "False" using `\<not> (meets e l m c)` `meets e l m c` by blast
 		qed
 		hence "\<not> col b c l" by blast
@@ -217,7 +225,7 @@ proof -
 	hence "\<not> (cross b d c l)" by blast
 	have "parallel b c d l" using `parallel b c d l` .
 	have "cross b l d c" using crisscross[OF `axioms` `parallel b c d l` `\<not> (cross b d c l)`] .
-	obtain r where "bet b r l \<and> bet d r c" using cross_f[OF `axioms` `cross b l d c`] by blast
+	obtain r where "bet b r l \<and> bet d r c" using cross_f[OF `axioms` `cross b l d c`]  by  blast
 	have "bet d r c" using `bet b r l \<and> bet d r c` by blast
 	have "bet b r l" using `bet b r l \<and> bet d r c` by blast
 	have "qua_eq_area D B C L d b c l" using paste2E[OF `axioms` `bet B M C` `bet b m c` `tri_eq_area M C L m c l` `qua_eq_area D B M L d b m l` `bet D R C` `bet B R L` `bet d r c` `bet b r l`] .
@@ -259,14 +267,16 @@ proof -
 	have "same_side D B C E" using samesidesymmetric[OF `axioms` `same_side B D C E`] by blast
 	have "\<not> (cross B D C E)"
 	proof (rule ccontr)
-		assume "cross B D C E"
+		assume "\<not> (\<not> (cross B D C E))"
+hence "cross B D C E" by blast
 		have "\<not> (col B C E)"
 		proof (rule ccontr)
-			assume "col B C E"
+			assume "\<not> (\<not> (col B C E))"
+hence "col B C E" by blast
 			have "E = E" using equalityreflexiveE[OF `axioms`] .
 			have "col D E E" using collinear_b `axioms` `E = E` by blast
 			have "meets B C D E" using meet_b[OF `axioms` `B \<noteq> C` `D \<noteq> E` `col B C E` `col D E E`] .
-			have "\<not> (meets B C D E)" using parallel_f[OF `axioms` `parallel B C D E`] by blast
+			have "\<not> (meets B C D E)" using parallel_f[OF `axioms` `parallel B C D E`] by fastforce
 			show "False" using `\<not> (meets B C D E)` `meets B C D E` by blast
 		qed
 		hence "\<not> col B C E" by blast
@@ -276,7 +286,7 @@ proof -
 	qed
 	hence "\<not> (cross B D C E)" by blast
 	have "cross B E D C" using crisscross[OF `axioms` `parallel B C D E` `\<not> (cross B D C E)`] .
-	obtain T where "bet B T E \<and> bet D T C" using cross_f[OF `axioms` `cross B E D C`] by blast
+	obtain T where "bet B T E \<and> bet D T C" using cross_f[OF `axioms` `cross B E D C`]  by  blast
 	have "bet B T E" using `bet B T E \<and> bet D T C` by blast
 	have "bet D T C" using `bet B T E \<and> bet D T C` by blast
 	have "parallel b c e l" using `parallel b c e l` .
@@ -307,14 +317,16 @@ proof -
 	have "same_side d b c e" using samesidesymmetric[OF `axioms` `same_side b d c e`] by blast
 	have "\<not> (cross b d c e)"
 	proof (rule ccontr)
-		assume "cross b d c e"
+		assume "\<not> (\<not> (cross b d c e))"
+hence "cross b d c e" by blast
 		have "\<not> (col b c e)"
 		proof (rule ccontr)
-			assume "col b c e"
+			assume "\<not> (\<not> (col b c e))"
+hence "col b c e" by blast
 			have "e = e" using equalityreflexiveE[OF `axioms`] .
 			have "col d e e" using collinear_b `axioms` `e = e` by blast
 			have "meets b c d e" using meet_b[OF `axioms` `b \<noteq> c` `d \<noteq> e` `col b c e` `col d e e`] .
-			have "\<not> (meets b c d e)" using parallel_f[OF `axioms` `parallel b c d e`] by blast
+			have "\<not> (meets b c d e)" using parallel_f[OF `axioms` `parallel b c d e`] by fastforce
 			show "False" using `\<not> (meets b c d e)` `meets b c d e` by blast
 		qed
 		hence "\<not> col b c e" by blast
@@ -324,7 +336,7 @@ proof -
 	qed
 	hence "\<not> (cross b d c e)" by blast
 	have "cross b e d c" using crisscross[OF `axioms` `parallel b c d e` `\<not> (cross b d c e)`] .
-	obtain t where "bet b t e \<and> bet d t c" using cross_f[OF `axioms` `cross b e d c`] by blast
+	obtain t where "bet b t e \<and> bet d t c" using cross_f[OF `axioms` `cross b e d c`]  by  blast
 	have "bet b t e" using `bet b t e \<and> bet d t c` by blast
 	have "bet d t c" using `bet b t e \<and> bet d t c` by blast
 	have "qua_eq_area B D E C b d e c" using paste2E[OF `axioms` `bet D L E` `bet d l e` `tri_eq_area L E C l e c` `qua_eq_area B D L C b d l c` `bet B T E` `bet D T C` `bet b t e` `bet d t c`] .

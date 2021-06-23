@@ -1,15 +1,15 @@
 theory samesidecollinear
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct NChelper collinear4 collinearorder inequalitysymmetric
 begin
 
 theorem samesidecollinear:
-	assumes: `axioms`
+	assumes "axioms"
 		"same_side P Q A B"
 		"col A B C"
 		"A \<noteq> C"
-	shows: "same_side P Q A C"
+	shows "same_side P Q A C"
 proof -
-	obtain p q r where "col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q" using sameside_f[OF `axioms` `same_side P Q A B`] by blast
+	obtain p q r where "col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q" using sameside_f[OF `axioms` `same_side P Q A B`]  by  blast
 	have "col A B p" using `col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q` by blast
 	have "col A B q" using `col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q` by blast
 	have "bet P p r" using `col A B p \<and> col A B q \<and> bet P p r \<and> bet Q q r \<and> \<not> col A B P \<and> \<not> col A B Q` by blast

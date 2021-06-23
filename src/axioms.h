@@ -50,7 +50,7 @@ const std::map<std::string, theorem> axioms{
     {"ETtransitive", theorem({"ETABCabc", "ETabcPQR"}, "ETABCPQR")},
     {"cutoff1", theorem({"BEABC", "BEabc", "BEEDC", "BEedc", "ETBCDbcd", "ETACEace"},
             "EFABDEabde")},
-    {"cutoff2", theorem({"BEBCD", "BEbcd", "ETCDEcde", "EFABDEabde"}, "EFABCDEabce")},
+    {"cutoff2", theorem({"BEBCD", "BEbcd", "ETCDEcde", "EFABDEabde"}, "EFABCEabce")},
     {"paste1", theorem({"BEABC", "BEabc", "BEEDC", "BEedc", "ETBCDbcd", "EFABDEabde"},
             "ETACEace")},
     {"deZolt1", theorem({"BEBED"}, "NOETDBCEBC")},
@@ -58,7 +58,7 @@ const std::map<std::string, theorem> axioms{
     {"paste2", theorem({"BEBCD", "BEbcd", "ETCDEcde", "EFABCEabce",
             "BEAMD", "BEBME", "BEamd", "BEbme"}, "EFABDEabde")},
     {"paste3", theorem({"ETABCabc", "ETABDabd", "BECMD", "ORBEAMB|EQAM|EQMB",
-            "BEcmd", "ORBEamb|EQam|EQmb"}, "EFABCDacbd")},
+            "BEcmd", "ORBEamb|EQam|EQmb"}, "EFACBDacbd")},
     {"paste4", theorem({"EFABmDFKHG", "EFDBeCGHML", "BEAPC", "BEBPD", "BEKHM",
-            "BEFGL", "BEBmD", "BEBeC", "BEFJM", "BEKJL"}, "EFABCDFKML")}
+            "BEFGL", "BEBmD", "BEBeC", "BEFJM", "BEKJL"}, "EFABCDFKML")},
 };

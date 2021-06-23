@@ -1,13 +1,13 @@
 theory Prop48A
-	imports Axioms Definitions Theorems
+	imports Euclid4 Geometry NCdistinct NCorder Prop04 Prop34 betweennotequal congruenceflip crossimpliesopposite equalanglesNC equalangleshelper equalanglesreflexive equalanglessymmetric equaltorightisright lessthancongruence lessthancongruence2 parallelNC ray4 squareparallelogram squarerectangle trichotomy1
 begin
 
 theorem Prop48A:
-	assumes: `axioms`
+	assumes "axioms"
 		"square A B C D"
 		"square a b c d"
 		"qua_eq_area A B C D a b c d"
-	shows: "seg_eq A B a b"
+	shows "seg_eq A B a b"
 proof -
 	have "parallelogram A B C D" using squareparallelogram[OF `axioms` `square A B C D`] .
 	have "parallelogram a b c d" using squareparallelogram[OF `axioms` `square a b c d`] .
@@ -40,13 +40,14 @@ proof -
 	have "seg_eq A B A D" using congruenceflip[OF `axioms` `seg_eq A B D A`] by blast
 	have "\<not> (seg_lt a b A B)"
 	proof (rule ccontr)
-		assume "seg_lt a b A B"
-		obtain E where "bet A E B \<and> seg_eq A E a b" using lessthan_f[OF `axioms` `seg_lt a b A B`] by blast
+		assume "\<not> (\<not> (seg_lt a b A B))"
+hence "seg_lt a b A B" by blast
+		obtain E where "bet A E B \<and> seg_eq A E a b" using lessthan_f[OF `axioms` `seg_lt a b A B`]  by  blast
 		have "bet A E B" using `bet A E B \<and> seg_eq A E a b` by blast
 		have "seg_eq A E a b" using `bet A E B \<and> seg_eq A E a b` by blast
 		have "seg_lt a d A B" using lessthancongruence2[OF `axioms` `seg_lt a b A B` `seg_eq a b a d`] .
 		have "seg_lt a d A D" using lessthancongruence[OF `axioms` `seg_lt a d A B` `seg_eq A B A D`] .
-		obtain F where "bet A F D \<and> seg_eq A F a d" using lessthan_f[OF `axioms` `seg_lt a d A D`] by blast
+		obtain F where "bet A F D \<and> seg_eq A F a d" using lessthan_f[OF `axioms` `seg_lt a d A D`]  by  blast
 		have "bet A F D" using `bet A F D \<and> seg_eq A F a d` by blast
 		have "seg_eq A F a d" using `bet A F D \<and> seg_eq A F a d` by blast
 		have "ang_right D A B" using square_f[OF `axioms` `square A B C D`] by blast
@@ -82,13 +83,14 @@ proof -
 	hence "\<not> (seg_lt a b A B)" by blast
 	have "\<not> (seg_lt A B a b)"
 	proof (rule ccontr)
-		assume "seg_lt A B a b"
-		obtain e where "bet a e b \<and> seg_eq a e A B" using lessthan_f[OF `axioms` `seg_lt A B a b`] by blast
+		assume "\<not> (\<not> (seg_lt A B a b))"
+hence "seg_lt A B a b" by blast
+		obtain e where "bet a e b \<and> seg_eq a e A B" using lessthan_f[OF `axioms` `seg_lt A B a b`]  by  blast
 		have "bet a e b" using `bet a e b \<and> seg_eq a e A B` by blast
 		have "seg_eq a e A B" using `bet a e b \<and> seg_eq a e A B` by blast
 		have "seg_lt A D a b" using lessthancongruence2[OF `axioms` `seg_lt A B a b` `seg_eq A B A D`] .
 		have "seg_lt A D a d" using lessthancongruence[OF `axioms` `seg_lt A D a b` `seg_eq a b a d`] .
-		obtain f where "bet a f d \<and> seg_eq a f A D" using lessthan_f[OF `axioms` `seg_lt A D a d`] by blast
+		obtain f where "bet a f d \<and> seg_eq a f A D" using lessthan_f[OF `axioms` `seg_lt A D a d`]  by  blast
 		have "bet a f d" using `bet a f d \<and> seg_eq a f A D` by blast
 		have "seg_eq a f A D" using `bet a f d \<and> seg_eq a f A D` by blast
 		have "ang_right d a b" using square_f[OF `axioms` `square a b c d`] by blast

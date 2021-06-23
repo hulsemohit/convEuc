@@ -1,22 +1,22 @@
 theory linereflectionisometry
-	imports Axioms Definitions Theorems
+	imports n8_2 n8_3 Geometry Prop10 betweennesspreserved betweennotequal collinearright congruenceflip congruencesymmetric congruencetransitive doublereverse inequalitysymmetric pointreflectionisometry ray4 rightangleNC rightreverse
 begin
 
 theorem linereflectionisometry:
-	assumes: `axioms`
+	assumes "axioms"
 		"ang_right B A C"
 		"ang_right A B D"
 		"bet C A E"
 		"bet D B F"
 		"seg_eq A C A E"
 		"seg_eq B D B F"
-	shows: "seg_eq C D E F"
+	shows "seg_eq C D E F"
 proof -
-	obtain H where "bet B A H \<and> seg_eq B A H A \<and> seg_eq B C H C \<and> A \<noteq> C" using rightangle_f[OF `axioms` `ang_right B A C`] by blast
-	obtain G where "bet A B G \<and> seg_eq A B G B \<and> seg_eq A D G D \<and> B \<noteq> D" using rightangle_f[OF `axioms` `ang_right A B D`] by blast
+	obtain H where "bet B A H \<and> seg_eq B A H A \<and> seg_eq B C H C \<and> A \<noteq> C" using rightangle_f[OF `axioms` `ang_right B A C`]  by  blast
+	obtain G where "bet A B G \<and> seg_eq A B G B \<and> seg_eq A D G D \<and> B \<noteq> D" using rightangle_f[OF `axioms` `ang_right A B D`]  by  blast
 	have "bet A B G" using `bet A B G \<and> seg_eq A B G B \<and> seg_eq A D G D \<and> B \<noteq> D` by blast
 	have "A \<noteq> B" using betweennotequal[OF `axioms` `bet A B G`] by blast
-	obtain M where "bet A M B \<and> seg_eq M A M B" using Prop10[OF `axioms` `A \<noteq> B`] by blast
+	obtain M where "bet A M B \<and> seg_eq M A M B" using Prop10[OF `axioms` `A \<noteq> B`]  by  blast
 	have "bet A M B" using `bet A M B \<and> seg_eq M A M B` by blast
 	have "seg_eq M A M B" using `bet A M B \<and> seg_eq M A M B` by blast
 	have "ang_right D B A" using n8_2[OF `axioms` `ang_right A B D`] .
@@ -27,13 +27,14 @@ proof -
 	have "\<not> col D B M" using rightangleNC[OF `axioms` `ang_right D B M`] .
 	have "\<not> (D = M)"
 	proof (rule ccontr)
-		assume "D = M"
+		assume "\<not> (D \<noteq> M)"
+		hence "D = M" by blast
 		have "col D B M" using collinear_b `axioms` `D = M` by blast
 		show "False" using `col D B M` `\<not> col D B M` by blast
 	qed
 	hence "D \<noteq> M" by blast
 	have "M \<noteq> D" using inequalitysymmetric[OF `axioms` `D \<noteq> M`] .
-	obtain R where "bet D M R \<and> seg_eq M R M D" using extensionE[OF `axioms` `D \<noteq> M` `M \<noteq> D`] by blast
+	obtain R where "bet D M R \<and> seg_eq M R M D" using extensionE[OF `axioms` `D \<noteq> M` `M \<noteq> D`]  by  blast
 	have "bet D M R" using `bet D M R \<and> seg_eq M R M D` by blast
 	have "seg_eq M R M D" using `bet D M R \<and> seg_eq M R M D` by blast
 	have "bet D B F" using `bet D B F` .
@@ -47,13 +48,14 @@ proof -
 	have "\<not> col F B M" using rightangleNC[OF `axioms` `ang_right F B M`] .
 	have "\<not> (F = M)"
 	proof (rule ccontr)
-		assume "F = M"
+		assume "\<not> (F \<noteq> M)"
+		hence "F = M" by blast
 		have "col F B M" using collinear_b `axioms` `F = M` by blast
 		show "False" using `col F B M` `\<not> col F B M` by blast
 	qed
 	hence "F \<noteq> M" by blast
 	have "M \<noteq> F" using inequalitysymmetric[OF `axioms` `F \<noteq> M`] .
-	obtain Q where "bet F M Q \<and> seg_eq M Q M F" using extensionE[OF `axioms` `F \<noteq> M` `M \<noteq> F`] by blast
+	obtain Q where "bet F M Q \<and> seg_eq M Q M F" using extensionE[OF `axioms` `F \<noteq> M` `M \<noteq> F`]  by  blast
 	have "bet F M Q" using `bet F M Q \<and> seg_eq M Q M F` by blast
 	have "seg_eq M Q M F" using `bet F M Q \<and> seg_eq M Q M F` by blast
 	have "seg_eq M D M R" using congruencesymmetric[OF `axioms` `seg_eq M R M D`] .
@@ -68,7 +70,7 @@ proof -
 	have "midpoint B M A" using midpoint_b[OF `axioms` `bet B M A` `seg_eq B M M A`] .
 	have "seg_eq F B Q A" using pointreflectionisometry[OF `axioms` `midpoint F M Q` `midpoint B M A`] .
 	have "seg_eq B D B F" using `seg_eq B D B F` .
-	have "seg_eq B F F B" using equalityreverseE[OF `axioms`] by blast
+	have "seg_eq B F F B" using equalityreverseE[OF `axioms`] .
 	have "seg_eq B D F B" using congruencetransitive[OF `axioms` `seg_eq B D B F` `seg_eq B F F B`] .
 	have "ang_right B A C" using `ang_right B A C` .
 	have "ang_right C A B" using n8_2[OF `axioms` `ang_right B A C`] .
@@ -125,7 +127,7 @@ proof -
 	have "seg_eq M E M C" using `seg_eq M E M C` .
 	have "seg_eq Q M R M" using `seg_eq Q M R M` .
 	have "seg_eq M F M D" using `seg_eq M F M D` .
-	have "seg_eq E F C D" using 5-lineE[OF `axioms` `seg_eq M F M D` `seg_eq Q E R C` `seg_eq M E M C` `bet Q M F` `bet R M D` `seg_eq Q M R M`] .
+	have "seg_eq E F C D" using n5_lineE[OF `axioms` `seg_eq M F M D` `seg_eq Q E R C` `seg_eq M E M C` `bet Q M F` `bet R M D` `seg_eq Q M R M`] .
 	have "seg_eq C D E F" using congruencesymmetric[OF `axioms` `seg_eq E F C D`] .
 	thus ?thesis by blast
 qed

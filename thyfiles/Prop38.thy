@@ -1,20 +1,20 @@
 theory Prop38
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct NCorder PGrotate Prop34 Prop36 collinear5 collinearorder collinearparallel2 congruenceflip diagonalsmeet nullsegment3 oppositesidesymmetric parallelNC parallelflip parallelsymmetric triangletoparallelogram
 begin
 
 theorem Prop38:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallel P Q B C"
 		"col P Q A"
 		"col P Q D"
 		"seg_eq B C E F"
 		"col B C E"
 		"col B C F"
-	shows: "tri_eq_area A B C D E F"
+	shows "tri_eq_area A B C D E F"
 proof -
 	have "parallel B C P Q" using parallelsymmetric[OF `axioms` `parallel P Q B C`] .
 	have "parallel C B P Q" using parallelflip[OF `axioms` `parallel B C P Q`] by blast
-	obtain G where "parallelogram A G B C \<and> col P Q G" using triangletoparallelogram[OF `axioms` `parallel C B P Q` `col P Q A`] by blast
+	obtain G where "parallelogram A G B C \<and> col P Q G" using triangletoparallelogram[OF `axioms` `parallel C B P Q` `col P Q A`]  by  blast
 	have "parallelogram A G B C" using `parallelogram A G B C \<and> col P Q G` by blast
 	have "col P Q G" using `parallelogram A G B C \<and> col P Q G` by blast
 	have "parallelogram G B C A" using PGrotate[OF `axioms` `parallelogram A G B C`] .
@@ -23,7 +23,7 @@ proof -
 	have "E \<noteq> F" using nullsegment3[OF `axioms` `B \<noteq> C` `seg_eq B C E F`] .
 	have "parallel P Q E F" using collinearparallel2[OF `axioms` `parallel P Q B C` `col B C E` `col B C F` `E \<noteq> F`] .
 	have "parallel E F P Q" using parallelsymmetric[OF `axioms` `parallel P Q E F`] .
-	obtain H where "parallelogram D H F E \<and> col P Q H" using triangletoparallelogram[OF `axioms` `parallel E F P Q` `col P Q D`] by blast
+	obtain H where "parallelogram D H F E \<and> col P Q H" using triangletoparallelogram[OF `axioms` `parallel E F P Q` `col P Q D`]  by  blast
 	have "parallelogram D H F E" using `parallelogram D H F E \<and> col P Q H` by blast
 	have "col P Q H" using `parallelogram D H F E \<and> col P Q H` by blast
 	have "parallelogram H F E D" using PGrotate[OF `axioms` `parallelogram D H F E`] .
@@ -38,12 +38,12 @@ proof -
 	have "qua_eq_area G B C A E F H D" using EFpermutationE[OF `axioms` `qua_eq_area G B C A H F E D`] by blast
 	have "qua_eq_area E F H D G B C A" using EFsymmetricE[OF `axioms` `qua_eq_area G B C A E F H D`] .
 	have "qua_eq_area E F H D C B G A" using EFpermutationE[OF `axioms` `qua_eq_area E F H D G B C A`] by blast
-	obtain M where "bet D M F \<and> bet H M E" using diagonalsmeet[OF `axioms` `parallelogram D H F E`] by blast
+	obtain M where "bet D M F \<and> bet H M E" using diagonalsmeet[OF `axioms` `parallelogram D H F E`]  by  blast
 	have "bet D M F" using `bet D M F \<and> bet H M E` by blast
 	have "bet H M E" using `bet D M F \<and> bet H M E` by blast
 	have "col D M F" using collinear_b `axioms` `bet D M F \<and> bet H M E` by blast
 	have "col F D M" using collinearorder[OF `axioms` `col D M F`] by blast
-	obtain m where "bet A m B \<and> bet G m C" using diagonalsmeet[OF `axioms` `parallelogram A G B C`] by blast
+	obtain m where "bet A m B \<and> bet G m C" using diagonalsmeet[OF `axioms` `parallelogram A G B C`]  by  blast
 	have "bet A m B" using `bet A m B \<and> bet G m C` by blast
 	have "bet G m C" using `bet A m B \<and> bet G m C` by blast
 	have "col A m B" using collinear_b `axioms` `bet A m B \<and> bet G m C` by blast

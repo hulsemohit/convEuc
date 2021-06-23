@@ -1,25 +1,25 @@
 theory Prop47B
-	imports Axioms Definitions Theorems
+	imports n3_6b n8_2 n8_7 ABCequalsCBA Euclid4 Geometry NCdistinct NCorder PGflip Prop04 Prop34 Prop41 Prop47A angleaddition betweennotequal collinear4 collinearbetween collinearorder collinearparallel collinearright congruenceflip congruencesymmetric diagonalsbisect equalanglesNC equalangleshelper equalanglesreflexive equalanglessymmetric equalanglestransitive inequalitysymmetric oppositesideflip parallelNC paralleldef2B parallelflip parallelsymmetric planeseparation ray4 ray5 righttogether samesidesymmetric squareparallelogram
 begin
 
 theorem Prop47B:
-	assumes: `axioms`
+	assumes "axioms"
 		"triangle A B C"
 		"ang_right B A C"
 		"square A B F G"
 		"oppo_side G B A C"
 		"square B C E D"
 		"oppo_side D C B A"
-	shows: "\<exists> L M. parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A \<and> qua_eq_area A B F G B M L D"
+	shows "\<exists> L M. parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A \<and> qua_eq_area A B F G B M L D"
 proof -
-	obtain L M where "parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A" using Prop47A[OF `axioms` `triangle A B C` `ang_right B A C` `square B C E D` `oppo_side D C B A`] by blast
+	obtain L M where "parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A" using Prop47A[OF `axioms` `triangle A B C` `ang_right B A C` `square B C E D` `oppo_side D C B A`]  by  blast
 	have "parallelogram B M L D" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A` by blast
 	have "bet B M C" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A` by blast
 	have "parallelogram M C E L" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A` by blast
 	have "bet D L E" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A` by blast
 	have "bet L M A" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A` by blast
 	have "ang_right D L A" using `parallelogram B M L D \<and> bet B M C \<and> parallelogram M C E L \<and> bet D L E \<and> bet L M A \<and> ang_right D L A` by blast
-	obtain N where "bet D N A \<and> col C B N \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`] by blast
+	obtain N where "bet D N A \<and> col C B N \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`]  by  blast
 	have "ang_right G A B" using square_f[OF `axioms` `square A B F G`] by blast
 	have "bet G A C" using righttogether[OF `axioms` `ang_right G A B` `ang_right B A C` `oppo_side G B A C`] by blast
 	have "ang_right A B F" using square_f[OF `axioms` `square A B F G`] by blast
@@ -34,7 +34,7 @@ proof -
 	have "same_side F G A B" using samesidesymmetric[OF `axioms` `same_side G F A B`] by blast
 	have "oppo_side G A B C" using oppositesideflip[OF `axioms` `oppo_side G B A C`] .
 	have "oppo_side F A B C" using planeseparation[OF `axioms` `same_side F G A B` `oppo_side G A B C`] .
-	obtain a where "bet F a C \<and> col A B a \<and> \<not> col A B F" using oppositeside_f[OF `axioms` `oppo_side F A B C`] by blast
+	obtain a where "bet F a C \<and> col A B a \<and> \<not> col A B F" using oppositeside_f[OF `axioms` `oppo_side F A B C`]  by  blast
 	have "bet F a C" using `bet F a C \<and> col A B a \<and> \<not> col A B F` by blast
 	have "col A B a" using `bet F a C \<and> col A B a \<and> \<not> col A B F` by blast
 	have "col B A a" using collinearorder[OF `axioms` `col A B a`] by blast
@@ -47,7 +47,7 @@ proof -
 	have "parallel F B A G" using parallelsymmetric[OF `axioms` `parallel A G F B`] .
 	have "parallel F B C G" using collinearparallel[OF `axioms` `parallel F B A G` `col A G C` `C \<noteq> G`] .
 	have "parallel F B G C" using parallelflip[OF `axioms` `parallel F B C G`] by blast
-	have "\<not> (meets F B G C)" using parallel_f[OF `axioms` `parallel F B G C`] by blast
+	have "\<not> (meets F B G C)" using parallel_f[OF `axioms` `parallel F B G C`] by fastforce
 	have "A \<noteq> C" using NCdistinct[OF `axioms` `\<not> col A B C`] by blast
 	have "\<not> col A B F" using parallelNC[OF `axioms` `parallel A B F G`] by blast
 	have "F \<noteq> A" using NCdistinct[OF `axioms` `\<not> col A B F`] by blast
@@ -73,7 +73,7 @@ proof -
 	have "ang_eq A B C a B C" using equalangleshelper[OF `axioms` `ang_eq A B C A B C` `ray_on B A a` `ray_on B C C`] .
 	have "area_sum_eq F B A A B C F B C" using anglesum_b[OF `axioms` `ang_eq F B A F B a` `ang_eq A B C a B C` `bet F a C`] .
 	have "oppo_side D C B A" using `oppo_side D C B A` .
-	obtain c where "bet D c A \<and> col C B c \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`] by blast
+	obtain c where "bet D c A \<and> col C B c \<and> \<not> col C B D" using oppositeside_f[OF `axioms` `oppo_side D C B A`]  by  blast
 	have "bet D c A" using `bet D c A \<and> col C B c \<and> \<not> col C B D` by blast
 	have "col C B c" using `bet D c A \<and> col C B c \<and> \<not> col C B D` by blast
 	have "\<not> col C B D" using `bet D N A \<and> col C B N \<and> \<not> col C B D` by blast
@@ -97,7 +97,7 @@ proof -
 	have "parallel B D A L" using collinearparallel[OF `axioms` `parallel B D M L` `col M L A` `A \<noteq> L`] .
 	have "B = B" using equalityreflexiveE[OF `axioms`] .
 	have "parallel D B L A" using parallelflip[OF `axioms` `parallel B D A L`] by blast
-	have "\<not> (meets D B L A)" using parallel_f[OF `axioms` `parallel D B L A`] by blast
+	have "\<not> (meets D B L A)" using parallel_f[OF `axioms` `parallel D B L A`] by fastforce
 	have "\<not> col B D L" using parallelNC[OF `axioms` `parallel B D A L`] by blast
 	have "D \<noteq> B" using NCdistinct[OF `axioms` `\<not> col B D L`] by blast
 	have "M \<noteq> A" using betweennotequal[OF `axioms` `bet L M A`] by blast
@@ -110,7 +110,8 @@ proof -
 	have "\<not> col D B A" using parallelNC[OF `axioms` `parallel D B L A`] by blast
 	have "\<not> (B = c)"
 	proof (rule ccontr)
-		assume "B = c"
+		assume "\<not> (B \<noteq> c)"
+		hence "B = c" by blast
 		have "col D B c" using collinear_b `axioms` `B = c` by blast
 		have "col D c A" using collinear_b `axioms` `bet D c A \<and> col C B c \<and> \<not> col C B D` by blast
 		have "col c D B" using collinearorder[OF `axioms` `col D B c`] by blast
@@ -144,7 +145,8 @@ proof -
 	have "ang_eq D B A F B C" using equalanglessymmetric[OF `axioms` `ang_eq F B C D B A`] .
 	have "\<not> (col C B F)"
 	proof (rule ccontr)
-		assume "col C B F"
+		assume "\<not> (\<not> (col C B F))"
+hence "col C B F" by blast
 		have "ang_right F B A" using `ang_right F B A` .
 		have "col F B C" using collinearorder[OF `axioms` `col C B F`] by blast
 		have "ang_right C B A" using collinearright[OF `axioms` `ang_right F B A` `col F B C` `C \<noteq> B`] .
@@ -209,13 +211,13 @@ proof -
 	have "tri_eq_area D M B A B F" using ETsymmetricE[OF `axioms` `tri_eq_area A B F D M B`] .
 	have "tri_eq_area D M B F A B" using ETpermutationE[OF `axioms` `tri_eq_area D M B A B F`] by blast
 	have "tri_eq_area F A B D M B" using ETsymmetricE[OF `axioms` `tri_eq_area D M B F A B`] .
-	obtain m where "midpoint A m F \<and> midpoint B m G" using diagonalsbisect[OF `axioms` `parallelogram A B F G`] by blast
+	obtain m where "midpoint A m F \<and> midpoint B m G" using diagonalsbisect[OF `axioms` `parallelogram A B F G`]  by  blast
 	have "midpoint A m F" using `midpoint A m F \<and> midpoint B m G` by blast
 	have "midpoint B m G" using `midpoint A m F \<and> midpoint B m G` by blast
 	have "bet A m F" using midpoint_f[OF `axioms` `midpoint A m F`] by blast
 	have "bet B m G" using midpoint_f[OF `axioms` `midpoint B m G`] by blast
 	have "bet F m A" using betweennesssymmetryE[OF `axioms` `bet A m F`] .
-	obtain n where "midpoint B n L \<and> midpoint M n D" using diagonalsbisect[OF `axioms` `parallelogram B M L D`] by blast
+	obtain n where "midpoint B n L \<and> midpoint M n D" using diagonalsbisect[OF `axioms` `parallelogram B M L D`]  by  blast
 	have "midpoint B n L" using `midpoint B n L \<and> midpoint M n D` by blast
 	have "midpoint M n D" using `midpoint B n L \<and> midpoint M n D` by blast
 	have "bet B n L" using midpoint_f[OF `axioms` `midpoint B n L`] by blast
@@ -225,7 +227,7 @@ proof -
 	have "col D M n" using collinearorder[OF `axioms` `col M n D`] by blast
 	have "\<not> col B M D" using parallelNC[OF `axioms` `parallel B M L D`] by blast
 	have "\<not> col D M B" using NCorder[OF `axioms` `\<not> col B M D`] by blast
-	have "qua_eq_area F B A G D B M L" sorry
+	have "qua_eq_area F B A G D B M L" using paste3E `axioms` `tri_eq_area F A B D M B` `tri_eq_area F A G D M L` `bet B m G` `bet F m A` `bet B n L` `bet D n M` by blast
 	have "qua_eq_area F B A G B M L D" using EFpermutationE[OF `axioms` `qua_eq_area F B A G D B M L`] by blast
 	have "qua_eq_area B M L D F B A G" using EFsymmetricE[OF `axioms` `qua_eq_area F B A G B M L D`] .
 	have "qua_eq_area B M L D A B F G" using EFpermutationE[OF `axioms` `qua_eq_area B M L D F B A G`] by blast

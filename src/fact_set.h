@@ -7,7 +7,7 @@
 class fact_set {
     private:
         std::set<std::string> facts;
-        std::string last;
+        std::string last, vars;
         
     public:
         void add_fact(const std::string& fact);
@@ -21,6 +21,8 @@ class fact_set {
         std::string find_contradiction() const;
 
         std::vector<std::string> all_matches(const std::string& pattern) const;
+
+        bool has_var(char v) const;
 
     private:
         std::string check_or(const std::string& cases) const;

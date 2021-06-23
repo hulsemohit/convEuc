@@ -1,9 +1,9 @@
 theory Prop36
-	imports Axioms Definitions Theorems
+	imports Geometry NCdistinct Prop33 Prop34 Prop35 collinear4 collinearorder collinearparallel2 congruenceflip congruencesymmetric congruencetransitive crisscross inequalitysymmetric parallelNC parallelflip parallelsymmetric
 begin
 
 theorem Prop36:
-	assumes: `axioms`
+	assumes "axioms"
 		"parallelogram A B C D"
 		"parallelogram E F G H"
 		"col A D E"
@@ -11,7 +11,7 @@ theorem Prop36:
 		"col B C F"
 		"col B C G"
 		"seg_eq B C F G"
-	shows: "qua_eq_area A B C D E F G H"
+	shows "qua_eq_area A B C D E F G H"
 proof -
 	have "parallel A B C D \<and> parallel A D B C" using parallelogram_f[OF `axioms` `parallelogram A B C D`] .
 	have "parallel E F G H \<and> parallel E H F G" using parallelogram_f[OF `axioms` `parallelogram E F G H`] .
@@ -30,9 +30,10 @@ proof -
 	have "parallel B C E H" using collinearparallel2[OF `axioms` `parallel B C A D` `col A D E` `col A D H` `E \<noteq> H`] .
 	have "parallel E H B C" using parallelsymmetric[OF `axioms` `parallel B C E H`] .
 	have "seg_eq E H B C" using congruencesymmetric[OF `axioms` `seg_eq B C E H`] .
-	have "cross E C B H \<or> cross E B H C"
+	have "\<not> (\<not> (cross E C B H \<or> cross E B H C))"
 	proof (rule ccontr)
-		assume "\<not> (cross E C B H \<or> cross E B H C)"
+		assume "\<not> (\<not> (\<not> (cross E C B H \<or> cross E B H C)))"
+hence "\<not> (cross E C B H \<or> cross E B H C)" by blast
 		have "\<not> (cross E C B H) \<and> \<not> (cross E B H C)" using `\<not> (cross E C B H \<or> cross E B H C)` by blast
 		have "\<not> (cross E C B H)" using `\<not> (cross E C B H) \<and> \<not> (cross E B H C)` by blast
 		have "\<not> (cross E B H C)" using `\<not> (cross E C B H) \<and> \<not> (cross E B H C)` by blast
@@ -40,11 +41,11 @@ proof -
 		show "False" using `cross E C B H` `\<not> (cross E C B H) \<and> \<not> (cross E B H C)` by blast
 	qed
 	hence "cross E C B H \<or> cross E B H C" by blast
-	consider "cross E C B H"|"cross E B H C" using `cross E C B H \<or> cross E B H C`  by blast
-	hence qua_eq_area A B C D E F G H
+	consider "cross E C B H"|"cross E B H C" using `\<not> (\<not> (cross E C B H \<or> cross E B H C))`  by blast
+	hence "qua_eq_area A B C D E F G H"
 	proof (cases)
-		case 1
-		obtain M where "bet E M C \<and> bet B M H" using cross_f[OF `axioms` `cross E C B H`] by blast
+		assume "cross E C B H"
+		obtain M where "bet E M C \<and> bet B M H" using cross_f[OF `axioms` `cross E C B H`]  by  blast
 		have "bet E M C" using `bet E M C \<and> bet B M H` by blast
 		have "bet B M H" using `bet E M C \<and> bet B M H` by blast
 		have "bet H M B" using betweennesssymmetryE[OF `axioms` `bet B M H`] .
@@ -82,9 +83,10 @@ proof -
 		have "qua_eq_area E B C H G H E F" using EFsymmetricE[OF `axioms` `qua_eq_area G H E F E B C H`] .
 		have "qua_eq_area A B C D G H E F" using EFtransitiveE[OF `axioms` `qua_eq_area A B C D E B C H` `qua_eq_area E B C H G H E F`] .
 		have "qua_eq_area A B C D E F G H" using EFpermutationE[OF `axioms` `qua_eq_area A B C D G H E F`] by blast
+		thus ?thesis by blast
 	next
-		case 2
-		obtain M where "bet E M B \<and> bet H M C" using cross_f[OF `axioms` `cross E B H C`] by blast
+		assume "cross E B H C"
+		obtain M where "bet E M B \<and> bet H M C" using cross_f[OF `axioms` `cross E B H C`]  by  blast
 		have "bet E M B" using `bet E M B \<and> bet H M C` by blast
 		have "bet H M C" using `bet E M B \<and> bet H M C` by blast
 		have "parallel H E B C" using parallelflip[OF `axioms` `parallel E H B C`] by blast
@@ -120,7 +122,8 @@ proof -
 		have "qua_eq_area H B C E F E H G" using EFsymmetricE[OF `axioms` `qua_eq_area F E H G H B C E`] .
 		have "qua_eq_area A B C D F E H G" using EFtransitiveE[OF `axioms` `qua_eq_area A B C D H B C E` `qua_eq_area H B C E F E H G`] .
 		have "qua_eq_area A B C D E F G H" using EFpermutationE[OF `axioms` `qua_eq_area A B C D F E H G`] by blast
-	next
+		thus ?thesis by blast
+	qed
 	thus ?thesis by blast
 qed
 

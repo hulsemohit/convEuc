@@ -1,14 +1,14 @@
 theory crossimpliesopposite
-	imports Axioms Definitions Theorems
+	imports Geometry NCorder collinearorder oppositesidesymmetric
 begin
 
 theorem crossimpliesopposite:
-	assumes: `axioms`
+	assumes "axioms"
 		"cross A B C D"
 		"\<not> col A C D"
-	shows: "oppo_side A C D B \<and> oppo_side A D C B \<and> oppo_side B C D A \<and> oppo_side B D C A"
+	shows "oppo_side A C D B \<and> oppo_side A D C B \<and> oppo_side B C D A \<and> oppo_side B D C A"
 proof -
-	obtain M where "bet A M B \<and> bet C M D" using cross_f[OF `axioms` `cross A B C D`] by blast
+	obtain M where "bet A M B \<and> bet C M D" using cross_f[OF `axioms` `cross A B C D`]  by  blast
 	have "bet A M B" using `bet A M B \<and> bet C M D` by blast
 	have "bet C M D" using `bet A M B \<and> bet C M D` by blast
 	have "col C M D" using collinear_b `axioms` `bet A M B \<and> bet C M D` by blast
