@@ -8,11 +8,11 @@ theorem Prop30C:
 		"parallel C D E F"
 		"\<not> col A B C"
 		"bet G K H"
-		"col A G B"
+		"bet A G B"
 		"A \<noteq> G"
-		"col E H F"
+		"bet E H F"
 		"E \<noteq> H"
-		"col C K D"
+		"bet C K D"
 		"C \<noteq> K"
 		"oppo_side A G H F"
 		"oppo_side C K H F"
@@ -29,21 +29,21 @@ proof -
 	have "bet K H Q" using `bet K H Q \<and> seg_eq H Q K H` by blast
 	have "bet G H Q" using n3_7a[OF `axioms` `bet G K H` `bet K H Q`] .
 	have "bet P G H" using betweennesssymmetryE[OF `axioms` `bet H G P`] .
-	have "ang_eq A G H G H F" sorry
+	have "ang_eq A G H G H F" using Prop29[OF `axioms` `parallel A B E F` `bet A G B` `bet E H F` `bet P G H` `oppo_side A G H F`] by blast
 	have "bet P K H" using n3_5b[OF `axioms` `bet P G H` `bet G K H`] .
-	have "ang_eq C K H K H F" sorry
+	have "ang_eq C K H K H F" using Prop29[OF `axioms` `parallel C D E F` `bet C K D` `bet E H F` `bet G K H` `oppo_side C K H F`] by blast
 	have "bet H K G" using betweennesssymmetryE[OF `axioms` `bet G K H`] .
 	have "ray_on H K G" using ray4 `axioms` `bet H K G` `H \<noteq> K` by blast
 	have "ray_on H G K" using ray5[OF `axioms` `ray_on H K G`] .
 	have "F = F" using equalityreflexiveE[OF `axioms`] .
-	have "H \<noteq> F" sorry
+	have "H \<noteq> F" using betweennotequal[OF `axioms` `bet E H F`] by blast
 	have "ray_on H F F" using ray4 `axioms` `F = F` `H \<noteq> F` by blast
 	have "ang_eq A G H K H F" using equalangleshelper[OF `axioms` `ang_eq A G H G H F` `ray_on H G K` `ray_on H F F`] .
 	have "ang_eq K H F A G H" using equalanglessymmetric[OF `axioms` `ang_eq A G H K H F`] .
 	have "ang_eq C K H A G H" using equalanglestransitive[OF `axioms` `ang_eq C K H K H F` `ang_eq K H F A G H`] .
 	have "G \<noteq> H" using betweennotequal[OF `axioms` `bet G H Q`] by blast
 	have "ray_on G H K" using ray4 `axioms` `bet G K H` `G \<noteq> H` by blast
-	have "A \<noteq> G" using `A \<noteq> G` .
+	have "A \<noteq> G" using betweennotequal[OF `axioms` `bet A G B`] by blast
 	have "G \<noteq> A" using inequalitysymmetric[OF `axioms` `A \<noteq> G`] .
 	have "A = A" using equalityreflexiveE[OF `axioms`] .
 	have "ray_on G A A" using ray4 `axioms` `A = A` `G \<noteq> A` by blast
@@ -86,8 +86,8 @@ proof -
 	have "col K G M \<and> col K G m \<and> bet A M F \<and> bet C m F \<and> \<not> col K G A \<and> \<not> col K G C" using `col K G M` `col K G m` `bet A M F \<and> col G H M \<and> \<not> col G H A` `bet C m F \<and> col K H m \<and> \<not> col K H C` `\<not> col K G A` `\<not> col K G C` by blast
 	have "same_side A C K G" using sameside_b[OF `axioms` `col K G M` `col K G m` `bet A M F` `bet C m F` `\<not> col K G A` `\<not> col K G C`] .
 	have "same_side C A K G" using samesidesymmetric[OF `axioms` `same_side A C K G`] by blast
-	have "bet D K C" sorry
-	have "bet B G A" sorry
+	have "bet D K C" using betweennesssymmetryE[OF `axioms` `bet C K D`] .
+	have "bet B G A" using betweennesssymmetryE[OF `axioms` `bet A G B`] .
 	have "bet H K G" using `bet H K G` .
 	have "bet K G P" using n3_6a[OF `axioms` `bet H K G` `bet H G P`] .
 	have "ang_eq H K C K G A" using `ang_eq H K C K G A` .

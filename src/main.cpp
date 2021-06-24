@@ -14,7 +14,9 @@ void generate_statement(const std::string&);
 void generate_base_theory();
 
 int main(int, char* argv[]) {
-    generate_base_theory();
+    // Don't automatically generate Geometry.thy, some sections have been modified
+    // by hand. (Automatic generation uses `sorry` to prove three lemmas).
+    // generate_base_theory();
 
     std::ifstream in("../eucfiles/list.txt");
     std::ofstream root("../thyfiles/ROOT");
@@ -32,9 +34,6 @@ int main(int, char* argv[]) {
     }
     in.close();
     root.close();
-
-    // prover::generate_proof("subtractequals.prf");
-    // return 0;
 
     in = std::ifstream("../eucfiles/list.txt");
     while(getline(in, s)) {

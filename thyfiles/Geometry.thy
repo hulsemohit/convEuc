@@ -116,13 +116,13 @@ definition qua_eq_area where
 	"qua_eq_area A B C D a b c d \<equiv> \<exists> U X Y Z u x y z. oppo_side A B C D \<and> oppo_side a b c d \<and> figure_rect A B C D X Y Z U \<and> figure_rect a b c d x y z u \<and> rec_eq_area X Y Z U x y z u"
 
 definition cir_in where
-	"cir_in P J \<equiv> \<forall> C A B. circle J C A B \<longrightarrow> (\<exists> X Y. circle J C A B \<and> bet X C Y \<and> seg_eq C Y A B \<and> seg_eq C X A B \<and> bet X P Y)"
+	"cir_in P J \<equiv> (\<exists> A B C X Y. circle J C A B \<and> bet X C Y \<and> seg_eq C Y A B \<and> seg_eq C X A B \<and> bet X P Y)"
 
 definition cir_ou where
-	"cir_ou P J \<equiv> \<forall> C A B. circle J C A B \<longrightarrow> (\<exists> X. circle J C A B \<and> bet C X P \<and> seg_eq C X A B)"
+	"cir_ou P J \<equiv> (\<exists> A B C X. circle J C A B \<and> bet C X P \<and> seg_eq C X A B)"
 
 definition cir_on where
-	"cir_on B J \<equiv> \<forall> A C D. circle J A C D \<longrightarrow> circle J A C D \<and> seg_eq A B C D"
+	"cir_on B J \<equiv> (\<exists> A C D. circle J A C D \<and> seg_eq A B C D)"
 
 
 definition n5_line where
@@ -233,8 +233,11 @@ definition stability where
 definition circle_ne where
 	"circle_ne \<equiv> \<forall> A B C.(\<exists> X. circle X C A B) \<longleftrightarrow> A \<noteq> B"
 
+definition circle_unique where
+  "circle_unique \<equiv> \<forall> J A B C X Y Z. circle J A B C \<and> circle J X Y Z \<longrightarrow> A = X \<and> seg_eq B C Y Z"
+
 definition axioms where
-	"axioms \<equiv> n5_line \<and> EFpermutation \<and> EFsymmetric \<and> EFtransitive \<and> ETpermutation \<and> ETsymmetric \<and> ETtransitive \<and> Euclid5 \<and> Pasch_inner \<and> Pasch_outer \<and> betweennessidentity \<and> betweennesssymmetry \<and> circle_circle \<and> congruencereflexive \<and> congruencetransitive \<and> congruentequal \<and> connectivity \<and> cutoff1 \<and> cutoff2 \<and> deZolt1 \<and> deZolt2 \<and> equalityreflexive \<and> equalityreverse \<and> equalitytransitive \<and> extension \<and> halvesofequals \<and> innertransitivity \<and> line_circle \<and> nullsegment1 \<and> nullsegment2 \<and> paste1 \<and> paste2 \<and> paste3 \<and> paste4 \<and> stability \<and> circle_ne"
+	"axioms \<equiv> n5_line \<and> EFpermutation \<and> EFsymmetric \<and> EFtransitive \<and> ETpermutation \<and> ETsymmetric \<and> ETtransitive \<and> Euclid5 \<and> Pasch_inner \<and> Pasch_outer \<and> betweennessidentity \<and> betweennesssymmetry \<and> circle_circle \<and> congruencereflexive \<and> congruencetransitive \<and> congruentequal \<and> connectivity \<and> cutoff1 \<and> cutoff2 \<and> deZolt1 \<and> deZolt2 \<and> equalityreflexive \<and> equalityreverse \<and> equalitytransitive \<and> extension \<and> halvesofequals \<and> innertransitivity \<and> line_circle \<and> nullsegment1 \<and> nullsegment2 \<and> paste1 \<and> paste2 \<and> paste3 \<and> paste4 \<and> stability \<and> circle_ne \<and> circle_unique"
 
 lemma anglelessthan_b:
 	assumes "axioms"
@@ -449,14 +452,24 @@ lemma inside_b:
 		"seg_eq C X A B"
 		"bet X P Y"
 	shows "circle J C A B \<and> cir_in P J"
-	using assms axioms_def cir_in_def sorry
+	using assms axioms_def cir_in_def by fastforce
 
 lemma inside_f:
 	assumes "axioms"
 		"circle J C A B"
 		"cir_in P J"
 	shows "\<exists> X Y. circle J C A B \<and> bet X C Y \<and> seg_eq C Y A B \<and> seg_eq C X A B \<and> bet X P Y"
-	using assms axioms_def cir_in_def by fastforce
+	using assms axioms_def cir_in_def
+proof -
+  obtain U V W X Y where "circle J U V W" "bet X U Y" "seg_eq U Y V W" "seg_eq U X V W" "bet X P Y" using assms cir_in_def by blast
+  have "U = C" using `axioms` axioms_def `circle J U V W` `circle J C A B` circle_unique_def by blast
+  have "bet X C Y" using `U = C` `bet X U Y` by simp
+  have "seg_eq V W A B" using `axioms` axioms_def `circle J U V W` `circle J C A B` circle_unique_def by blast
+  have "seg_eq C X A B" using `axioms` axioms_def `seg_eq U X V W` `seg_eq V W A B` `U = C` congruencetransitive_def congruencereflexive_def by metis
+  have "seg_eq C Y A B" using `axioms` axioms_def `seg_eq U Y V W` `seg_eq V W A B` `U = C` congruencetransitive_def congruencereflexive_def by metis
+  show ?thesis  using \<open>bet X C Y\<close> \<open>bet X P Y\<close> \<open>seg_eq C X A B\<close> \<open>seg_eq C Y A B\<close> `circle J C A B` by blast
+qed
+
 
 lemma interior_b:
 	assumes "axioms"
@@ -531,14 +544,21 @@ lemma on_b:
 		"circle J A C D"
 		"seg_eq A B C D"
 	shows "circle J A C D \<and> cir_on B J"
-	using assms axioms_def cir_on_def sorry
+	using assms axioms_def cir_on_def by fastforce
 
 lemma on_f:
 	assumes "axioms"
 		"circle J A C D"
 		"cir_on B J"
 	shows "circle J A C D \<and> seg_eq A B C D"
-	using assms axioms_def cir_on_def by fastforce
+proof -
+  obtain X Y Z where "circle J X Y Z" "seg_eq X B Y Z" using assms cir_on_def by blast
+  have "X = A" using `axioms` axioms_def circle_unique_def `circle J X Y Z` `circle J A C D` axioms_def by blast
+  have "seg_eq C D Y Z" using `axioms` axioms_def assms circle_unique_def `circle J X Y Z` `circle J A C D` by blast
+  have "seg_eq X B C D" using `axioms` axioms_def congruencetransitive_def congruencereflexive_def `seg_eq C D Y Z` `seg_eq X B Y Z` by metis
+  have "seg_eq A B C D" using `seg_eq X B C D` `X = A` by simp
+  thus ?thesis using `circle J A C D` by simp
+qed
 
 lemma oppositeside_b:
 	assumes "axioms"
@@ -560,14 +580,22 @@ lemma outside_b:
 		"bet C X P"
 		"seg_eq C X A B"
 	shows "circle J C A B \<and> cir_ou P J"
-	using assms axioms_def cir_ou_def sorry
+	using assms axioms_def cir_ou_def by fastforce
 
 lemma outside_f:
 	assumes "axioms"
 		"circle J C A B"
 		"cir_ou P J"
 	shows "\<exists> X. circle J C A B \<and> bet C X P \<and> seg_eq C X A B"
-	using assms axioms_def cir_ou_def by fastforce
+proof -
+  obtain U V W X where "circle J U V W" "bet U X P" "seg_eq U X V W" using `cir_ou P J` cir_ou_def by blast
+  have "U = C" using `circle J U V W` `circle J C A B` `axioms` axioms_def circle_unique_def by blast
+  have "bet C X P" using `bet U X P` `U = C` by blast
+  have "seg_eq V W A B" using `circle J U V W` `circle J C A B` `axioms` axioms_def circle_unique_def by blast
+  have "seg_eq U X A B" using `axioms` axioms_def congruencetransitive_def congruencereflexive_def `seg_eq U X V W` `seg_eq V W A B` by metis
+  have "seg_eq C X A B" using `seg_eq U X A B` `U = C` by simp
+  show ?thesis using \<open>bet C X P\<close> \<open>seg_eq C X A B\<close> `circle J C A B` by blast
+qed
 
 lemma parallel_b:
 	assumes "axioms"
