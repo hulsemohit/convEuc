@@ -1,21 +1,22 @@
 #pragma once
 
-#include <string>
 #include <map>
+#include <string>
 
 class command {
-    public:
-        const std::string name;
-        const int arity;
+public:
+    const std::string name;
+    const int arity;
 
-    public:
-        command(const std::string& _name, int _arity): name{_name}, arity{_arity} {};
+public:
+    command(const std::string& _name, int _arity)
+        : name{_name}, arity{_arity} {};
 
-        std::string convert(const std::string& vars) const;
+    std::string convert(const std::string& vars) const;
 };
 
 // All Euc commands
-const std::map<std::string, command> commands {
+const std::map<std::string, command> commands{
     {"BE", command{"bet", 3}},
     {"EQ", command{"eq_pnt", 2}},
     {"NE", command{"neq_pnt", 2}},
@@ -38,7 +39,7 @@ const std::map<std::string, command> commands {
     {"SS", command{"same_side", 4}},
     {"OS", command{"oppo_side", 4}},
     {"AO", command{"ang_lt", 6}},
-    {"EL", command{"equilateral", 3}}, 
+    {"EL", command{"equilateral", 3}},
     {"RR", command{"ang_right", 3}},
     {"MI", command{"midpoint", 3}},
     {"IS", command{"tri_isos", 3}},
@@ -88,7 +89,7 @@ const std::map<std::string, std::string> euc_cmd_names{
     {"sameside", "SS"},
     {"isosceles", "IS"},
     {"cut", "CU"},
-    {"trianglecongruence","TC"},
+    {"trianglecongruence", "TC"},
     {"anglelessthan", "AO"},
     {"togethergreater", "TG"},
     {"togetherfour", "TT"},
@@ -107,5 +108,4 @@ const std::map<std::string, std::string> euc_cmd_names{
     {"figurerectangle", "FR"},
     {"equaltriangles", "TE"},
     {"equalfigures", "EF"},
-    {"equaltrianglefigure", "TF"}
-};
+    {"equaltrianglefigure", "TF"}};

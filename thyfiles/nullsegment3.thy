@@ -2,8 +2,8 @@ theory nullsegment3
 	imports Geometry
 begin
 
-theorem nullsegment3:
-	assumes "axioms"
+theorem(in euclidean_geometry) nullsegment3:
+	assumes 
 		"A \<noteq> B"
 		"seg_eq A B C D"
 	shows "C \<noteq> D"
@@ -13,7 +13,7 @@ proof -
 		assume "\<not> (C \<noteq> D)"
 		hence "C = D" by blast
 		have "seg_eq A B C C" using `seg_eq A B C D` `C = D` by blast
-		have "A = B" using nullsegment1E[OF `axioms` `seg_eq A B C C`] .
+		have "A = B" using nullsegment1E[OF `seg_eq A B C C`] .
 		have "A \<noteq> B" using `A \<noteq> B` .
 		show "False" using `A \<noteq> B` `A = B` by blast
 	qed

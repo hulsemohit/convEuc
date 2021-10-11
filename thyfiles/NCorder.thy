@@ -2,8 +2,8 @@ theory NCorder
 	imports Geometry collinearorder
 begin
 
-theorem NCorder:
-	assumes "axioms"
+theorem(in euclidean_geometry) NCorder:
+	assumes 
 		"\<not> col A B C"
 	shows "\<not> col B A C \<and> \<not> col B C A \<and> \<not> col C A B \<and> \<not> col A C B \<and> \<not> col C B A"
 proof -
@@ -11,7 +11,7 @@ proof -
 	proof (rule ccontr)
 		assume "\<not> (\<not> (col B A C))"
 hence "col B A C" by blast
-		have "col A B C" using collinearorder[OF `axioms` `col B A C`] by blast
+		have "col A B C" using collinearorder[OF `col B A C`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "\<not> col B A C" by blast
@@ -19,7 +19,7 @@ hence "col B A C" by blast
 	proof (rule ccontr)
 		assume "\<not> (\<not> (col B C A))"
 hence "col B C A" by blast
-		have "col A B C" using collinearorder[OF `axioms` `col B C A`] by blast
+		have "col A B C" using collinearorder[OF `col B C A`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "\<not> col B C A" by blast
@@ -27,7 +27,7 @@ hence "col B C A" by blast
 	proof (rule ccontr)
 		assume "\<not> (\<not> (col C A B))"
 hence "col C A B" by blast
-		have "col A B C" using collinearorder[OF `axioms` `col C A B`] by blast
+		have "col A B C" using collinearorder[OF `col C A B`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "\<not> col C A B" by blast
@@ -35,7 +35,7 @@ hence "col C A B" by blast
 	proof (rule ccontr)
 		assume "\<not> (\<not> (col A C B))"
 hence "col A C B" by blast
-		have "col A B C" using collinearorder[OF `axioms` `col A C B`] by blast
+		have "col A B C" using collinearorder[OF `col A C B`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "\<not> col A C B" by blast
@@ -43,7 +43,7 @@ hence "col A C B" by blast
 	proof (rule ccontr)
 		assume "\<not> (\<not> (col C B A))"
 hence "col C B A" by blast
-		have "col A B C" using collinearorder[OF `axioms` `col C B A`] by blast
+		have "col A B C" using collinearorder[OF `col C B A`] by blast
 		show "False" using `col A B C` `\<not> col A B C` by blast
 	qed
 	hence "\<not> col C B A" by blast

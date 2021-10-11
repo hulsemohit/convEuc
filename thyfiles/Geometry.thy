@@ -1,15 +1,14 @@
+
 theory Geometry
-	imports Main
+	imports Main Complex_Main
 begin
 
-typedecl point
-typedecl circ
-
-consts
-	bet :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> bool"
-	seg_eq :: "point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> bool"
-	circle :: "circ \<Rightarrow> point \<Rightarrow> point \<Rightarrow> point \<Rightarrow> bool"
-
+locale point_circ=
+ fixes 
+	bet :: "'point \<Rightarrow> 'point \<Rightarrow> 'point \<Rightarrow> bool" and
+	seg_eq :: "'point \<Rightarrow> 'point \<Rightarrow> 'point \<Rightarrow> 'point \<Rightarrow> bool" and
+	circle :: "'circ \<Rightarrow> 'point \<Rightarrow> 'point \<Rightarrow> 'point \<Rightarrow> bool"
+begin                                                       
 definition col where
 	"col A B C \<equiv> A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B"
 
@@ -156,7 +155,7 @@ definition Pasch_outer where
 	"Pasch_outer \<equiv> \<forall> A B C P Q. bet A P C \<and> bet B C Q \<and> \<not> col B Q A \<longrightarrow> (\<exists> X. bet A X Q \<and> bet B P X)"
 
 definition betweennessidentity where
-	"betweennessidentity \<equiv> \<forall> A B :: point. \<not> (bet A B A)"
+	"betweennessidentity \<equiv> \<forall> A B. \<not> (bet A B A)"
 
 definition betweennesssymmetry where
 	"betweennesssymmetry \<equiv> \<forall> A B C. bet A B C \<longrightarrow> (bet C B A)"
@@ -165,7 +164,7 @@ definition circle_circle where
 	"circle_circle \<equiv> \<forall> C D F G J K P Q R S. circle J C R S \<and> cir_in P J \<and> cir_ou Q J \<and> circle K D F G \<and> cir_on P K \<and> cir_on Q K \<longrightarrow> (\<exists> X. cir_on X J \<and> cir_on X K)"
 
 definition congruencereflexive where
-	"congruencereflexive \<equiv> \<forall> A B :: point. seg_eq A B A B"
+	"congruencereflexive \<equiv> \<forall> A B. seg_eq A B A B"
 
 definition congruencetransitive where
 	"congruencetransitive \<equiv> \<forall> B C D E P Q. seg_eq P Q B C \<and> seg_eq P Q D E \<longrightarrow> (seg_eq B C D E)"
@@ -188,14 +187,8 @@ definition deZolt1 where
 definition deZolt2 where
 	"deZolt2 \<equiv> \<forall> A B C E F. triangle A B C \<and> bet B E A \<and> bet B F C \<longrightarrow> (\<not> (tri_eq_area A B C E B F))"
 
-definition equalityreflexive where
-	"equalityreflexive \<equiv> \<forall> A :: point. A = A"
-
 definition equalityreverse where
-	"equalityreverse \<equiv> \<forall> A B :: point. seg_eq A B B A"
-
-definition equalitytransitive where
-	"equalitytransitive \<equiv> \<forall> A B C :: point. A = C \<and> B = C \<longrightarrow> (A = B)"
+	"equalityreverse \<equiv> \<forall> A B. seg_eq A B B A"
 
 definition extension where
 	"extension \<equiv> \<forall> A B C D. A \<noteq> B \<and> C \<noteq> D \<longrightarrow> (\<exists> X. bet A B X \<and> seg_eq B X C D)"
@@ -213,7 +206,7 @@ definition nullsegment1 where
 	"nullsegment1 \<equiv> \<forall> A B C. seg_eq A B C C \<longrightarrow> (A = B)"
 
 definition nullsegment2 where
-	"nullsegment2 \<equiv> \<forall> A B :: point. seg_eq A A B B"
+	"nullsegment2 \<equiv> \<forall> A B. seg_eq A A B B"
 
 definition paste1 where
 	"paste1 \<equiv> \<forall> A B C D E a b c d e. bet A B C \<and> bet a b c \<and> bet E D C \<and> bet e d c \<and> tri_eq_area B C D b c d \<and> qua_eq_area A B D E a b d e \<longrightarrow> (tri_eq_area A C E a c e)"
@@ -222,134 +215,138 @@ definition paste2 where
 	"paste2 \<equiv> \<forall> A B C D E M a b c d e m. bet B C D \<and> bet b c d \<and> tri_eq_area C D E c d e \<and> qua_eq_area A B C E a b c e \<and> bet A M D \<and> bet B M E \<and> bet a m d \<and> bet b m e \<longrightarrow> (qua_eq_area A B D E a b d e)"
 
 definition paste3 where
-	"paste3 \<equiv> \<forall> A B C D M a b c d m. tri_eq_area A B C a b c \<and> tri_eq_area A B D a b d \<and> bet C M D \<and> bet A M B \<or> A = M \<or> M = B \<and> bet c m d \<and> bet a m b \<or> a = m \<or> m = b \<longrightarrow> (qua_eq_area A C B D a c b d)"
+	"paste3 \<equiv> \<forall> A B C D M a b c d m. tri_eq_area A B C a b c \<and>
+    tri_eq_area A B D a b d \<and> bet C M D \<and> (bet A M B \<or> A = M \<or> M = B)
+    \<and> bet c m d \<and> (bet a m b \<or> a = m \<or> m = b) \<longrightarrow> (qua_eq_area A C B D a c b d)"
 
 definition paste4 where
 	"paste4 \<equiv> \<forall> A B C D F G H J K L M P e m. qua_eq_area A B m D F K H G \<and> qua_eq_area D B e C G H M L \<and> bet A P C \<and> bet B P D \<and> bet K H M \<and> bet F G L \<and> bet B m D \<and> bet B e C \<and> bet F J M \<and> bet K J L \<longrightarrow> (qua_eq_area A B C D F K M L)"
 
-definition stability where
-	"stability \<equiv> \<forall> A B :: point. \<not> (A \<noteq> B) \<longrightarrow> (A = B)"
 
 definition circle_ne where
 	"circle_ne \<equiv> \<forall> A B C.(\<exists> X. circle X C A B) \<longleftrightarrow> A \<noteq> B"
 
 definition circle_unique where
-  "circle_unique \<equiv> \<forall> J A B C X Y Z. circle J A B C \<and> circle J X Y Z \<longrightarrow> A = X \<and> seg_eq B C Y Z"
+ "circle_unique \<equiv> \<forall> J A B C X Y Z. circle J A B C \<and> circle J X Y Z \<longrightarrow> A = X \<and> seg_eq B C Y Z"
 
 definition axioms where
-	"axioms \<equiv> n5_line \<and> EFpermutation \<and> EFsymmetric \<and> EFtransitive \<and> ETpermutation \<and> ETsymmetric \<and> ETtransitive \<and> Euclid5 \<and> Pasch_inner \<and> Pasch_outer \<and> betweennessidentity \<and> betweennesssymmetry \<and> circle_circle \<and> congruencereflexive \<and> congruencetransitive \<and> congruentequal \<and> connectivity \<and> cutoff1 \<and> cutoff2 \<and> deZolt1 \<and> deZolt2 \<and> equalityreflexive \<and> equalityreverse \<and> equalitytransitive \<and> extension \<and> halvesofequals \<and> innertransitivity \<and> line_circle \<and> nullsegment1 \<and> nullsegment2 \<and> paste1 \<and> paste2 \<and> paste3 \<and> paste4 \<and> stability \<and> circle_ne \<and> circle_unique"
+	"axioms \<equiv> n5_line \<and> EFpermutation \<and> EFsymmetric \<and> EFtransitive \<and> ETpermutation \<and> ETsymmetric \<and> ETtransitive \<and> Euclid5 \<and> Pasch_inner \<and> Pasch_outer \<and> betweennessidentity \<and> betweennesssymmetry \<and> circle_circle \<and> congruencereflexive \<and> congruencetransitive \<and> congruentequal \<and> connectivity \<and> cutoff1 \<and> cutoff2 \<and> deZolt1 \<and> deZolt2 \<and> equalityreverse \<and> extension \<and> halvesofequals \<and> innertransitivity \<and> line_circle \<and> nullsegment1 \<and> nullsegment2 \<and> paste1 \<and> paste2 \<and> paste3 \<and> paste4 \<and> circle_ne \<and> circle_unique"
+end
 
-lemma anglelessthan_b:
-	assumes "axioms"
+locale euclidean_geometry = point_circ + assumes ax:"point_circ.axioms bet seg_eq circle"
+
+lemma(in euclidean_geometry) anglelessthan_b:
+	assumes
 		"bet U X V"
 		"ray_on E D U"
 		"ray_on E F V"
 		"ang_eq A B C D E X"
 	shows "ang_lt A B C D E F"
-	using assms axioms_def ang_lt_def by fastforce
+	using assms ang_lt_def by fastforce
 
-lemma anglelessthan_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) anglelessthan_f:
+	assumes
 		"ang_lt A B C D E F"
 	shows "\<exists> U V X. bet U X V \<and> ray_on E D U \<and> ray_on E F V \<and> ang_eq A B C D E X"
-	using assms axioms_def ang_lt_def by fastforce
+	using assms ang_lt_def by fastforce
 
-lemma anglesum_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) anglesum_b:
+	assumes
 		"ang_eq A B C P Q X"
 		"ang_eq D E F X Q R"
 		"bet P X R"
 	shows "area_sum_eq A B C D E F P Q R"
-	using assms axioms_def area_sum_eq_def by fastforce
+	using assms area_sum_eq_def by fastforce
 
-lemma anglesum_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) anglesum_f:
+	assumes
 		"area_sum_eq A B C D E F P Q R"
 	shows "\<exists> X. ang_eq A B C P Q X \<and> ang_eq D E F X Q R \<and> bet P X R"
-	using assms axioms_def area_sum_eq_def by fastforce
+	using assms area_sum_eq_def by fastforce
 
-lemma baserectangle_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) baserectangle_b:
+	assumes
 		"rectangle B C D E"
 		"col D E A"
 	shows "base_rect A B C D E"
-	using assms axioms_def base_rect_def by fastforce
+	using assms base_rect_def by fastforce
 
-lemma baserectangle_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) baserectangle_f:
+	assumes
 		"base_rect A B C D E"
 	shows "rectangle B C D E \<and> col D E A"
-	using assms axioms_def base_rect_def by fastforce
+	using assms base_rect_def by fastforce
 
-lemma circle_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) circle_b:
+	assumes
 		"circle X C A B"
 	shows "A \<noteq> B"
-	using assms axioms_def circle_ne_def by fastforce
+using assms ax axioms_def circle_ne_def by fastforce
+ 
 
-lemma circle_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) circle_f:
+	assumes
 		"A \<noteq> B"
 	shows "\<forall> C. \<exists> X. circle X C A B"
-	using assms axioms_def circle_ne_def by fastforce
+	using assms ax axioms_def circle_ne_def by fastforce
 
-lemma collinear_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) collinear_b:
+	assumes
 		"A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B"
 	shows "col A B C"
-	using assms axioms_def col_def by fastforce
+	using assms col_def by fastforce
 
-lemma collinear_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) collinear_f:
+	assumes
 		"col A B C"
 	shows "A = B \<or> A = C \<or> B = C \<or> bet B A C \<or> bet A B C \<or> bet A C B"
-	using assms axioms_def col_def by fastforce
+	using assms col_def by fastforce
 
-lemma congruentrectangles_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) congruentrectangles_b:
+	assumes
 		"rectangle A B C D"
 		"rectangle a b c d"
 		"seg_eq A B a b"
 		"seg_eq B C b c"
 	shows "rec_cong A B C D a b c d"
-	using assms axioms_def rec_cong_def by fastforce
+	using assms ax axioms_def rec_cong_def by fastforce
 
-lemma congruentrectangles_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) congruentrectangles_f:
+	assumes
 		"rec_cong A B C D a b c d"
 	shows "rectangle A B C D \<and> rectangle a b c d \<and> seg_eq A B a b \<and> seg_eq B C b c"
-	using assms axioms_def rec_cong_def by fastforce
+	using assms rec_cong_def by fastforce
 
-lemma cross_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) cross_b:
+	assumes
 		"bet A X B"
 		"bet C X D"
 	shows "cross A B C D"
-	using assms axioms_def cross_def by fastforce
+	using assms cross_def by fastforce
 
-lemma cross_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) cross_f:
+	assumes
 		"cross A B C D"
 	shows "\<exists> X. bet A X B \<and> bet C X D"
-	using assms axioms_def cross_def by fastforce
+	using assms cross_def by fastforce
 
-lemma cut_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) cut_b:
+	assumes
 		"bet A E B"
 		"bet C E D"
 		"\<not> col A B C"
 		"\<not> col A B D"
 	shows "cuts A B C D E"
-	using assms axioms_def cuts_def by fastforce
+	using assms cuts_def by fastforce
 
-lemma cut_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) cut_f:
+	assumes
 		"cuts A B C D E"
 	shows "bet A E B \<and> bet C E D \<and> \<not> col A B C \<and> \<not> col A B D"
-	using assms axioms_def cuts_def by fastforce
+	using assms cuts_def by fastforce
 
-lemma equalangles_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalangles_b:
+	assumes
 		"ray_on B A U"
 		"ray_on B C V"
 		"ray_on b a u"
@@ -359,246 +356,244 @@ lemma equalangles_b:
 		"seg_eq U V u v"
 		"\<not> col A B C"
 	shows "ang_eq A B C a b c"
-	using assms axioms_def ang_eq_def by fastforce
+	using assms ang_eq_def by fastforce
 
-lemma equalangles_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalangles_f:
+	assumes
 		"ang_eq A B C a b c"
 	shows "\<exists> U V u v. ray_on B A U \<and> ray_on B C V \<and> ray_on b a u \<and> ray_on b c v \<and> seg_eq B U b u \<and> seg_eq B V b v \<and> seg_eq U V u v \<and> \<not> col A B C"
-	using assms axioms_def ang_eq_def by fastforce
+	using assms ang_eq_def by fastforce
 
-lemma equalfigures_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalfigures_b:
+	assumes
 		"oppo_side A B C D"
 		"oppo_side a b c d"
 		"figure_rect A B C D X Y Z U"
 		"figure_rect a b c d x y z u"
 		"rec_eq_area X Y Z U x y z u"
 	shows "qua_eq_area A B C D a b c d"
-	using assms axioms_def qua_eq_area_def by fastforce
+	using assms qua_eq_area_def by fastforce
 
-lemma equalfigures_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalfigures_f:
+	assumes
 		"qua_eq_area A B C D a b c d"
 	shows "\<exists> U X Y Z u x y z. oppo_side A B C D \<and> oppo_side a b c d \<and> figure_rect A B C D X Y Z U \<and> figure_rect a b c d x y z u \<and> rec_eq_area X Y Z U x y z u"
-	using assms axioms_def qua_eq_area_def by fastforce
+	using assms qua_eq_area_def by fastforce
 
-lemma equalrectangles_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalrectangles_b:
+	assumes
 		"rec_cong A B C D X Y Z U"
 		"rec_cong a b c d x Y z u"
 		"bet x Y Z"
 		"bet X Y z"
 		"bet W U w"
 	shows "rec_eq_area A B C D a b c d"
-	using assms axioms_def rec_eq_area_def by fastforce
+	using assms rec_eq_area_def by fastforce
 
-lemma equalrectangles_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalrectangles_f:
+	assumes
 		"rec_eq_area A B C D a b c d"
 	shows "\<exists> U W X Y Z u w x z. rec_cong A B C D X Y Z U \<and> rec_cong a b c d x Y z u \<and> bet x Y Z \<and> bet X Y z \<and> bet W U w"
-	using assms axioms_def rec_eq_area_def by fastforce
+	using assms rec_eq_area_def by fastforce
 
-lemma equaltriangles_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) equaltriangles_b:
+	assumes
 		"rectangle A B X Y"
 		"rectangle a b x y"
 		"col X Y C"
 		"col x y c"
 		"rec_eq_area A B X Y a b x y"
 	shows "tri_eq_area A B C a b c"
-	using assms axioms_def tri_eq_area_def by fastforce
+	using assms tri_eq_area_def by fastforce
 
-lemma equaltriangles_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) equaltriangles_f:
+	assumes
 		"tri_eq_area A B C a b c"
 	shows "\<exists> X Y x y. rectangle A B X Y \<and> rectangle a b x y \<and> col X Y C \<and> col x y c \<and> rec_eq_area A B X Y a b x y"
-	using assms axioms_def tri_eq_area_def by fastforce
+	using assms tri_eq_area_def by fastforce
 
-lemma equilateral_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) equilateral_b:
+	assumes
 		"seg_eq A B B C"
 		"seg_eq B C C A"
 	shows "equilateral A B C"
-	using assms axioms_def equilateral_def by fastforce
+	using assms equilateral_def by fastforce
 
-lemma equilateral_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) equilateral_f:
+	assumes
 		"equilateral A B C"
 	shows "seg_eq A B B C \<and> seg_eq B C C A"
-	using assms axioms_def equilateral_def by fastforce
+	using assms equilateral_def by fastforce
 
-lemma figurerectangle_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) figurerectangle_b:
+	assumes
 		"rectangle E F G H"
 		"bet E B F"
 		"bet H D G"
 		"base_rect C B D G F"
 		"base_rect A B D H E"
 	shows "figure_rect A B C D E F G H"
-	using assms axioms_def figure_rect_def by fastforce
+	using assms figure_rect_def by fastforce
 
-lemma figurerectangle_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) figurerectangle_f:
+	assumes
 		"figure_rect A B C D E F G H"
 	shows "rectangle E F G H \<and> bet E B F \<and> bet H D G \<and> base_rect C B D G F \<and> base_rect A B D H E"
-	using assms axioms_def figure_rect_def by fastforce
+	using assms figure_rect_def by fastforce
 
-lemma inside_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) inside_b:
+	assumes
 		"circle J C A B"
 		"bet X C Y"
 		"seg_eq C Y A B"
 		"seg_eq C X A B"
 		"bet X P Y"
 	shows "circle J C A B \<and> cir_in P J"
-	using assms axioms_def cir_in_def by fastforce
+	using assms cir_in_def by fastforce
 
-lemma inside_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) inside_f:
+	assumes
 		"circle J C A B"
 		"cir_in P J"
 	shows "\<exists> X Y. circle J C A B \<and> bet X C Y \<and> seg_eq C Y A B \<and> seg_eq C X A B \<and> bet X P Y"
-	using assms axioms_def cir_in_def
 proof -
-  obtain U V W X Y where "circle J U V W" "bet X U Y" "seg_eq U Y V W" "seg_eq U X V W" "bet X P Y" using assms cir_in_def by blast
-  have "U = C" using `axioms` axioms_def `circle J U V W` `circle J C A B` circle_unique_def by blast
-  have "bet X C Y" using `U = C` `bet X U Y` by simp
-  have "seg_eq V W A B" using `axioms` axioms_def `circle J U V W` `circle J C A B` circle_unique_def by blast
-  have "seg_eq C X A B" using `axioms` axioms_def `seg_eq U X V W` `seg_eq V W A B` `U = C` congruencetransitive_def congruencereflexive_def by metis
-  have "seg_eq C Y A B" using `axioms` axioms_def `seg_eq U Y V W` `seg_eq V W A B` `U = C` congruencetransitive_def congruencereflexive_def by metis
-  show ?thesis  using \<open>bet X C Y\<close> \<open>bet X P Y\<close> \<open>seg_eq C X A B\<close> \<open>seg_eq C Y A B\<close> `circle J C A B` by blast
+ obtain U V W X Y where "circle J U V W" "bet X U Y" "seg_eq U Y V W" "seg_eq U X V W" "bet X P Y" using assms cir_in_def by blast
+ have "U = C" using ax axioms_def `circle J U V W` `circle J C A B` circle_unique_def by blast
+ have "bet X C Y" using `U = C` `bet X U Y` by simp
+ have "seg_eq V W A B" using ax axioms_def `circle J U V W` `circle J C A B` ax circle_unique_def by blast
+ have "seg_eq C X A B" using ax axioms_def `seg_eq U X V W` `seg_eq V W A B` `U = C` congruencetransitive_def congruencereflexive_def by metis
+ have "seg_eq C Y A B" using ax axioms_def `seg_eq U Y V W` `seg_eq V W A B` `U = C` congruencetransitive_def congruencereflexive_def by metis
+ show ?thesis using `bet X C Y` `bet X P Y` `seg_eq C X A B` `seg_eq C Y A B` `circle J C A B` by blast
 qed
 
-
-lemma interior_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) interior_b:
+	assumes
 		"ray_on B A X"
 		"ray_on B C Y"
 		"bet X P Y"
 	shows "ang_in A B C P"
-	using assms axioms_def ang_in_def by fastforce
+	using assms ang_in_def by fastforce
 
-lemma interior_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) interior_f:
+	assumes
 		"ang_in A B C P"
 	shows "\<exists> X Y. ray_on B A X \<and> ray_on B C Y \<and> bet X P Y"
-	using assms axioms_def ang_in_def by fastforce
+	using assms ang_in_def by fastforce
 
-lemma isosceles_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) isosceles_b:
+	assumes
 		"triangle A B C"
 		"seg_eq A B A C"
 	shows "tri_isos A B C"
-	using assms axioms_def tri_isos_def by fastforce
+	using assms tri_isos_def by fastforce
 
-lemma isosceles_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) isosceles_f:
+	assumes
 		"tri_isos A B C"
 	shows "triangle A B C \<and> seg_eq A B A C"
-	using assms axioms_def tri_isos_def by fastforce
+	using assms tri_isos_def by fastforce
 
-lemma lessthan_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) lessthan_b:
+	assumes
 		"bet C X D"
 		"seg_eq C X A B"
 	shows "seg_lt A B C D"
-	using assms axioms_def seg_lt_def by fastforce
+	using assms seg_lt_def by fastforce
 
-lemma lessthan_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) lessthan_f:
+	assumes
 		"seg_lt A B C D"
 	shows "\<exists> X. bet C X D \<and> seg_eq C X A B"
-	using assms axioms_def seg_lt_def by fastforce
+	using assms seg_lt_def by fastforce
 
-lemma meet_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) meet_b:
+	assumes
 		"A \<noteq> B"
 		"C \<noteq> D"
 		"col A B X"
 		"col C D X"
 	shows "meets A B C D"
-	using assms axioms_def meets_def by fastforce
+	using assms meets_def by fastforce
 
-lemma meet_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) meet_f:
+	assumes
 		"meets A B C D"
 	shows "\<exists> X. A \<noteq> B \<and> C \<noteq> D \<and> col A B X \<and> col C D X"
-	using assms axioms_def meets_def by fastforce
+	using assms meets_def by fastforce
 
-lemma midpoint_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) midpoint_b:
+	assumes
 		"bet A B C"
 		"seg_eq A B B C"
 	shows "midpoint A B C"
-	using assms axioms_def midpoint_def by fastforce
+	using assms midpoint_def by fastforce
 
-lemma midpoint_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) midpoint_f:
+	assumes
 		"midpoint A B C"
 	shows "bet A B C \<and> seg_eq A B B C"
-	using assms axioms_def midpoint_def by fastforce
+	using assms midpoint_def by fastforce
 
-lemma on_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) on_b:
+	assumes
 		"circle J A C D"
 		"seg_eq A B C D"
 	shows "circle J A C D \<and> cir_on B J"
-	using assms axioms_def cir_on_def by fastforce
+	using assms cir_on_def by fastforce
 
-lemma on_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) on_f:
+	assumes
 		"circle J A C D"
 		"cir_on B J"
 	shows "circle J A C D \<and> seg_eq A B C D"
 proof -
-  obtain X Y Z where "circle J X Y Z" "seg_eq X B Y Z" using assms cir_on_def by blast
-  have "X = A" using `axioms` axioms_def circle_unique_def `circle J X Y Z` `circle J A C D` axioms_def by blast
-  have "seg_eq C D Y Z" using `axioms` axioms_def assms circle_unique_def `circle J X Y Z` `circle J A C D` by blast
-  have "seg_eq X B C D" using `axioms` axioms_def congruencetransitive_def congruencereflexive_def `seg_eq C D Y Z` `seg_eq X B Y Z` by metis
-  have "seg_eq A B C D" using `seg_eq X B C D` `X = A` by simp
-  thus ?thesis using `circle J A C D` by simp
+ obtain X Y Z where "circle J X Y Z" "seg_eq X B Y Z" using assms cir_on_def by blast
+ have "X = A" using ax axioms_def circle_unique_def `circle J X Y Z` `circle J A C D` axioms_def by blast
+ have "seg_eq C D Y Z" using ax axioms_def assms circle_unique_def `circle J X Y Z` `circle J A C D` by blast
+ have "seg_eq X B C D" using ax axioms_def congruencetransitive_def congruencereflexive_def `seg_eq C D Y Z` `seg_eq X B Y Z` by metis
+ have "seg_eq A B C D" using `seg_eq X B C D` `X = A` by simp
+ thus ?thesis using `circle J A C D` by simp
 qed
 
-lemma oppositeside_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) oppositeside_b:
+	assumes
 		"bet P X Q"
 		"col A B X"
 		"\<not> col A B P"
 	shows "oppo_side P A B Q"
-	using assms axioms_def oppo_side_def by fastforce
+	using assms oppo_side_def by fastforce
 
-lemma oppositeside_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) oppositeside_f:
+	assumes
 		"oppo_side P A B Q"
 	shows "\<exists> X. bet P X Q \<and> col A B X \<and> \<not> col A B P"
-	using assms axioms_def oppo_side_def by fastforce
+	using assms oppo_side_def by fastforce
 
-lemma outside_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) outside_b:
+	assumes
 		"circle J C A B"
 		"bet C X P"
 		"seg_eq C X A B"
 	shows "circle J C A B \<and> cir_ou P J"
-	using assms axioms_def cir_ou_def by fastforce
+	using assms cir_ou_def by fastforce
 
-lemma outside_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) outside_f:
+	assumes
 		"circle J C A B"
 		"cir_ou P J"
 	shows "\<exists> X. circle J C A B \<and> bet C X P \<and> seg_eq C X A B"
 proof -
-  obtain U V W X where "circle J U V W" "bet U X P" "seg_eq U X V W" using `cir_ou P J` cir_ou_def by blast
-  have "U = C" using `circle J U V W` `circle J C A B` `axioms` axioms_def circle_unique_def by blast
-  have "bet C X P" using `bet U X P` `U = C` by blast
-  have "seg_eq V W A B" using `circle J U V W` `circle J C A B` `axioms` axioms_def circle_unique_def by blast
-  have "seg_eq U X A B" using `axioms` axioms_def congruencetransitive_def congruencereflexive_def `seg_eq U X V W` `seg_eq V W A B` by metis
-  have "seg_eq C X A B" using `seg_eq U X A B` `U = C` by simp
-  show ?thesis using \<open>bet C X P\<close> \<open>seg_eq C X A B\<close> `circle J C A B` by blast
+ obtain U V W X where "circle J U V W" "bet U X P" "seg_eq U X V W" using `cir_ou P J` cir_ou_def by blast
+ have "U = C" using ax `circle J U V W` `circle J C A B`  axioms_def circle_unique_def by blast
+ have "bet C X P" using `bet U X P` `U = C` by blast
+ have "seg_eq V W A B" using ax `circle J U V W` `circle J C A B`  axioms_def circle_unique_def by blast
+ have "seg_eq U X A B" using  ax axioms_def congruencetransitive_def congruencereflexive_def `seg_eq U X V W` `seg_eq V W A B` by metis
+ have "seg_eq C X A B" using `seg_eq U X A B` `U = C` by simp
+ show ?thesis using \<open>bet C X P\<close> \<open>seg_eq C X A B\<close> `circle J C A B` by blast
 qed
 
-lemma parallel_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) parallel_b:
+	assumes
 		"A \<noteq> B"
 		"C \<noteq> D"
 		"col A B U"
@@ -611,100 +606,100 @@ lemma parallel_b:
 		"bet U X v"
 		"bet u X V"
 	shows "parallel A B C D"
-	using assms axioms_def parallel_def by fastforce
+	using assms parallel_def by fastforce
 
-lemma parallel_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) parallel_f:
+	assumes
 		"parallel A B C D"
 	shows "\<exists> U V X u v. A \<noteq> B \<and> C \<noteq> D \<and> col A B U \<and> col A B V \<and> U \<noteq> V \<and> col C D u \<and> col C D v \<and> u \<noteq> v \<and> \<not> (meets A B C D) \<and> bet U X v \<and> bet u X V"
-	using assms axioms_def parallel_def by fastforce
+	using assms parallel_def by fastforce
 
-lemma parallelogram_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) parallelogram_b:
+	assumes
 		"parallel A B C D"
 		"parallel A D B C"
 	shows "parallelogram A B C D"
-	using assms axioms_def parallelogram_def by fastforce
+	using assms parallelogram_def by fastforce
 
-lemma parallelogram_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) parallelogram_f:
+	assumes
 		"parallelogram A B C D"
 	shows "parallel A B C D \<and> parallel A D B C"
-	using assms axioms_def parallelogram_def by fastforce
+	using assms parallelogram_def by fastforce
 
-lemma perpat_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) perpat_b:
+	assumes
 		"col P Q C"
 		"col A B C"
 		"col A B X"
 		"ang_right X C P"
 	shows "perp_at P Q A B C"
-	using assms axioms_def perp_at_def by fastforce
+	using assms perp_at_def by fastforce
 
-lemma perpat_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) perpat_f:
+	assumes
 		"perp_at P Q A B C"
 	shows "\<exists> X. col P Q C \<and> col A B C \<and> col A B X \<and> ang_right X C P"
-	using assms axioms_def perp_at_def by fastforce
+	using assms perp_at_def by fastforce
 
-lemma perpendicular_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) perpendicular_b:
+	assumes
 		"perp_at P Q A B X"
 	shows "perp P Q A B"
-	using assms axioms_def perp_def by fastforce
+	using assms perp_def by fastforce
 
-lemma perpendicular_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) perpendicular_f:
+	assumes
 		"perp P Q A B"
 	shows "\<exists> X. perp_at P Q A B X"
-	using assms axioms_def perp_def by fastforce
+	using assms perp_def by fastforce
 
-lemma ray_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) ray_b:
+	assumes
 		"bet X A C"
 		"bet X A B"
 	shows "ray_on A B C"
-	using assms axioms_def ray_on_def by fastforce
+	using assms ray_on_def by fastforce
 
-lemma ray_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) ray_f:
+	assumes
 		"ray_on A B C"
 	shows "\<exists> X. bet X A C \<and> bet X A B"
-	using assms axioms_def ray_on_def by fastforce
+	using assms ray_on_def by fastforce
 
-lemma rectangle_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) rectangle_b:
+	assumes
 		"ang_right D A B"
 		"ang_right A B C"
 		"ang_right B C D"
 		"ang_right C D A"
 		"cross A C B D"
 	shows "rectangle A B C D"
-	using assms axioms_def rectangle_def by fastforce
+	using assms rectangle_def by fastforce
 
-lemma rectangle_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) rectangle_f:
+	assumes
 		"rectangle A B C D"
 	shows "ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A \<and> cross A C B D"
-	using assms axioms_def rectangle_def by fastforce
+	using assms rectangle_def by fastforce
 
-lemma rightangle_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) rightangle_b:
+	assumes
 		"bet A B X"
 		"seg_eq A B X B"
 		"seg_eq A C X C"
 		"B \<noteq> C"
 	shows "ang_right A B C"
-	using assms axioms_def ang_right_def by fastforce
+	using assms ang_right_def by fastforce
 
-lemma rightangle_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) rightangle_f:
+	assumes
 		"ang_right A B C"
 	shows "\<exists> X. bet A B X \<and> seg_eq A B X B \<and> seg_eq A C X C \<and> B \<noteq> C"
-	using assms axioms_def ang_right_def by fastforce
+	using assms ang_right_def by fastforce
 
-lemma sameside_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) sameside_b:
+	assumes
 		"col A B U"
 		"col A B V"
 		"bet P U X"
@@ -712,16 +707,16 @@ lemma sameside_b:
 		"\<not> col A B P"
 		"\<not> col A B Q"
 	shows "same_side P Q A B"
-	using assms axioms_def same_side_def by fastforce
+	using assms same_side_def by fastforce
 
-lemma sameside_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) sameside_f:
+	assumes
 		"same_side P Q A B"
 	shows "\<exists> U V X. col A B U \<and> col A B V \<and> bet P U X \<and> bet Q V X \<and> \<not> col A B P \<and> \<not> col A B Q"
-	using assms axioms_def same_side_def by fastforce
+	using assms same_side_def by fastforce
 
-lemma square_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) square_b:
+	assumes
 		"seg_eq A B C D"
 		"seg_eq A B B C"
 		"seg_eq A B D A"
@@ -730,114 +725,114 @@ lemma square_b:
 		"ang_right B C D"
 		"ang_right C D A"
 	shows "square A B C D"
-	using assms axioms_def square_def by fastforce
+	using assms square_def by fastforce
 
-lemma square_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) square_f:
+	assumes
 		"square A B C D"
 	shows "seg_eq A B C D \<and> seg_eq A B B C \<and> seg_eq A B D A \<and> ang_right D A B \<and> ang_right A B C \<and> ang_right B C D \<and> ang_right C D A"
-	using assms axioms_def square_def by fastforce
+	using assms square_def by fastforce
 
-lemma supplement_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) supplement_b:
+	assumes
 		"ray_on B C D"
 		"bet A B F"
 	shows "supplement A B C D F"
-	using assms axioms_def supplement_def by fastforce
+	using assms supplement_def by fastforce
 
-lemma supplement_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) supplement_f:
+	assumes
 		"supplement A B C D F"
 	shows "ray_on B C D \<and> bet A B F"
-	using assms axioms_def supplement_def by fastforce
+	using assms supplement_def by fastforce
 
-lemma tarski_parallel_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) tarski_parallel_b:
+	assumes
 		"A \<noteq> B"
 		"C \<noteq> D"
 		"\<not> (meets A B C D)"
 		"same_side C D A B"
 	shows "tarski_parallel A B C D"
-	using assms axioms_def tarski_parallel_def by fastforce
+	using assms tarski_parallel_def by fastforce
 
-lemma tarski_parallel_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) tarski_parallel_f:
+	assumes
 		"tarski_parallel A B C D"
 	shows "A \<noteq> B \<and> C \<noteq> D \<and> \<not> (meets A B C D) \<and> same_side C D A B"
-	using assms axioms_def tarski_parallel_def by fastforce
+	using assms tarski_parallel_def by fastforce
 
-lemma togetherfour_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) togetherfour_b:
+	assumes
 		"bet E F X"
 		"seg_eq F X G H"
 		"seg_sum_gt A B C D E X"
 	shows "seg_sum_pair_gt A B C D E F G H"
-	using assms axioms_def seg_sum_pair_gt_def by fastforce
+	using assms seg_sum_pair_gt_def by fastforce
 
-lemma togetherfour_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) togetherfour_f:
+	assumes
 		"seg_sum_pair_gt A B C D E F G H"
 	shows "\<exists> X. bet E F X \<and> seg_eq F X G H \<and> seg_sum_gt A B C D E X"
-	using assms axioms_def seg_sum_pair_gt_def by fastforce
+	using assms seg_sum_pair_gt_def by fastforce
 
-lemma togethergreater_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) togethergreater_b:
+	assumes
 		"bet A B X"
 		"seg_eq B X C D"
 		"seg_lt E F A X"
 	shows "seg_sum_gt A B C D E F"
-	using assms axioms_def seg_sum_gt_def by fastforce
+	using assms seg_sum_gt_def by fastforce
 
-lemma togethergreater_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) togethergreater_f:
+	assumes
 		"seg_sum_gt A B C D E F"
 	shows "\<exists> X. bet A B X \<and> seg_eq B X C D \<and> seg_lt E F A X"
-	using assms axioms_def seg_sum_gt_def by fastforce
+	using assms seg_sum_gt_def by fastforce
 
-lemma triangle_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) triangle_b:
+	assumes
 		"\<not> col A B C"
 	shows "triangle A B C"
-	using assms axioms_def triangle_def by fastforce
+	using assms triangle_def by fastforce
 
-lemma triangle_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) triangle_f:
+	assumes
 		"triangle A B C"
 	shows "\<not> col A B C"
-	using assms axioms_def triangle_def by fastforce
+	using assms triangle_def by fastforce
 
-lemma trianglecongruence_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) trianglecongruence_b:
+	assumes
 		"seg_eq A B a b"
 		"seg_eq B C b c"
 		"seg_eq A C a c"
 		"triangle A B C"
 	shows "tri_cong A B C a b c"
-	using assms axioms_def tri_cong_def by fastforce
+	using assms tri_cong_def by fastforce
 
-lemma trianglecongruence_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) trianglecongruence_f:
+	assumes
 		"tri_cong A B C a b c"
 	shows "seg_eq A B a b \<and> seg_eq B C b c \<and> seg_eq A C a c \<and> triangle A B C"
-	using assms axioms_def tri_cong_def by fastforce
+	using assms tri_cong_def by fastforce
 
-lemma tworightangles_b:
-	assumes "axioms"
+lemma(in euclidean_geometry) tworightangles_b:
+	assumes
 		"supplement X Y U V Z"
 		"ang_eq A B C X Y U"
 		"ang_eq D E F V Y Z"
 	shows "ang_sum_right A B C D E F"
-	using assms axioms_def ang_sum_right_def by fastforce
+	using assms ang_sum_right_def by fastforce
 
-lemma tworightangles_f:
-	assumes "axioms"
+lemma(in euclidean_geometry) tworightangles_f:
+	assumes
 		"ang_sum_right A B C D E F"
 	shows "\<exists> U V X Y Z. supplement X Y U V Z \<and> ang_eq A B C X Y U \<and> ang_eq D E F V Y Z"
-	using assms axioms_def ang_sum_right_def by fastforce
+	using assms ang_sum_right_def by fastforce
 
 
-lemma n5_lineE:
-	assumes "axioms"
+lemma(in euclidean_geometry) n5_lineE:
+	assumes
 		"seg_eq B C b c"
 		"seg_eq A D a d"
 		"seg_eq B D b d"
@@ -845,85 +840,84 @@ lemma n5_lineE:
 		"bet a b c"
 		"seg_eq A B a b"
 	shows "seg_eq D C d c"
-	using assms axioms_def n5_line_def by blast
+	using assms ax axioms_def n5_line_def by blast
 
-lemma EFpermutationE:
-	assumes "axioms"
+lemma(in euclidean_geometry) EFpermutationE:
+	assumes
 		"qua_eq_area A B C D a b c d"
 	shows "qua_eq_area A B C D b c d a \<and> qua_eq_area A B C D d c b a \<and> qua_eq_area A B C D c d a b \<and> qua_eq_area A B C D b a d c \<and> qua_eq_area A B C D d a b c \<and> qua_eq_area A B C D c b a d \<and> qua_eq_area A B C D a d c b"
-	using assms axioms_def EFpermutation_def by blast
+	using assms ax axioms_def EFpermutation_def by blast
 
-lemma EFsymmetricE:
-	assumes "axioms"
+lemma(in euclidean_geometry) EFsymmetricE:
+	assumes
 		"qua_eq_area A B C D a b c d"
 	shows "qua_eq_area a b c d A B C D"
-	using assms axioms_def EFsymmetric_def by blast
+	using assms ax axioms_def EFsymmetric_def by blast
 
-lemma EFtransitiveE:
-	assumes "axioms"
+lemma(in euclidean_geometry) EFtransitiveE:
+	assumes
 		"qua_eq_area A B C D a b c d"
 		"qua_eq_area a b c d P Q R S"
 	shows "qua_eq_area A B C D P Q R S"
-	using assms axioms_def EFtransitive_def by blast
+	using assms ax axioms_def EFtransitive_def by blast
 
-lemma ETpermutationE:
-	assumes "axioms"
+lemma(in euclidean_geometry) ETpermutationE:
+	assumes
 		"tri_eq_area A B C a b c"
 	shows "tri_eq_area A B C b c a \<and> tri_eq_area A B C a c b \<and> tri_eq_area A B C b a c \<and> tri_eq_area A B C c b a \<and> tri_eq_area A B C c a b"
-	using assms axioms_def ETpermutation_def by blast
+	using assms ax axioms_def ETpermutation_def by blast
 
-lemma ETsymmetricE:
-	assumes "axioms"
+lemma(in euclidean_geometry) ETsymmetricE:
+	assumes
 		"tri_eq_area A B C a b c"
 	shows "tri_eq_area a b c A B C"
-	using assms axioms_def ETsymmetric_def by blast
+	using assms ax axioms_def ETsymmetric_def by blast
 
-lemma ETtransitiveE:
-	assumes "axioms"
+lemma(in euclidean_geometry) ETtransitiveE:
+	assumes
 		"tri_eq_area A B C a b c"
 		"tri_eq_area a b c P Q R"
 	shows "tri_eq_area A B C P Q R"
-	using assms axioms_def ETtransitive_def by blast
+	using assms ax axioms_def ETtransitive_def by blast
 
-lemma Euclid5E:
-	assumes "axioms"
+lemma(in euclidean_geometry) Euclid5E:
+	assumes
 		"bet r t s"
 		"bet p t q"
 		"bet r a q"
 		"seg_eq p t q t"
 		"seg_eq t r t s"
 	shows "\<exists> X. bet p a X \<and> bet s q X"
-	using assms axioms_def Euclid5_def by blast
+	using assms ax axioms_def Euclid5_def by blast
 
-lemma Pasch_innerE:
-	assumes "axioms"
+lemma(in euclidean_geometry) Pasch_innerE:
+	assumes
 		"bet A P C"
 		"bet B Q C"
 		"\<not> col A C B"
 	shows "\<exists> X. bet A X Q \<and> bet B X P"
-	using assms axioms_def Pasch_inner_def by blast
+	using assms ax axioms_def Pasch_inner_def by blast
 
-lemma Pasch_outerE:
-	assumes "axioms"
+lemma(in euclidean_geometry) Pasch_outerE:
+	assumes
 		"bet A P C"
 		"bet B C Q"
 		"\<not> col B Q A"
 	shows "\<exists> X. bet A X Q \<and> bet B P X"
-	using assms axioms_def Pasch_outer_def by blast
+	using assms ax axioms_def Pasch_outer_def by blast
 
-lemma betweennessidentityE:
-	assumes "axioms"
+lemma(in euclidean_geometry) betweennessidentityE:
 	shows "\<not> (bet A B A)"
-	using assms axioms_def betweennessidentity_def by blast
+	using ax axioms_def betweennessidentity_def by blast
 
-lemma betweennesssymmetryE:
-	assumes "axioms"
+lemma(in euclidean_geometry) betweennesssymmetryE:
+	assumes
 		"bet A B C"
 	shows "bet C B A"
-	using assms axioms_def betweennesssymmetry_def by blast
+	using assms ax axioms_def betweennesssymmetry_def by blast
 
-lemma circle_circleE:
-	assumes "axioms"
+lemma(in euclidean_geometry) circle_circleE:
+	assumes 
 		"circle J C R S"
 		"cir_in P J"
 		"cir_ou Q J"
@@ -931,37 +925,36 @@ lemma circle_circleE:
 		"cir_on P K"
 		"cir_on Q K"
 	shows "\<exists> X. cir_on X J \<and> cir_on X K"
-	using assms axioms_def circle_circle_def by blast
+	using assms ax axioms_def circle_circle_def by blast
 
-lemma congruencereflexiveE:
-	assumes "axioms"
+lemma(in euclidean_geometry) congruencereflexiveE:
 	shows "seg_eq A B A B"
-	using assms axioms_def congruencereflexive_def by blast
+	using ax axioms_def congruencereflexive_def by blast
 
-lemma congruencetransitiveE:
-	assumes "axioms"
+lemma(in euclidean_geometry) congruencetransitiveE:
+	assumes
 		"seg_eq P Q B C"
 		"seg_eq P Q D E"
 	shows "seg_eq B C D E"
-	using assms axioms_def congruencetransitive_def by blast
+	using assms ax axioms_def congruencetransitive_def by blast
 
-lemma congruentequalE:
-	assumes "axioms"
+lemma(in euclidean_geometry) congruentequalE:
+	assumes
 		"tri_cong A B C a b c"
 	shows "tri_eq_area A B C a b c"
-	using assms axioms_def congruentequal_def by blast
+	using assms ax axioms_def congruentequal_def by blast
 
-lemma connectivityE:
-	assumes "axioms"
+lemma(in euclidean_geometry) connectivityE:
+	assumes
 		"bet A B D"
 		"bet A C D"
 		"\<not> (bet A B C)"
 		"\<not> (bet A C B)"
 	shows "B = C"
-	using assms axioms_def connectivity_def by blast
+	using assms ax axioms_def connectivity_def by blast
 
-lemma cutoff1E:
-	assumes "axioms"
+lemma(in euclidean_geometry) cutoff1E:
+	assumes
 		"bet A B C"
 		"bet a b c"
 		"bet E D C"
@@ -969,93 +962,90 @@ lemma cutoff1E:
 		"tri_eq_area B C D b c d"
 		"tri_eq_area A C E a c e"
 	shows "qua_eq_area A B D E a b d e"
-	using assms axioms_def cutoff1_def by blast
+	using assms ax axioms_def cutoff1_def by blast
 
-lemma cutoff2E:
-	assumes "axioms"
+lemma(in euclidean_geometry) cutoff2E:
+	assumes
 		"bet B C D"
 		"bet b c d"
 		"tri_eq_area C D E c d e"
 		"qua_eq_area A B D E a b d e"
 	shows "qua_eq_area A B C E a b c e"
-	using assms axioms_def cutoff2_def by blast
+	using assms ax axioms_def cutoff2_def by blast
 
-lemma deZolt1E:
-	assumes "axioms"
+lemma(in euclidean_geometry) deZolt1E:
+	assumes
 		"bet B E D"
 	shows "\<not> (tri_eq_area D B C E B C)"
-	using assms axioms_def deZolt1_def by blast
+	using assms ax axioms_def deZolt1_def by blast
 
-lemma deZolt2E:
-	assumes "axioms"
+lemma(in euclidean_geometry) deZolt2E:
+	assumes
 		"triangle A B C"
 		"bet B E A"
 		"bet B F C"
 	shows "\<not> (tri_eq_area A B C E B F)"
-	using assms axioms_def deZolt2_def by blast
+	using assms ax axioms_def deZolt2_def by blast
 
-lemma equalityreflexiveE:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalityreflexiveE:
 	shows "A = A"
-	using assms axioms_def equalityreflexive_def by blast
+ by blast
 
-lemma equalityreverseE:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalityreverseE:
 	shows "seg_eq A B B A"
-	using assms axioms_def equalityreverse_def by blast
+	using ax axioms_def equalityreverse_def by blast
 
-lemma equalitytransitiveE:
-	assumes "axioms"
+lemma(in euclidean_geometry) equalitytransitiveE:
+	assumes
 		"A = C"
 		"B = C"
 	shows "A = B"
-	using assms axioms_def equalitytransitive_def by blast
+ using assms by blast
 
-lemma extensionE:
-	assumes "axioms"
+lemma(in euclidean_geometry) extensionE:
+	assumes
 		"A \<noteq> B"
 		"C \<noteq> D"
 	shows "\<exists> X. bet A B X \<and> seg_eq B X C D"
-	using assms axioms_def extension_def by blast
+	using assms ax axioms_def extension_def by blast
 
-lemma halvesofequalsE:
-	assumes "axioms"
+lemma(in euclidean_geometry) halvesofequalsE:
+	assumes
 		"tri_eq_area A B C B C D"
 		"oppo_side A B C D"
 		"tri_eq_area a b c b c d"
 		"oppo_side a b c d"
 		"qua_eq_area A B D C a b d c"
 	shows "tri_eq_area A B C a b c"
-	using assms axioms_def halvesofequals_def by blast
+	using assms ax axioms_def halvesofequals_def by blast
 
-lemma innertransitivityE:
-	assumes "axioms"
+lemma(in euclidean_geometry) innertransitivityE:
+	assumes
 		"bet A B D"
 		"bet B C D"
 	shows "bet A B C"
-	using assms axioms_def innertransitivity_def by blast
+	using assms ax axioms_def innertransitivity_def by blast
 
-lemma line_circleE:
-	assumes "axioms"
+lemma(in euclidean_geometry) line_circleE:
+	assumes
 		"circle K C P Q"
 		"cir_in B K"
 		"A \<noteq> B"
 	shows "\<exists> X Y. col A B X \<and> col A B Y \<and> cir_on X K \<and> cir_on Y K \<and> bet X B Y"
-	using assms axioms_def line_circle_def by blast
+	using assms ax axioms_def line_circle_def by blast
 
-lemma nullsegment1E:
-	assumes "axioms"
+lemma(in euclidean_geometry) nullsegment1E:
+	assumes
 		"seg_eq A B C C"
 	shows "A = B"
-	using assms axioms_def nullsegment1_def by blast
+	using assms ax axioms_def nullsegment1_def by blast
 
-lemma nullsegment2E:
-	assumes "axioms"
+lemma(in euclidean_geometry) nullsegment2E:
 	shows "seg_eq A A B B"
-	using assms axioms_def nullsegment2_def by blast
+ using ax axioms_def nullsegment2_def by blast
 
-lemma paste1E:
-	assumes "axioms"
+lemma(in euclidean_geometry) paste1E:
+	assumes
 		"bet A B C"
 		"bet a b c"
 		"bet E D C"
@@ -1063,10 +1053,10 @@ lemma paste1E:
 		"tri_eq_area B C D b c d"
 		"qua_eq_area A B D E a b d e"
 	shows "tri_eq_area A C E a c e"
-	using assms axioms_def paste1_def by blast
+	using assms ax axioms_def paste1_def by blast
 
-lemma paste2E:
-	assumes "axioms"
+lemma(in euclidean_geometry) paste2E:
+	assumes
 		"bet B C D"
 		"bet b c d"
 		"tri_eq_area C D E c d e"
@@ -1076,10 +1066,10 @@ lemma paste2E:
 		"bet a m d"
 		"bet b m e"
 	shows "qua_eq_area A B D E a b d e"
-	using assms axioms_def paste2_def by blast
+	using assms ax axioms_def paste2_def by blast
 
-lemma paste3E:
-	assumes "axioms"
+lemma(in euclidean_geometry) paste3E:
+	assumes
 		"tri_eq_area A B C a b c"
 		"tri_eq_area A B D a b d"
 		"bet C M D"
@@ -1087,10 +1077,10 @@ lemma paste3E:
 		"bet c m d"
 		"bet a m b \<or> a = m \<or> m = b"
 	shows "qua_eq_area A C B D a c b d"
-	using assms axioms_def paste3_def by blast
+	using assms ax axioms_def paste3_def by blast
 
-lemma paste4E:
-	assumes "axioms"
+lemma(in euclidean_geometry) paste4E:
+	assumes
 		"qua_eq_area A B m D F K H G"
 		"qua_eq_area D B e C G H M L"
 		"bet A P C"
@@ -1102,12 +1092,12 @@ lemma paste4E:
 		"bet F J M"
 		"bet K J L"
 	shows "qua_eq_area A B C D F K M L"
-	using assms axioms_def paste4_def by blast
+	using assms ax axioms_def paste4_def by blast
 
-lemma stabilityE:
-	assumes "axioms"
+lemma(in euclidean_geometry) stabilityE:
+	assumes
 		"\<not> (A \<noteq> B)"
 	shows "A = B"
-	using assms axioms_def stability_def by blast
-
+	using assms ax axioms_def by blast
 end
+

@@ -1,43 +1,42 @@
 #pragma once
 
-#include <vector>
-#include <string>
 #include <map>
+#include <string>
+#include <vector>
 
 #include "fact_set.h"
 
 class theorem {
-    public:
-        const std::vector<std::string> assumptions;
-        const std::string conclusion;
-        static std::map<std::string, theorem> theorems;
-        
-    private:
-        int var_cnt;
-        std::vector<std::vector<std::vector<int>>> assms_pos;
-        std::vector<std::vector<int>> conc_pos;
-        std::string exists;
-        std::vector<int> exists_pos;
+public:
+    const std::vector<std::string> assumptions;
+    const std::string conclusion;
+    static std::map<std::string, theorem> theorems;
 
-        std::set<std::string> depends;
+private:
+    int var_cnt;
+    std::vector<std::vector<std::vector<int>>> assms_pos;
+    std::vector<std::vector<int>> conc_pos;
+    std::string exists;
+    std::vector<int> exists_pos;
 
-    public:
-        theorem(std::vector<std::string> euc_assms = {}, std::string euc_conc = "");
+    std::set<std::string> depends;
 
-        theorem instantiate(const std::string& vars) const;
+public:
+    theorem(std::vector<std::string> euc_assms = {}, std::string euc_conc = "");
 
-        bool check_assumptions(const fact_set& facts) const;
+    theorem instantiate(const std::string& vars) const;
 
-        std::string to_string() const;
+    bool check_assumptions(const fact_set& facts) const;
 
-        int get_var_cnt() const;
+    std::string to_string() const;
 
-        std::string get_exists() const;
+    int get_var_cnt() const;
 
-        void add_depends(const std::string& s);
-        
-        std::set<std::string> get_depends() const;
+    std::string get_exists() const;
 
-        bool is_exists_pos(int p) const;
+    void add_depends(const std::string& s);
+
+    std::set<std::string> get_depends() const;
+
+    bool is_exists_pos(int p) const;
 };
-
